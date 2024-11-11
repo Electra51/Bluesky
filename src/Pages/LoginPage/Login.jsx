@@ -55,7 +55,7 @@ const Login = () => {
   }, [auth?.token, navigate]);
 
   return (
-    <div className="w-full max-w-[350px] mx-auto py-6">
+    <div className="w-full max-w-[350px] mx-auto py-6 mt-20">
       <Logo />
       <BreadCrum prev={"Home"} still={"Login"} link={"/"} />
       <form
@@ -68,7 +68,7 @@ const Login = () => {
             Email
           </label>
           <input
-            className="appearance-none border rounded w-full py-2 px-2 text-gray-700 leading-tight focus:outline-none focus:shadow-outline placeholder:text-[14px]"
+            className="appearance-none border rounded-full w-full py-2 px-2 text-gray-700 leading-tight focus:outline-none focus:shadow-outline placeholder:text-[14px]"
             id="email"
             type="text"
             value={value.email}
@@ -85,7 +85,7 @@ const Login = () => {
             Password
           </label>
           <input
-            className="appearance-none border rounded w-full py-2 px-2 text-gray-700 leading-tight focus:outline-none focus:shadow-outline placeholder:text-[14px]"
+            className="appearance-none border rounded-full w-full py-2 px-2 text-gray-700 leading-tight focus:outline-none focus:shadow-outline placeholder:text-[14px]"
             id="password"
             type="password"
             value={value.password}
@@ -104,7 +104,7 @@ const Login = () => {
         </div>
         <div className="flex flex-col items-center justify-center mt-5">
           <button
-            className="bg-[#168326] hover:bg-[#2473b9] text-white font-medium py-1 px-4 rounded focus:outline-none focus:shadow-outline w-full text-[15px]"
+            className="bg-[#0077B6] hover:bg-[#C5A4EB] text-white font-medium py-1.5 px-4 rounded-full focus:outline-none focus:shadow-outline w-full text-[15px]"
             type="submit">
             Log In
           </button>

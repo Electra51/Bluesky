@@ -13,6 +13,13 @@ body {
   color: #202020;
 }
 
+.container {
+  width: 1440px;
+  margin: 0 auto;
+}
+.round-curve {
+  border-radius: 10px;
+}
 .p-dialog-header {
   visibility: hidden;
 }
