@@ -3,6 +3,8 @@ import post1 from "../../assets/recent/recent1.png";
 import post2 from "../../assets/recent/recent2.png";
 import post3 from "../../assets/recent/recent3.png";
 import SectionHeader from "../../components/Common/SectionHeader";
+import VerticleCard from "../../components/Common/VerticleCard";
+import HorizontalCard from "../../components/Common/HorizontalCard";
 
 const RecentBlogs = () => {
   const recent_post = [
@@ -84,64 +86,19 @@ const RecentBlogs = () => {
     <div className="container">
       <SectionHeader title={"Recent Blog Posts"} />
 
-      <div className="grid grid-cols-2 gap-16">
-        <div className="border">
-          <div className="card1 border">
-            <div className="h-[300px] rounded">
-              <img
-                src={recent_post[0]?.featuredImage}
-                alt=""
-                className="object fit h-full w-full"
-              />
-            </div>
-            <div className="mt-3">
-              <p>
-                {recent_post[0]?.authors?.name} .{" "}
-                {recent_post[0]?.authors?.publish_date}
-              </p>
-              <p className="text-2xl">{recent_post[0]?.title}</p>
-              <p>{recent_post[0]?.description}</p>
-              <div className="flex flex-wrap gap-3">
-                {recent_post[0]?.tag.slice(0, 2).map((tag, index) => (
-                  <p
-                    key={index}
-                    className="text-[#333] px-2 border bg-green-400">
-                    {tag}
-                  </p>
-                ))}
-              </div>
-            </div>
-          </div>
+      <div className="grid grid-cols-2 gap-16 mt-10">
+        <div className="border border-gray-50">
+          <VerticleCard recent_post={recent_post} cardHeight={300} />
         </div>
         <div className="flex flex-col gap-y-5">
           {recent_post
             .filter((_, index) => index === 1 || index === 2 || index === 3)
             .map((post) => (
-              <div key={post.id} className="card1 border flex gap-5">
-                <div className="w-[340px] h-full rounded">
-                  <img
-                    src={post.featuredImage}
-                    alt=""
-                    className="object fit h-full w-full"
-                  />
-                </div>
-                <div className="mt-3">
-                  <p>
-                    {post.authors.name} . {post.date}
-                  </p>
-                  <p className="text-2xl">{post.title}</p>
-                  <p>{post.description}</p>
-                  <div className="flex flex-wrap gap-3">
-                    {post.tag.slice(0, 2).map((tag, index) => (
-                      <p
-                        key={index}
-                        className="text-[#333] px-2 border bg-red-400">
-                        {tag}
-                      </p>
-                    ))}
-                  </div>
-                </div>
-              </div>
+              <HorizontalCard
+                post={post}
+                cardImgHeight={160}
+                cardImgWidth={340}
+              />
             ))}
         </div>
       </div>

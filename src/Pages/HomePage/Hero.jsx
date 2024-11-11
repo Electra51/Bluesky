@@ -1,11 +1,12 @@
 import React from "react";
 import img1Logo from "../../assets/heroImg5.png";
 import img2 from "../../assets/Image.png";
+import CategoryName from "../../components/Common/CategoryName";
 
 const Hero = () => {
   return (
-    <div className="container">
-      <div className="h-[600px] w-full round-curve relative">
+    <div className="container  relative">
+      <div className="h-[600px] w-full round-curve">
         <img
           src={img1Logo}
           alt="hero"
@@ -23,10 +24,8 @@ const Hero = () => {
         </div>
       </div>
 
-      <div className="w-[598px] h-[304px] round-curve bg-[#f7fafc] border border-[#f3f3f3] absolute bottom-[120px] left-[400px] shadow-md px-8 py-4">
-        <button className="bg-[#0077B6] rounded-md px-2 py-0.5 text-white mt-5">
-          Technology
-        </button>
+      <div className="w-[598px] h-[304px] round-curve bg-[#f7fafc] border border-[#f3f3f3] absolute bottom-[-90px] left-[70px] shadow-md px-8 py-4">
+        <CategoryName title={"Technology"} />
         <p className="text-[36px] font-bold mt-4 leading-[40px]">
           The Impact of Technology on the Workplace: How Technology is Changing
         </p>
