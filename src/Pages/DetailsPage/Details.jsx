@@ -44,7 +44,6 @@ const Details = () => {
       if (response.status === 200) {
         const PostData = response.data;
         setBlogdata(PostData.posts);
-        console.log("postData", PostData.posts[0].category?.name);
       } else {
         console.error("Failed to fetch category data for editing");
       }

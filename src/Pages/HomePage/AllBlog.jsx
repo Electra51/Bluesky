@@ -7,119 +7,65 @@ import { toast } from "react-toastify";
 import post1 from "../../assets/recent/recent1.png";
 import post2 from "../../assets/recent/recent2.png";
 import post3 from "../../assets/recent/recent3.png";
+import HorizontalCard from "../../components/Common/HorizontalCard";
+import useFetchPosts from "../../hooks/useFetchPosts";
+import moment from "moment";
+import { BsDot } from "react-icons/bs";
+import Tags from "../../components/Common/Tags";
 const AllBlog = () => {
   const [auth, setAuth] = useAuth();
-  const [blogdata, setBlogdata] = useState();
-  console.log("blogdata", blogdata);
-  // content get data
-  const fetchPostData = async () => {
-    try {
-      const response = await axios.get(
-        `http://localhost:8080/api/v1/post/posts`
-      );
+  // const [blogdata, setBlogdata] = useState([]);
 
-      if (response.status === 200) {
-        const PostData = response.data;
-        setBlogdata(PostData.posts);
-        console.log("postData", PostData.posts);
-      } else {
-        console.error("Failed to fetch category data for editing");
-      }
-    } catch (error) {
-      console.error("Error:", error.message);
-    }
-  };
-  useEffect(() => {
-    fetchPostData();
-  }, []);
+  // // content get data
+  // const fetchPostData = async () => {
+  //   try {
+  //     const response = await axios.get(
+  //       `http://localhost:8080/api/v1/post/posts`
+  //     );
 
+  //     if (response.status === 200) {
+  //       const PostData = response.data;
+  //       setBlogdata(PostData.posts);
+  //     } else {
+  //       console.error("Failed to fetch category data for editing");
+  //     }
+  //   } catch (error) {
+  //     console.error("Error:", error.message);
+  //   }
+  // };
+  // useEffect(() => {
+  //   fetchPostData();
+  // }, []);
+  const { data, loading, error } = useFetchPosts(
+    "http://localhost:8080/api/v1/post/posts"
+  );
+
+  if (loading) {
+    return <div>Loading...</div>;
+  }
+
+  if (error) {
+    return <div>Error: {error}</div>;
+  }
+
+  // Check if posts array has content before reducing
+  if (!data.length) {
+    return <div>No recent posts available.</div>;
+  }
+  console.log("data", data);
   const authData = localStorage.getItem("Auth");
 
-  //logout function
-  const handleLogout = () => {
-    setAuth({
-      ...auth,
-      user: null,
-      token: "",
-    });
-    localStorage.removeItem("auth");
-    toast.success("logout successfully");
-  };
+  // //logout function
+  // const handleLogout = () => {
+  //   setAuth({
+  //     ...auth,
+  //     user: null,
+  //     token: "",
+  //   });
+  //   localStorage.removeItem("auth");
+  //   toast.success("logout successfully");
+  // };
 
-  const recent_post = [
-    {
-      id: 1,
-      featuredImage: post1,
-      category: "Technology",
-      title: "The Future of Artificial Intelligence",
-      description:
-        "Exploring the latest advancements in AI and how they shape our future.",
-      date: "2024-10-15",
-      tag: ["AI", "Machine Learning", "Innovation", "Future", "Tech Trends"],
-      likes: 150,
-      comments: 75,
-      shares: 30,
-      authors: {
-        name: "Alice Smith",
-        image: "https://via.placeholder.com/150",
-        publish_date: "2024-10-15",
-      },
-    },
-    {
-      id: 2,
-      featuredImage: post2,
-      category: "Health & Wellness",
-      title: "Top 10 Benefits of a Plant-Based Diet",
-      description:
-        "Discover the health benefits of plant-based eating and how to start today.",
-      date: "2024-10-12",
-      tag: ["Health", "Wellness", "Diet", "Nutrition", "Lifestyle"],
-      likes: 220,
-      comments: 40,
-      shares: 65,
-      authors: {
-        name: "Mark Lee",
-        image: "https://via.placeholder.com/150",
-        publish_date: "2024-10-12",
-      },
-    },
-    {
-      id: 3,
-      featuredImage: post3,
-      category: "Travel",
-      title: "Exploring Hidden Gems in Europe",
-      description:
-        "A guide to uncovering Europe’s best-kept secrets for adventurous travelers.",
-      date: "2024-10-08",
-      tag: ["Travel", "Adventure", "Europe", "Guides", "Hidden Gems"],
-      likes: 180,
-      comments: 55,
-      shares: 45,
-      authors: {
-        name: "Sarah Brown",
-        image: "https://via.placeholder.com/150",
-        publish_date: "2024-10-08",
-      },
-    },
-    {
-      id: 4,
-      featuredImage: post1,
-      category: "Finance",
-      title: "How to Start Investing in 2024",
-      description:
-        "Learn the basics of investing and tips for building a strong financial future.",
-      date: "2024-10-01",
-      tag: ["Finance", "Investing", "Wealth", "Money Management", "2024"],
-      likes: 305,
-      comments: 90,
-      shares: 75,
-      authors: {
-        name: "David Johnson",
-        image: "https://via.placeholder.com/150",
-        publish_date: "2024-10-01",
-      },
-    },
-  ];
   return (
     <div className="container">
       <div className="flex flex-col lg:flex-row justify-between items-center">
@@ -137,25 +83,95 @@ const AllBlog = () => {
         </Link>
       </div>
 
-      <div className="py-20">
-        <div className="card1 border flex gap-5">
-          <div className="w-[640px] h-[300px] rounded">
-            <img src={post1} alt="" className="object fit h-full w-full" />
-          </div>
-          <div className="mt-3">
-            <p>asd . 10.09.2020</p>
-            <p className="text-2xl">Thusko</p>
-            <p>scv</p>
-            <div className="flex flex-wrap gap-3">
-              <p className="text-[#333] px-2 border bg-red-400">sdfvbg</p>
-              <p className="text-[#333] px-2 border bg-red-400">sdfvbg</p>
-              <p className="text-[#333] px-2 border bg-red-400">sdfvbg</p>
-              <p className="text-[#333] px-2 border bg-red-400">sdfvbg</p>
+      <div className="pb-20 pt-10">
+        <Link to={`/details/${data[0]?._id}`}>
+          <div className="grid grid-cols-2 border rounded-[6px] gap-5">
+            <div className="w-full h-[300px] rounded-l-[6px]">
+              <img
+                src={data[0]?.featuredImage}
+                alt=""
+                className="object fit h-full w-full rounded-l-[6px]"
+              />
+            </div>
+            <div className="mt-3">
+              <p className="text-[#ad47b6] text-[15px] flex justify-normal items-center">
+                {data[0]?.users?.nickname} <BsDot className="2xl" />
+                {moment(data[0]?.users?.createdAt).format("lll")}
+              </p>
+              <p className="text-2xl mt-3">{data[0]?.title}</p>
+              {data[0]?.description?.length > 240 ? (
+                <p className="text-[16px] text-gray-600 mt-3">
+                  {data[0]?.description?.slice(0, 240).replace(/<[^>]*>/g, "") +
+                    "..."}
+                </p>
+              ) : (
+                <p className="text-[16px]">
+                  {data[0]?.description.replace(/<[^>]*>/g, "")}
+                </p>
+              )}
+              <div className="flex flex-wrap gap-3">
+                <div className="flex flex-wrap gap-3 mt-5 pb-2">
+                  {data[0]?.tagNames?.map((tag, index) => (
+                    <Tags tag={tag} key={index} />
+                  ))}
+                </div>
+              </div>
             </div>
           </div>
-        </div>
-        <div className="grid grid-cols-3 gap-12 mt-10">
-          <div className="border flex flex-col gap-5">
+        </Link>
+
+        <div className="grid grid-cols-3 gap-12 mt-7">
+          {data
+            .filter((_, index) => index === 1 || index === 2 || index === 3)
+            .map((post) => {
+              return (
+                <Link to={`/details/${post?._id}`}>
+                  <div className="border rounded-[6px] flex flex-col gap-5">
+                    <div className="w-full h-[260px] rounded-t-[6px]">
+                      <img
+                        src={post?.featuredImage}
+                        alt=""
+                        className="object fit h-full w-full rounded-t-[6px]"
+                      />
+                    </div>
+                    <div className="mt-3  px-4">
+                      <p className="text-[#ad47b6] text-[15px] flex justify-normal items-center">
+                        {post?.users?.nickname} <BsDot className="2xl" />
+                        {moment(post?.users?.createdAt).format("lll")}
+                      </p>
+                      {post?.title?.length > 40 ? (
+                        <p className="text-[18px] font-medium text-black mt-4">
+                          {post?.title?.slice(0, 40).replace(/<[^>]*>/g, "") +
+                            "..."}
+                        </p>
+                      ) : (
+                        <p className="text-[18px] font-medium text-black mt-4">
+                          {post?.title.replace(/<[^>]*>/g, "")}
+                        </p>
+                      )}
+                      {post?.description?.length > 180 ? (
+                        <p className="text-[16px] text-gray-600 mt-3">
+                          {post?.description
+                            ?.slice(0, 180)
+                            .replace(/<[^>]*>/g, "") + "..."}
+                        </p>
+                      ) : (
+                        <p className="text-[16px]">
+                          {post?.description.replace(/<[^>]*>/g, "")}
+                        </p>
+                      )}
+                      <div className="flex flex-wrap gap-3 mt-2 pb-3">
+                        {post?.tagNames?.slice(0, 2)?.map((tag, index) => {
+                          return <Tags tag={tag} key={index} />;
+                        })}
+                      </div>
+                    </div>
+                  </div>
+                </Link>
+              );
+            })}
+
+          {/* <div className="border flex flex-col gap-5">
             <div className="w-full h-[260px] rounded">
               <img src={post1} alt="" className="object fit h-full w-full" />
             </div>
@@ -186,23 +202,7 @@ const AllBlog = () => {
                 <p className="text-[#333] px-2 border bg-red-400">sdfvbg</p>
               </div>
             </div>
-          </div>
-          <div className="border flex flex-col gap-5">
-            <div className="w-full h-[260px] rounded">
-              <img src={post1} alt="" className="object fit h-full w-full" />
-            </div>
-            <div className="mt-3">
-              <p>asd . 10.09.2020</p>
-              <p className="text-2xl">Thusko</p>
-              <p>scv</p>
-              <div className="flex flex-wrap gap-3">
-                <p className="text-[#333] px-2 border bg-red-400">sdfvbg</p>
-                <p className="text-[#333] px-2 border bg-red-400">sdfvbg</p>
-                <p className="text-[#333] px-2 border bg-red-400">sdfvbg</p>
-                <p className="text-[#333] px-2 border bg-red-400">sdfvbg</p>
-              </div>
-            </div>
-          </div>
+          </div> */}
         </div>
         {/* <div className="grid grid-cols-1 lg:grid-cols-3 justify-items-center lg:justify-items-start gap-[20px] justify-center items-center mt-[24px]">
           {blogdata?.slice(0, 3).map((e, i) => {

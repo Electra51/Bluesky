@@ -16,6 +16,10 @@ import Profile from "../Pages/DashboardPages/ProfilePage/Profile";
 import ForgotPassword from "../Pages/ForgotPassword/ForgotPassword";
 import ResetPassword from "../Pages/ForgotPassword/ResetPassword";
 import SignUp from "../Pages/SignupPage/SignUp";
+import SignUpUserSelect from "../Pages/SignupPage/SignUpUserSelect";
+import EditPost from "../Pages/DashboardPages/EditPost/EditPost";
+import AuthorList from "../Pages/DashboardPages/AuthorList/AuthorList";
+import BlogPage from "../Pages/BlogPage/BlogPage";
 
 export const router = createBrowserRouter([
   {
@@ -26,6 +30,10 @@ export const router = createBrowserRouter([
       {
         path: "/",
         element: <Home />,
+      },
+      {
+        path: "/blog",
+        element: <BlogPage />,
       },
       {
         path: "/details",
@@ -46,7 +54,7 @@ export const router = createBrowserRouter([
     ),
     children: [
       {
-        path: "/dashboard",
+        path: "/dashboard/dashboard",
         element: (
           <PrivateRoute>
             <Dashboard />
@@ -58,6 +66,22 @@ export const router = createBrowserRouter([
         element: (
           <PrivateRoute>
             <PostPage />
+          </PrivateRoute>
+        ),
+      },
+      {
+        path: "/dashboard/editPost/:id",
+        element: (
+          <PrivateRoute>
+            <EditPost />
+          </PrivateRoute>
+        ),
+      },
+      {
+        path: "/dashboard/author-list",
+        element: (
+          <PrivateRoute>
+            <AuthorList />
           </PrivateRoute>
         ),
       },
@@ -101,8 +125,12 @@ export const router = createBrowserRouter([
     element: <Login />,
   },
   {
-    path: "/signup",
+    path: "/signup/:id",
     element: <SignUp />,
+  },
+  {
+    path: "/user-select",
+    element: <SignUpUserSelect />,
   },
   {
     path: "/forgot-password",

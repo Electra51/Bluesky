@@ -6,7 +6,7 @@ const Subscribe = () => {
       <div className="container grid grid-cols-2 gap-9 items-center">
         <div>
           <p className="text-3xl font-semibold">Subscribe to our Newsletter</p>
-          <p>
+          <p className="mb-10  mt-2">
             Subscribe to our email newsletter to get the latest posts delivered
             right to your email.
           </p>

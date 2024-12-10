@@ -8,7 +8,7 @@ function App() {
     <>
       <Toaster />
       <RouterProvider router={router} />
-      <ScrollToTop smooth color="#6f00ff" />
+      <ScrollToTop smooth color="#fff" />
     </>
   );
 }

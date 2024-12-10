@@ -1,4 +1,7 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import Slider from "react-slick";
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
 import post1 from "../../assets/recent/recent1.png";
 import post2 from "../../assets/recent/recent2.png";
 import post3 from "../../assets/recent/recent3.png";
@@ -9,8 +12,64 @@ import {
   IoLogoTwitter,
   IoMdFastforward,
 } from "react-icons/io";
+import SectionHeader from "../../components/Common/SectionHeader";
+import HorizontalCard from "../../components/Common/HorizontalCard";
+import CategoryName from "../../components/Common/CategoryName";
+import axios from "axios";
+import useFetchPosts from "../../hooks/useFetchPosts";
+import { BsDot } from "react-icons/bs";
+import moment from "moment";
 
 const TrendingBlog = () => {
+  const settings = {
+    dots: true,
+    infinite: true,
+    speed: 500,
+    slidesToShow: 1,
+    slidesToScroll: 1,
+  };
+  const [categories, setCategories] = useState([]);
+  const [trendingItem, setTrendingItem] = useState([]);
+  const [featured, setFeaturedItem] = useState([]);
+  const { data, loading, error } = useFetchPosts(
+    "http://localhost:8080/api/v1/post/posts"
+  );
+
+  console.log("data", data);
+  useEffect(() => {
+    const trendingItems = data.filter((item) =>
+      item?.status?.includes("Trending")
+    );
+    const featuredItems = data.filter((item) =>
+      item?.status?.includes("Featured")
+    );
+    setTrendingItem(trendingItems);
+    setFeaturedItem(featuredItems);
+  }, [data]);
+
+  console.log("featured", featured);
+  const fetchData = async () => {
+    try {
+      const response = await axios.get(
+        "http://localhost:8080/api/v1/category/categories"
+      );
+
+      if (response.status === 200) {
+        setCategories(response.data);
+      } else {
+        console.error("Failed to fetch categories");
+      }
+    } catch (error) {
+      console.error("Error:", error.message);
+    }
+  };
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  console.log("categories", categories);
+
   const recent_post = [
     {
       id: 1,
@@ -87,97 +146,84 @@ const TrendingBlog = () => {
   ];
   return (
     <div className="container">
-      <h2 className="text-[25px] font-semibold text-center lg:text-left mb-7">
-        Trending Blogs
-      </h2>
+      <SectionHeader title={"Trending Blogs"} />
       <div className=" grid grid-cols-3 gap-10">
-        <div className="col-span-2">
-          <div>
-            {recent_post?.map((e, i) => {
+        <div className="col-span-2 ">
+          <div className="flex flex-col justify-normal gap-1">
+            {trendingItem?.map((e, i) => {
               return (
-                <div key={e.id} className="card1 border flex gap-5 mt-4">
-                  <div className="w-[340px] h-full rounded">
-                    <img
-                      src={e.featuredImage}
-                      alt=""
-                      className="object fit h-full w-full"
-                    />
-                  </div>
-                  <div className="mt-3">
-                    <p>
-                      {e.authors.name} . {e.date}
-                    </p>
-                    <p className="text-2xl">{e.title}</p>
-                    <p>{e.description}</p>
-                    <div className="flex flex-wrap gap-3">
-                      {e.tag.slice(0, 2).map((tag, index) => (
-                        <p
-                          key={index}
-                          className="text-[#333] px-2 border bg-red-400">
-                          {tag}
-                        </p>
-                      ))}
-                    </div>
-                  </div>
-                </div>
+                <HorizontalCard
+                  key={i}
+                  left={"10"}
+                  top={"10"}
+                  post={e}
+                  cardImgHeight={180}
+                  cardImgWidth={340}
+                />
               );
             })}
           </div>
         </div>
         <div>
-          <div className="mt-4  border rounded px-4 py-2">
-            <p>Explore Categories or Topics</p>
-            <div className="flex flex-wrap gap-3 mt-4">
-              <p className="text-[#333] px-2 border bg-red-400">Category</p>
-              <p className="text-[#333] px-2 border bg-red-400">Topic</p>
-              <p className="text-[#333] px-2 border bg-red-400">Category</p>
-              <p className="text-[#333] px-2 border bg-red-400">Topic</p>
-              <p className="text-[#333] px-2 border bg-red-400">Category</p>
-              <p className="text-[#333] px-2 border bg-red-400">Topic</p>
-              <p className="text-[#333] px-2 border bg-red-400">Topic</p>
-              <p className="text-[#333] px-2 border bg-red-400">Category</p>
-              <p className="text-[#333] px-2 border bg-red-400">Topic</p>
-              <p className="text-[#333] px-2 border bg-red-400">Topic</p>
-              <p className="text-[#333] px-2 border bg-red-400">Topic</p>
-              <p className="text-[#333] px-2 border bg-red-400">Category</p>
-              <p className="text-[#333] px-2 border bg-red-400">Topic</p>
-              <p className="text-[#333] px-2 border bg-red-400">Category</p>
-              <p className="text-[#333] px-2 border bg-red-400">Topic</p>
-              <p className="text-[#333] px-2 border bg-red-400">Topic</p>
-              <p className="text-[#333] px-2 border bg-red-400">Topic</p>
-              <p className="text-[#333] px-2 border bg-red-400">Category</p>
-              <p className="text-[#333] px-2 border bg-red-400">Topic</p>
-              <p className="text-[#333] px-2 border bg-red-400">Category</p>
-              <p className="text-[#333] px-2 border bg-red-400">Topic</p>
-              <p className="text-[#333] px-2 border bg-red-400">Category</p>
-              <p className="text-[#333] px-2 border bg-red-400">Topic</p>
-              <p className="text-[#333] px-2 border bg-red-400">Category</p>
-              <p className="text-[#333] px-2 border bg-red-400">Topic</p>
+          <div className="border round-curve px-4 py-2">
+            <p className="text-gray-700 mt-1 text-[16px]">
+              Explore Categories or Topics
+            </p>
+            <div className="grid grid-cols-3 gap-3 mt-4 pt-1 pb-3">
+              {categories.map((e, i) => {
+                return <CategoryName title={e?.name} p={"category-list"} />;
+              })}
             </div>
           </div>
-          <div className="mt-4">
-            <p>Features Posts</p>
-            <div className=" mt-4  relative">
-              <div className="h-[300px] w-full rounded">
-                <img
-                  src={post1}
-                  alt=""
-                  className="h-full w-full object-fill rounded"
-                />
-              </div>
-              <div className="absolute top-6 left-10">
-                <button className="bg-[#478428] rounded-md px-2 py-0.5 text-white mt-5">
-                  Technology
-                </button>
-                <div className="mt-32">
-                  <p>Topic Title:</p>
-                  <p className="text-[#333]">Post Title</p>
-                </div>
-              </div>
-            </div>
+          <div className="mt-6">
+            <p className="text-gray-700 mt-1 text-[16px]">Features Posts</p>
+            <Slider {...settings}>
+              {featured?.map((e, i) => {
+                console.log("e", e);
+                return (
+                  <div>
+                    <h3>
+                      {" "}
+                      <div className=" mt-4 rounded-md relative px-1">
+                        <div className="h-[300px] w-full rounded-md">
+                          <img
+                            src={e?.featuredImage}
+                            alt=""
+                            className="h-full w-full object-fill rounded-md"
+                          />
+                        </div>
+                        <div className="absolute top-3 left-3">
+                          <CategoryName title={e?.category?.name} />
+                          <div className="mt-48">
+                            <p className="text-gray-200 text-[12px] flex justify-normal items-center">
+                              {e?.users?.nickname} <BsDot className="2xl" />
+                              {moment(e.createdAt).format("lll")}
+                            </p>
+                            <div className="flex justify-normal items-center gap-1 mt-2">
+                              <p className="text-white">Topic Title:</p>
+                              {e?.title?.length > 30 ? (
+                                <p className="text-[16px] text-white">
+                                  {e?.title
+                                    ?.slice(0, 30)
+                                    .replace(/<[^>]*>/g, "") + "..."}
+                                </p>
+                              ) : (
+                                <p className="text-[16px] text-white">
+                                  {e?.title?.replace(/<[^>]*>/g, "")}
+                                </p>
+                              )}
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </h3>
+                  </div>
+                );
+              })}
+            </Slider>
           </div>
           <div className="mt-4">
-            <p>Stay With Us</p>
+            <p className="text-gray-700 mt-1 text-[16px]">Stay With Us</p>
             <div className=" mt-4 flex justify-normal items-center gap-10">
               <div className="h-8 w-8 rounded-full border flex justify-center items-center">
                 <IoLogoFacebook />

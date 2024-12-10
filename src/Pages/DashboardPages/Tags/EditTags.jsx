@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { toast } from "react-toastify";
+import DashboardHeader from "../../../components/Common/DashboardHeader";
 
 const EditTags = ({
   tagId,
@@ -27,7 +28,7 @@ const EditTags = ({
 
         if (response.status === 200) {
           const tagData = response.data;
-          console.log("tagData", tagData);
+
           setValue({
             name: tagData.name,
             slug: tagData.slug,
@@ -65,7 +66,6 @@ const EditTags = ({
       );
 
       if (response.status === 200) {
-        console.log("tag updated successfully");
         fetchData();
         setEditingTagId(null);
       } else {
@@ -77,8 +77,10 @@ const EditTags = ({
   };
 
   return (
-    <div className="w-[270px] h-[846px] bg-white">
-      <p className="text-[16px] font-medium px-4 pt-4">Edit Category</p>
+    <div className="w-[270px] bg-white mt-4 border-0 border-l">
+      <div className="pl-4">
+        <DashboardHeader title={"Edit Tag"} />
+      </div>{" "}
       <form className="rounded px-4 pt-6 pb-8 mb-4" onSubmit={handleTagUpdate}>
         <div className="mb-4">
           <label className="block font-normal text-[14px] mb-2" htmlFor="name">
@@ -132,7 +134,7 @@ const EditTags = ({
             Cancel
           </button>
           <button
-            className="bg-[#76C4EB] gap-2 hover:bg-[#76C4EB] w-[149px] h-[40px] text-white text-[14px] font-medium flex justify-center rounded-[4px] focus:outline-none focus:shadow-outline items-center"
+            className="bg-[#0077B6] gap-1 hover:bg-[#76C4EB] w-[149px] h-[40px] text-white text-[14px] font-medium flex justify-center rounded-[4px] focus:outline-none focus:shadow-outline items-center"
             type="submit">
             Update
           </button>

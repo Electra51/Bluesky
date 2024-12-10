@@ -15,8 +15,13 @@ import { useDropzone } from "react-dropzone";
 import { MdOutlineFileUpload } from "react-icons/md";
 import { RiDeleteBinLine } from "react-icons/ri";
 import { IoIosClose } from "react-icons/io";
-import { toast } from "react-toastify";
+import DashboardHeader from "../../../components/Common/DashboardHeader";
+import { useNavigate } from "react-router-dom";
+import { useAuth } from "../../../context/auth";
+import toast from "react-hot-toast";
+
 const AddPost = () => {
+  const [auth, setAuth] = useAuth();
   const [title, setTitle] = useState("");
   const [value, setValue] = useState("");
   const [selectedTag, setSelectedTag] = useState(null);
@@ -24,17 +29,15 @@ const AddPost = () => {
   const [categories, setCategories] = useState([]);
   const [allTags, setAllTags] = useState([]);
   const [tags, setTags] = useState([]);
-  const [showNewCategoryInput, setShowNewCategoryInput] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState();
   const [featuredImage, setFeaturedImage] = useState(null);
   const onDrop = useCallback((acceptedFiles) => {
     const file = acceptedFiles[0];
     setFeaturedImage(file);
   }, []);
-
-  console.log("featuredImage", featuredImage);
+  const navigate = useNavigate();
   const { getRootProps, getInputProps } = useDropzone({ onDrop });
-
+  const useId = auth?.user?._id;
   const formats = [
     "header",
     "bold",
@@ -59,7 +62,6 @@ const AddPost = () => {
       if (/^image\//.test(file.type)) {
         const formData = new FormData();
         formData.append("image", file);
-        console.log("first", file);
 
         try {
           const response = await axios.post(
@@ -162,51 +164,13 @@ const AddPost = () => {
   useEffect(() => {
     fetchDataTags();
   }, []);
-  const handleNewCategoryClick = () => {
-    setShowNewCategoryInput(true);
-  };
 
   const [inputValue, setInputValue] = useState({
     name: "",
     slug: "",
     description: "",
   });
-  const handleCategoryAdd = async (e) => {
-    e.preventDefault();
 
-    const data = {
-      name: inputValue.name,
-      slug: inputValue.name,
-      description: inputValue.name,
-    };
-
-    try {
-      const response = await axios.post(
-        "http://localhost:8080/api/v1/category/categories",
-        data,
-        {
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      );
-
-      if (response.status === 201) {
-        const newCategory = response.data;
-        console.log(newCategory);
-        fetchData();
-        setInputValue({
-          name: "",
-          slug: "",
-          description: "",
-        });
-      } else {
-        console.error("Failed to add category");
-      }
-    } catch (error) {
-      console.error("Error:", error.message);
-    }
-  };
   const fetchData = async () => {
     try {
       const response = await axios.get(
@@ -231,12 +195,11 @@ const AddPost = () => {
     setSelectedCategory(categoryId);
   };
 
-  console.log("title", title, "value", value, "feat ", featuredImage);
-
   const handleBlogPost = async () => {
     try {
       let imageUrl = "";
 
+      // Upload featured image if it exists
       if (featuredImage) {
         const imageFormData = new FormData();
         imageFormData.append("image", featuredImage);
@@ -254,167 +217,146 @@ const AddPost = () => {
         imageUrl = imageUploadResponse.data.url;
       }
 
-      // Now, create the blog post
+      // Create the blog post
       const blogPostData = {
         title,
         description: value,
         featuredImage: imageUrl,
         category: selectedCategory,
+        users: useId, // Use user ID for associating the post
         tags: tags,
+        status: ["Pending"],
       };
-      console.log("blogpostdata", blogPostData);
+
       await axios.post("http://localhost:8080/api/v1/post/posts", blogPostData);
 
+      // Reset form fields
       setTitle("");
       setValue("");
       setFeaturedImage(null);
       setSelectedCategory();
       setTags([]);
 
-      console.log("Blog post created successfully!");
+      navigate("/dashboard/post");
+      toast.success("Blog post created successfully!");
     } catch (error) {
       console.error("Error creating blog post:", error);
+      toast.error("Error creating blog post. Please try again.");
     }
   };
+
   const handleTagChange = (selectedOptions) => {
     setSelectedTag(selectedOptions);
   };
 
   const handleAddTag = () => {
     if (selectedTag) {
-      setTags([...tags, ...selectedTag.map((tag) => tag.value)]);
+      setTags([...tags, ...selectedTag?.map((tag) => tag?.value)]);
     }
   };
   return (
-    <div className="flex justify-normal items-center gap-24">
-      <div className="w-[822px] bg-white m-[32px] rounded-[4px] p-[16px]">
-        {" "}
-        <h2 className="text-[16px] font-semibold">Add New post</h2>
-        <div className="flex flex-col mt-[24px]">
-          <label className="text-[14px] font-normal mb-[10px]">
-            Post Title
-          </label>
-          <input
-            type="text"
-            value={title}
-            onChange={(e) => {
-              setTitle(e.target.value);
-            }}
-            className="border border-[#E1E1E1] rounded-[4px] h-[40px]"
-          />
-        </div>
-        <div className="flex flex-col mt-[16px]">
-          <label className="text-[14px] font-normal mb-[10px]">
-            Post Description
-          </label>
-          <ReactQuill
-            theme="snow"
-            value={value}
-            onChange={setValue}
-            modules={modules}
-            formats={formats}
-            placeholder="Write something..."
-            bounds=".ql-editor"
-            ref={quillRef}
-          />
-        </div>
-        <div className="my-5 ">
-          <p className="text-[14px] font-normal mb-[10px]">Featured Image</p>
-          <div
-            {...getRootProps()}
-            className="flex justify-normal items-center gap-[18px] mt-1">
-            <div className="w-[383px] h-[222px] border border-dashed rounded-md flex flex-col justify-center items-center">
-              <input {...getInputProps()} />
-              <div className="h-[40px] w-[40px] rounded-full bg-[#76c4eb] flex justify-center items-center">
-                <MdOutlineFileUpload className="text-white text-xl" />
+    <div className="grid grid-cols-3 gap-4 w-[1440px]">
+      <div className="col-span-2 bg-white m-3 ">
+        <DashboardHeader title={"Add New Post"} />
+        <div className="mt-[7px] border border-gray-100 rounded-md p-4">
+          <div className="flex flex-col">
+            <label className="text-[14px] font-normal mb-[10px]">
+              Post Title
+            </label>
+            <input
+              type="text"
+              value={title}
+              onChange={(e) => {
+                setTitle(e.target.value);
+              }}
+              className="border border-[#E1E1E1] rounded-[4px] h-[40px]"
+            />
+          </div>
+          <div className="flex flex-col mt-[18px]">
+            <label className="text-[14px] font-normal mb-[10px]">
+              Post Description
+            </label>
+            <ReactQuill
+              theme="snow"
+              value={value}
+              onChange={setValue}
+              modules={modules}
+              formats={formats}
+              placeholder="Write something..."
+              bounds=".ql-editor"
+              ref={quillRef}
+            />
+          </div>
+          <div className="my-5 ">
+            <p className="text-[14px] font-normal mb-[10px] mt-5">
+              Featured Image
+            </p>
+            <div
+              {...getRootProps()}
+              className="flex justify-normal items-center gap-[18px] mt-1">
+              <div className="w-[383px] h-[222px] border border-dashed rounded-md flex flex-col justify-center items-center">
+                <input {...getInputProps()} />
+                <div className="h-[40px] w-[40px] rounded-full bg-[#76c4eb] flex justify-center items-center">
+                  <MdOutlineFileUpload className="text-white text-xl" />
+                </div>
+                <p className="mt-[16px] mb-[3px]">
+                  Drag & Drop or <span className="text-[#76c4eb]">Choose</span>{" "}
+                  image to upload
+                </p>
+                <p className="text-[#5F5F5F] text-[14px] font-normal">
+                  Supported formats: PNG, JPG, JPEG
+                </p>
               </div>
-              <p className="mt-[16px] mb-[3px]">
-                Drag & Drop or <span className="text-[#76c4eb]">Choose</span>{" "}
-                image to upload
-              </p>
-              <p className="text-[#5F5F5F] text-[14px] font-normal">
-                Supported formats: PNG, JPG, JPEG
-              </p>
+              {featuredImage ? (
+                <div className="w-[383px] h-[222px] bg-[#F4F8FA] flex justify-center items-center rounded-[4px]">
+                  <img
+                    src={URL.createObjectURL(featuredImage)}
+                    alt="Featured"
+                    width={97}
+                  />
+                </div>
+              ) : (
+                <div className="w-[383px] h-[222px] bg-[#F4F8FA] flex justify-center items-center rounded-[4px]">
+                  <img src={imgIcon} alt="Featured" width={97} />
+                </div>
+              )}
             </div>
-            {featuredImage ? (
-              <div className="w-[383px] h-[222px] bg-[#F4F8FA] flex justify-center items-center rounded-[4px]">
-                <img
-                  src={URL.createObjectURL(featuredImage)}
-                  alt="Featured"
-                  width={97}
-                />
-              </div>
-            ) : (
-              <div className="w-[383px] h-[222px] bg-[#F4F8FA] flex justify-center items-center rounded-[4px]">
-                <img src={imgIcon} alt="Featured" width={97} />
-              </div>
-            )}
           </div>
         </div>
       </div>
 
-      <div className="w-[270px] h-[746px] bg-white mt-4">
+      <div className="w-[270px] bg-white mt-4 border-0 border-l pl-4">
         <div className="flex justify-normal items-center gap-5 mx-auto p-2">
-          <button className="w-[113px] h-[40px] rounded-[4px] border  flex justify-center items-center gap-1">
+          <button className="w-[113px] h-[40px] rounded-md border hover:bg-[#f34624] flex justify-center items-center gap-1">
             <RiDeleteBinLine className="text-[24px]" />
             <span className="text-[14px]">Delete </span>
           </button>
           <button
-            className="w-[113px] h-[40px] rounded-[4px] bg-[#76C4EB] flex justify-center items-center gap-1"
+            className="w-[113px] h-[40px] rounded-md bg-[#0077B6] gap-1 hover:bg-[#76C4EB] text-white flex justify-center items-center "
             onClick={handleBlogPost}>
             <MdOutlineFileUpload className="text-[24px]" />{" "}
             <span className="text-[14px]">Publish</span>
           </button>
         </div>
         <hr className="pt-4 text-[#E9E9E9]" />
-        <p className="text-[16px] font-medium pb-3 px-2">All Categories</p>
+        <p className="text-[16px] font-medium pb-3 px-2">Select Categories</p>
         <div className="flex flex-col items-start px-2 gap-y-1.5">
           {categories?.map((category, i) => (
-            <label key={i}>
+            <div className="flex justify-normal items-center gap-1" key={i}>
               <input
                 type="checkbox"
                 onChange={() => handleCategoryChange(category._id)}
+                className="checkbox checkbox-primary w-5 h-5"
               />
-              {category.name}
-            </label>
+              <label>{category.name}</label>
+            </div>
           ))}
-          {showNewCategoryInput ? (
-            <form onSubmit={handleCategoryAdd}>
-              <input
-                type="text"
-                value={inputValue.name}
-                onChange={(e) => {
-                  setInputValue((prev) => ({
-                    ...prev,
-                    name: e.target.value,
-                  }));
-                }}
-                className="border border-[#E1E1E1] w-[238px] rounded-[4px] h-[40px]"
-              />
-              <div className="flex justify-normal items-center gap-5">
-                <button
-                  className="border border-[#EDEDED] w-[87px] rounded-[4px] h-[40px] mt-4 text-[14px] text-[#5F5F5F]"
-                  onClick={() => setShowNewCategoryInput(false)}>
-                  Cancel
-                </button>
-                <button
-                  className="border border-[#E1E1E1] w-[135px] rounded-[4px] h-[40px] mt-4 text-[14px] text-[#76C4EB]"
-                  type="submit">
-                  {" "}
-                  Add
-                </button>
-              </div>
-            </form>
-          ) : (
-            <p
-              className="text-[14px] text-[#76C4EB] cursor-pointer"
-              onClick={handleNewCategoryClick}>
-              + Add New Category
-            </p>
-          )}
+
           <hr />
-          <div className="relative">
-            <label>Tags</label>
+          <div className="relative mt-3">
+            <label className="text-[16px] font-medium pb-3 mt-5 mb-2">
+              Select Tags
+            </label>
             <Select
               isMulti
               options={allTags?.map((tag) => ({
@@ -422,20 +364,21 @@ const AddPost = () => {
                 label: tag?.name,
               }))}
               onChange={handleTagChange}
+              className="mt-2"
             />
             <button
-              className="border border-[#E1E1E1] w-[238px] rounded-[4px] h-[40px] text-[14px] text-[#76C4EB] mt-3"
+              className="border border-[#E1E1E1] w-[238px] rounded-[4px] h-[40px] text-[14px] text-[#76C4EB] mt-3  gap-1 hover:bg-[#0077B6]"
               onClick={handleAddTag}>
               Add
             </button>
             <div className="my-1 flex justify-normal items-center gap-2 flex-wrap">
-              {tags.map((tag, index) => (
+              {tags?.map((tag, index) => (
                 <div
                   key={index}
                   className="flex justify-normal items-center gap-2 border border-[#EDEDED] px-2 py-1 m-1 rounded-[4px]">
                   <p className="text-[#5F5F5F]">{tag}</p>
                   <IoIosClose
-                    onClick={() => setTags(tags.filter((t) => t !== tag))}
+                    onClick={() => setTags(tags?.filter((t) => t !== tag))}
                   />
                 </div>
               ))}

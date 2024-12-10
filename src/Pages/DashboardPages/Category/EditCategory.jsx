@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { toast } from "react-toastify";
+import DashboardHeader from "../../../components/Common/DashboardHeader";
 
 const EditCategory = ({
   categoryId,
@@ -64,7 +65,6 @@ const EditCategory = ({
       );
 
       if (response.status === 200) {
-        console.log("Category updated successfully");
         fetchData();
         setEditingCategoryId(null);
       } else {
@@ -76,8 +76,10 @@ const EditCategory = ({
   };
 
   return (
-    <div className="w-[270px] h-[846px] bg-white">
-      <p className="text-[16px] font-medium px-4 pt-4">Edit Category</p>
+    <div className="w-[270px] bg-white mt-4 border-0 border-l">
+      <div className="pl-4">
+        <DashboardHeader title={"Edit Category"} />
+      </div>{" "}
       <form
         className="rounded px-4 pt-6 pb-8 mb-4"
         onSubmit={handleCategoryUpdate}>

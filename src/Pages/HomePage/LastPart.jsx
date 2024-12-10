@@ -1,5 +1,5 @@
 import React from "react";
-import NewImage from "../../assets/recent/recent1.png";
+import NewImage from "../../assets/cover.png";
 import { Link } from "react-router-dom";
 const LastPart = () => {
   return (

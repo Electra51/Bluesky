@@ -9,7 +9,6 @@ const Card = ({ data }) => {
     return doc.body.textContent || "";
   }
   const details = removeHtmlTags(data?.description);
-  console.log("datafeaturedImage", data?.featuredImage);
   return (
     <div className="card h-[416px] w-[360px] rounded-md bg-white pt-[16px] px-[16px]">
       <figure className="h-[200px] w-[328px] mx-auto  rounded-sm">

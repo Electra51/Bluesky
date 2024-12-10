@@ -4,6 +4,7 @@ import DataTable from "react-data-table-component";
 import { BsThreeDotsVertical } from "react-icons/bs";
 import AddTags from "./AddTags";
 import EditTags from "./EditTags";
+import DashboardHeader from "../../../components/Common/DashboardHeader";
 
 const Tags = () => {
   const [tags, setTags] = useState([]);
@@ -77,7 +78,6 @@ const Tags = () => {
       );
 
       if (response.status === 200) {
-        console.log("Tag deleted successfully");
         fetchData();
       } else {
         console.error("Failed to delete Tag");
@@ -102,37 +102,34 @@ const Tags = () => {
   }, []);
 
   return (
-    <div className=" pt-[56px]">
-      <div className="grid grid-cols-3 gap-2">
-        <div className="col-span-2 bg-white m-3  border">
-          <div className="flex justify-between items-center p-3">
-            <h2>All Tags</h2>
-          </div>
-          <div className="mt-[10px]">
-            <DataTable
-              columns={columns}
-              data={tags}
-              pagination
-              conditionalRowStyles={[
-                {
-                  when: (row) => row._id === editingTagId,
-                  style: { backgroundColor: "#76C4EB" },
-                },
-              ]}
-            />
-          </div>
-        </div>
+    <div className="grid grid-cols-3 gap-4 w-[1440px]">
+      <div className="col-span-2 bg-white m-3 rounded-md">
+        <DashboardHeader title={"All Tags"} />
 
-        {isEditVisible ? (
-          <EditTags
-            tagId={editingTagId}
-            fetchData={fetchData}
-            onCancel={handleEditCancel}
+        <div className="mt-[7px] border rounded-sm">
+          <DataTable
+            columns={columns}
+            data={tags}
+            pagination
+            conditionalRowStyles={[
+              {
+                when: (row) => row._id === editingTagId,
+                style: { backgroundColor: "#76C4EB" },
+              },
+            ]}
           />
-        ) : (
-          <AddTags fetchData={fetchData} onCancel={handleEditCancel} />
-        )}
+        </div>
       </div>
+
+      {isEditVisible ? (
+        <EditTags
+          tagId={editingTagId}
+          fetchData={fetchData}
+          onCancel={handleEditCancel}
+        />
+      ) : (
+        <AddTags fetchData={fetchData} onCancel={handleEditCancel} />
+      )}
     </div>
   );
 };

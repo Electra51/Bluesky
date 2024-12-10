@@ -1,6 +1,8 @@
 import axios from "axios";
 import React, { useState } from "react";
 import { FiPlus } from "react-icons/fi";
+import DashboardHeader from "../../../components/Common/DashboardHeader";
+import { toast } from "react-toastify";
 
 const AddCategory = ({ fetchData, onCancel }) => {
   const [value, setValue] = useState({
@@ -31,13 +33,14 @@ const AddCategory = ({ fetchData, onCancel }) => {
 
       if (response.status === 201) {
         const newCategory = response.data;
-        console.log(newCategory);
+
         fetchData();
         setValue({
           name: "",
           slug: "",
           description: "",
         });
+        toast.success("Category Added Successfully !");
       } else {
         console.error("Failed to add category");
       }
@@ -46,8 +49,10 @@ const AddCategory = ({ fetchData, onCancel }) => {
     }
   };
   return (
-    <div className="w-[270px] h-[846px] bg-white mt-4">
-      <p className="text-[16px] font-medium px-4 pt-4">Add new Category</p>
+    <div className="w-[270px] bg-white mt-4 border-0 border-l ">
+      <div className="pl-4">
+        <DashboardHeader title={"Add New Category"} />
+      </div>
       <form
         className="rounded px-4 pt-6 pb-8 mb-4"
         onSubmit={handleCategoryAdd}>

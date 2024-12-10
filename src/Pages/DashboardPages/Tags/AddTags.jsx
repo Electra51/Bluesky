@@ -1,6 +1,8 @@
 import axios from "axios";
 import React, { useState } from "react";
 import { FiPlus } from "react-icons/fi";
+import { GoTag } from "react-icons/go";
+import DashboardHeader from "../../../components/Common/DashboardHeader";
 
 const AddTags = ({ fetchData, onCancel }) => {
   const [value, setValue] = useState({
@@ -31,7 +33,7 @@ const AddTags = ({ fetchData, onCancel }) => {
 
       if (response.status === 201) {
         const newTag = response.data;
-        console.log(newTag);
+
         fetchData();
         setValue({
           name: "",
@@ -46,9 +48,11 @@ const AddTags = ({ fetchData, onCancel }) => {
     }
   };
   return (
-    <div className="w-[270px] h-[846px] bg-white mt-4">
-      <p className="text-[16px] font-medium px-4 pt-4">Add new Tag</p>
-      <form className="rounded px-4 pt-6 pb-8 mb-4" onSubmit={handleTagsAdd}>
+    <div className="w-[270px] bg-white mt-4 border-0 border-l ">
+      <div className="pl-4">
+        <DashboardHeader title={"Add New Tag"} />
+      </div>
+      <form className="rounded px-4 pt-6 pb-8 mb-4 " onSubmit={handleTagsAdd}>
         <div className="mb-4">
           <label className="block font-normal text-[14px] mb-2" htmlFor="name">
             Name
@@ -96,9 +100,9 @@ const AddTags = ({ fetchData, onCancel }) => {
         </div>
         <div className="flex items-center justify-center">
           <button
-            className="bg-[#76C4EB] gap-1 hover:bg-[#76C4EB] text-white text-[14px] font-medium py-1 px-4 rounded focus:outline-none focus:shadow-outline flex justify-normal items-center"
+            className="bg-[#0077B6] gap-1 hover:bg-[#76C4EB] text-white text-[14px] font-medium py-1 px-4 rounded focus:outline-none focus:shadow-outline flex justify-normal items-center"
             type="submit">
-            <FiPlus className="text-[#76C4EB]" /> Add New Tag
+            Add New Tag <GoTag />
           </button>
         </div>
       </form>

@@ -12,7 +12,6 @@ const ForgotPassword = () => {
   const handleForgot = async (e) => {
     e.preventDefault();
 
-    console.log("data", email);
     try {
       const res = await axios.post(
         `http://localhost:8080/api/v1/auth/forgot-password`,
@@ -20,7 +19,6 @@ const ForgotPassword = () => {
       );
 
       if (res && res.data.success) {
-        console.log("res", res.data);
         toast.success(res.data.message);
         navigate("/login");
       } else {

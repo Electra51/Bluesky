@@ -1,0 +1,89 @@
+* {
+  transition: all 0.3s ease-out;
+}
+
+.user-card {
+  display: block;
+  position: relative;
+  max-width: 262px;
+  background-color: #f2f8f9;
+  border-radius: 4px;
+  padding: 32px 24px;
+  margin: 12px;
+  text-decoration: none;
+  z-index: 0;
+  overflow: hidden;
+}
+
+/* Before pseudo-element for hover effect */
+.user-card:before {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  top: -16px;
+  right: -16px;
+  background: #0077b6;
+  height: 42px;
+  width: 32px;
+  border-radius: 32px;
+  transform: scale(1);
+  transform-origin: 50% 50%;
+  transition: transform 0.25s ease-out;
+}
+
+/* Scale effect on hover */
+.user-card:hover:before {
+  transform: scale(21);
+}
+
+/* Text color transition on hover */
+.user-card:hover h3 {
+  color: #ffffff;
+}
+
+.user-card:hover p {
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.author-card {
+  display: block;
+  position: relative;
+  max-width: 262px;
+  background-color: #f2f8f9;
+  border-radius: 4px;
+  padding: 32px 24px;
+  margin: 12px;
+  text-decoration: none;
+  z-index: 0;
+  overflow: hidden;
+}
+
+/* Before pseudo-element for hover effect */
+.author-card:before {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  top: -16px;
+  right: -16px;
+  background: #c86fd6;
+  height: 42px;
+  width: 32px;
+  border-radius: 32px;
+  transform: scale(1);
+  transform-origin: 50% 50%;
+  transition: transform 0.25s ease-out;
+}
+
+/* Scale effect on hover */
+.author-card:hover:before {
+  transform: scale(21);
+}
+
+/* Text color transition on hover */
+.author-card:hover h3 {
+  color: #ffffff;
+}
+
+.author-card:hover p {
+  color: rgba(255, 255, 255, 0.8);
+}

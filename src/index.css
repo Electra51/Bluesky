@@ -27,7 +27,42 @@ body {
 .active {
   color: #76c4eb;
 }
-input:focus {
+input,
+select:focus {
   outline: none;
   padding-left: 8px;
+}
+.ql-container {
+  height: 210px !important;
+}
+
+.p-dialog-mask {
+  background: #81868a5e !important;
+}
+#pr_id_3 {
+  box-shadow: #8b939e !important;
+  border-radius: 6px;
+}
+.scroll-to-top {
+  background-color: #0077b6 !important;
+  right: 40px;
+  bottom: 40px;
+  position: fixed;
+  z-index: 2;
+  cursor: pointer;
+  border-radius: 100% !important;
+  width: 50px !important;
+  display: flex;
+  justify-items: center;
+  height: 50px !important;
+  box-shadow: 0 9px 25px 0 #0077b6;
+  border: none;
+  justify-content: center;
+  align-items: center;
+}
+
+svg[Attributes] {
+  width: 28;
+  height: 28;
+  fill: rgb(234, 229, 241) !important;
 }

@@ -1,5 +1,4 @@
 import React from "react";
-
 import Hero from "./Hero";
 import RecentBlogs from "./RecentBlogs";
 import Subscribe from "./Subscribe";

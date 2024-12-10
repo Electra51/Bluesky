@@ -1,6 +1,11 @@
 import img1 from "../../assets/img1.jpg";
-import imgVector from "../../assets/Vector.png";
-
+import { LuLayoutDashboard } from "react-icons/lu";
+import { MdListAlt } from "react-icons/md";
+import { RiFileEditLine } from "react-icons/ri";
+import { GoTag } from "react-icons/go";
+import { MdOutlineCategory } from "react-icons/md";
+import { FaRegUserCircle } from "react-icons/fa";
+import { PiUserListBold } from "react-icons/pi";
 export const blogdata = [
   {
     id: 1,
@@ -229,24 +234,56 @@ export const categoryData = [
 
 export const sidebarData = [
   {
-    link: "/dashboard",
-    label: "Blog",
-    img: imgVector,
+    link: "/dashboard/dashboard",
+    label: "Dashboard",
+    icon: <LuLayoutDashboard />,
+  },
+
+  {
+    link: "/dashboard/post",
+    label: "Blog Lists",
+    icon: <MdListAlt />,
+    role: 1,
+  },
+  {
+    link: "/dashboard/author-list",
+    label: "Author's Lists",
+    icon: <PiUserListBold />,
+    role: 2,
   },
   {
     link: "/dashboard/post",
-    label: "All Post",
+    label: "Blog Lists",
+    icon: <MdListAlt />,
+    role: 2,
   },
   {
     link: "/dashboard/addPost",
-    label: "Add New Post",
+    label: "Add New Blog",
+    icon: <RiFileEditLine />,
+    role: 1,
   },
   {
     link: "/dashboard/category",
     label: "Category",
+    icon: <MdOutlineCategory />,
+    role: 2,
   },
   {
     link: "/dashboard/tags",
     label: "Tags",
+    icon: <GoTag />,
+    role: 1,
+  },
+  {
+    link: "/dashboard/tags",
+    label: "Tags",
+    icon: <GoTag />,
+    role: 2,
+  },
+  {
+    link: "/dashboard/profile",
+    label: "Profile",
+    icon: <FaRegUserCircle />,
   },
 ];

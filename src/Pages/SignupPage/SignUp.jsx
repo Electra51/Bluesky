@@ -1,8 +1,7 @@
 import React, { useState } from "react";
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useAuth } from "../../context/auth";
 import axios from "axios";
-import { ProgressSpinner } from "primereact/progressspinner";
 import Logo from "../../components/Common/Logo";
 import BreadCrum from "../../components/Common/BreadCrum";
 import AuthInstruction from "../../components/Common/AuthInstruction";
@@ -16,48 +15,99 @@ const SignUp = () => {
     confirmPassword: "",
   });
   const [auth, setAuth] = useAuth();
-  const navigate = useNavigate();
-  const location = useLocation();
   const [loading, setLoading] = useState(false);
-  const [confirmPasswordError, setConfirmPasswordError] = useState(""); // New error state
+  const [confirmPasswordError, setConfirmPasswordError] = useState("");
+  const navigate = useNavigate();
+  const { id } = useParams();
 
-  // Signup function
   const handleSignUp = async (e) => {
     e.preventDefault();
-    const { name, email, password, confirmPassword } = value;
+    const { name, email, password, confirmPassword, role = id } = value;
 
-    if (!name || !email || !password || !confirmPassword) {
+    if (
+      !name ||
+      !email ||
+      !password ||
+      !confirmPassword ||
+      role === undefined
+    ) {
       toast.error("All fields are required");
       return;
     }
 
     // Check for password match
     if (password !== confirmPassword) {
-      setConfirmPasswordError("Passwords do not match"); // Set error message
+      setConfirmPasswordError("Passwords do not match");
       return;
     } else {
       setConfirmPasswordError(""); // Reset error message if passwords match
     }
 
-    setLoading(true); // Set loading to true before the API call
+    setLoading(true);
 
     try {
+      // Register user
       const res = await axios.post(
         `http://localhost:8080/api/v1/auth/register`,
-        { name, email, password, confirmPassword }
+        {
+          name,
+          email,
+          password,
+          confirmPassword,
+          role: id,
+        }
       );
 
-      // Check if the response was successful
       if (res && res.data.success) {
         toast.success(res?.data?.message);
-        setAuth({
-          ...auth,
-          user: res.data.user,
-          token: res.data.token,
-        });
-        localStorage.setItem("auth", JSON.stringify(res.data));
 
-        // Redirect to the login page after success
+        // Add the `isVarified` property to the user object
+        const updatedUser = {
+          ...res.data.user,
+          isVarified: false, // Default to false after registration
+        };
+
+        const authData = {
+          user: updatedUser,
+          token: res.data.token,
+        };
+
+        // Update state and localStorage
+        setAuth(authData);
+        localStorage.setItem("auth", JSON.stringify(authData));
+
+        // Check if the role is author (1)
+        if (id === 1) {
+          const token = res.data.token; // Assuming the token is returned after registration
+          const verificationRes = await axios.post(
+            `http://localhost:8080/api/v1/auth/author/request-verification`,
+            { userId: res.data.user._id }, // Send the user ID
+            {
+              headers: {
+                Authorization: `Bearer ${token}`, // Include the token in the request
+              },
+            }
+          );
+
+          if (verificationRes && verificationRes.data.success) {
+            toast.success("Verification request sent to admin.");
+            updatedUser.isVarified = true; // Update `isVarified` upon successful verification
+
+            // Update state and localStorage
+            const newAuthData = {
+              user: updatedUser,
+              token: res.data.token,
+            };
+            setAuth(newAuthData);
+            localStorage.setItem("auth", JSON.stringify(newAuthData));
+          } else {
+            toast.error(
+              verificationRes?.data?.message ||
+                "Failed to send verification request."
+            );
+          }
+        }
+
         navigate("/dashboard/profile");
       } else {
         toast.error(res.data.message);
@@ -66,7 +116,7 @@ const SignUp = () => {
       console.log(err);
       toast.error("Registration failed. Please try again.");
     } finally {
-      setLoading(false); // Set loading to false after the API call completes
+      setLoading(false);
     }
   };
 
@@ -75,7 +125,7 @@ const SignUp = () => {
       <Logo />
       <BreadCrum prev={"Home"} still={"SignUp"} link={"/"} />
       <form
-        className="bg-white border border-gray-200 shadow-sm rounded px-8 pt-8 pb-8 mb-4"
+        className="bg-white border border-gray-200 shadow-sm round-curve px-8 pt-8 pb-8 mb-4"
         onSubmit={handleSignUp}>
         <div className="mb-4">
           <label
@@ -111,6 +161,7 @@ const SignUp = () => {
             placeholder="Email"
           />
         </div>
+
         <div className="mb-4">
           <label
             className="block text-gray-700 text-[15px] font-semibold mb-1"
@@ -139,16 +190,17 @@ const SignUp = () => {
             id="confirmPassword"
             type="password"
             value={value.confirmPassword}
-            onChange={(e) =>
+            onChange={(e) => {
               setValue((prev) => ({
                 ...prev,
                 confirmPassword: e.target.value,
-              }))
-            }
+              }));
+              if (confirmPasswordError) setConfirmPasswordError(""); // Clear error when typing
+            }}
             placeholder="Confirm Password"
           />
         </div>
-        {confirmPasswordError && ( // Show error message if exists
+        {confirmPasswordError && (
           <p className="text-red-500 text-sm mb-2">{confirmPasswordError}</p>
         )}
         <div className="flex flex-col items-center justify-center mt-5">
@@ -157,9 +209,14 @@ const SignUp = () => {
               loading ? "opacity-50 cursor-not-allowed" : ""
             }`}
             type="submit"
-            disabled={loading} // Disable the button when loading
-          >
-            {loading ? <ProgressSpinner /> : "Sign Up"}
+            disabled={loading}>
+            {loading ? (
+              <span className="loading loading-spinner loading-xs">
+                Loading{" "}
+              </span>
+            ) : (
+              "Sign Up"
+            )}
           </button>
           <AuthInstruction
             title={"Already have an account?"}
