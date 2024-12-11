@@ -9,13 +9,14 @@ import { Link } from "react-router-dom";
 
 const BlogPage = () => {
   const { data, loading, error } = useFetchPosts(
-    "http://localhost:8080/api/v1/post/posts"
+    // "http://localhost:8080/api/v1/post/posts"
+    "https://blue-sky-backend-umber.vercel.app/api/v1/post/posts"
   );
   const [categories, setCategories] = useState([]);
   const fetchData = async () => {
     try {
       const response = await axios.get(
-        "http://localhost:8080/api/v1/category/categories"
+        "https://blue-sky-backend-umber.vercel.app/api/v1/category/categories"
       );
 
       if (response.status === 200) {

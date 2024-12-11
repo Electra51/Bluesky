@@ -1,7 +1,8 @@
 import React from "react";
 import { Dialog } from "primereact/dialog";
 import { IoClose } from "react-icons/io5";
-const ShareModal = ({ setVisible, visible, id, handleCopyLink }) => {
+
+const ShareModal = ({ setVisible, visible, postId, handleCopyLink }) => {
   return (
     <Dialog
       visible={visible}
@@ -10,11 +11,12 @@ const ShareModal = ({ setVisible, visible, id, handleCopyLink }) => {
       style={{ width: "40vw" }}
       onHide={() => setVisible(false)}>
       <IoClose onClick={() => setVisible(false)} className="cursor-pointer" />
+
       <div className="flex justify-between items-center py-4">
         <input
           type="text"
           readOnly
-          value={`http://localhost:8080/api/v1/post/posts/${id}`} // The link to share
+          value={`http://localhost:8080/api/v1/post/posts/${postId}`}
           className="text-[#0077B6]"
         />
         <button
