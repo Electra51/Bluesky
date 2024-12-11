@@ -7,7 +7,7 @@ import { useAuth } from "../../context/auth";
 import ShareModal from "../../components/Common/ShareModal";
 import ModalReact from "../../components/Common/ModalReact";
 import { BiLike } from "react-icons/bi";
-import { FaComments, FaRegComments, FaRegStar } from "react-icons/fa";
+import { FaComments, FaRegComments, FaRegStar, FaStar } from "react-icons/fa";
 import { FiShare2 } from "react-icons/fi";
 import like from "../../assets/emoji/like.jpg";
 import love from "../../assets/emoji/love.png";
@@ -16,22 +16,26 @@ import wow from "../../assets/emoji/wow.png";
 import happy from "../../assets/emoji/happy.png";
 import DetailsofBlog from "./DetailsofBlog";
 import ModatRating from "../../components/Common/ModatRating";
+import Star from "../../components/Common/Star";
 
 const SingleBlogDetails = () => {
   const [isShared, setIsShared] = useState(false);
+  const [isRating, setIsRating] = useState(false);
   const [visible, setVisible] = useState(false);
   const [visibleforReact, setVisibleforReact] = useState(false);
   const [visibleforRating, setVisibleforRating] = useState(false);
   const [auth, setAuth] = useAuth();
+  const userId = auth?.user?._id;
   const [showCommentBox, setShowCommentBox] = useState(false);
   const params = useParams();
   const [post, setPost] = useState({});
   const postId = params.id;
-  const userId = auth?.user?._id;
+
   const [text, setText] = useState("");
   const [ratingValue, setRatingValue] = useState("");
   const token = JSON.parse(localStorage.getItem("auth")).token;
   const [shareCount, setShareCount] = useState(post.shareCount || 0);
+  const [ratingCount, setRatingCount] = useState(post.averageRating || 0);
   const [showLink, setShowLink] = useState(false);
   const [selectedReaction, setSelectedReaction] = useState(null);
   const [showComments, setShowComments] = useState(false);
@@ -46,6 +50,7 @@ const SingleBlogDetails = () => {
         const postData = response.data.post;
         setPost(postData);
         setShareCount(postData.shareCount || 0); // Update shareCount state
+        setRatingCount(postData.averageRating || 0); // Update shareCount state
       } else {
         console.error("Failed to fetch blog post");
       }
@@ -199,6 +204,41 @@ const SingleBlogDetails = () => {
     }
   };
 
+  const handleRatingChange = (value) => {
+    setRatingValue(value);
+  };
+  console.log("ratingValue", ratingValue);
+  const handleSubmitRating = async () => {
+    try {
+      const response = await axios.post(
+        `http://localhost:8080/api/v1/post/posts/${postId}/add-rating`, // API endpoint for adding ratings
+        {
+          postId,
+          ratingValue: ratingValue,
+          userId: userId, // Assuming userId is passed as a prop or fetched via context
+        }
+      );
+
+      if (response.status === 200) {
+        const updatedRatingCount = response.data.averageRating; // Assume API returns the updated count
+        setRatingCount(updatedRatingCount);
+        // Handle successful rating submission (e.g., update UI, show toast message)
+        toast.success("Rating submitted successfully!");
+        setVisible(false);
+        setIsRating(true);
+      }
+    } catch (error) {
+      toast.error("Failed to submit rating.");
+      console.error(error);
+    }
+  };
+
+  const hasUserRated = (userId) => {
+    // Check if the user exists in the ratings array
+    const userRating = post?.ratings.find((rating) => rating.user === userId);
+    return userRating ? true : false; // Returns true if found, false if not
+  };
+
   return (
     <div className="container">
       <DetailsofBlog post={post} />
@@ -259,9 +299,13 @@ const SingleBlogDetails = () => {
                 {post?.reactions?.length}+
               </span>
             </div>
-            <span className="flex justify-end items-center">
-              {shareCount} Share
-            </span>
+            <div className="flex justify-end items-center gap-6">
+              {" "}
+              <Star ratingPoint={ratingCount} />
+              <span className="flex justify-end items-center">
+                {shareCount} Share
+              </span>
+            </div>
           </div>
           <div className="grid grid-cols-4 justify-normal items-center border border-gray-500 gap-2 divide-x-2 mt-2">
             <div className="flex justify-center items-center">
@@ -295,12 +339,30 @@ const SingleBlogDetails = () => {
                 )}
               </button>
             </div>
-            <div className="flex justify-center items-center py-2">
-              <button className="" onClick={() => setVisibleforRating(true)}>
-                <FaRegStar className="text-xl" />
+            {/* rating */}
+            <div
+              className={`flex justify-center items-center py-2 ${
+                visible ? "text-white bg-blue-300" : ""
+              }`}>
+              <button
+                onClick={() => {
+                  setVisibleforRating(true);
+                }}
+                className="">
+                {isRating || hasUserRated(userId) ? (
+                  <div className="flex justify-normal items-center gap-3">
+                    {hasUserRated(userId)
+                      ? post?.ratings.find((rating) => rating.user === userId)
+                          ?.value
+                      : ""}
+                    <FaStar className="text-orange-500 text-[16px] mt-[-3px]" />
+                  </div>
+                ) : (
+                  <FaRegStar className="text-xl" />
+                )}
               </button>
             </div>
-
+            {/* share */}
             <div
               className={`flex justify-center items-center py-2 ${
                 visible ? "text-white bg-blue-300" : ""
@@ -363,9 +425,11 @@ const SingleBlogDetails = () => {
       )}
       {visibleforRating && (
         <ModatRating
+          handleRatingChange={handleRatingChange}
           showLink={showLink}
           id={params.id}
-          handleReaction={handleReaction}
+          ratingValue={ratingValue}
+          handleSubmitRating={handleSubmitRating}
           visible={visibleforRating}
           setVisible={setVisibleforRating}
         />

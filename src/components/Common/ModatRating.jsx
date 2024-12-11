@@ -1,8 +1,18 @@
-import React from "react";
+import React, { useState } from "react";
 import { Dialog } from "primereact/dialog";
 import { IoClose } from "react-icons/io5";
-import { FaStar } from "react-icons/fa";
-const ModatRating = ({ setVisible, visible, id, handleReaction }) => {
+import axios from "axios";
+import { useAuth } from "../../context/auth";
+import toast from "react-hot-toast";
+
+const ModatRating = ({
+  setVisible,
+  visible,
+  id,
+  handleSubmitRating,
+  handleRatingChange,
+  ratingValue,
+}) => {
   return (
     <Dialog
       visible={visible}
@@ -11,61 +21,26 @@ const ModatRating = ({ setVisible, visible, id, handleReaction }) => {
       style={{ width: "30vw" }}
       onHide={() => setVisible(false)}>
       <IoClose onClick={() => setVisible(false)} className="cursor-pointer" />
-      <div className="flex justify-center items-center py-4">
+      <div className="flex justify-around items-center py-4">
         <div className="rating rating-lg rating-half">
-          <input type="radio" name="rating-10" className="rating-hidden" />
-          <input
-            type="radio"
-            name="rating-10"
-            className="mask mask-star-2 mask-half-1 bg-orange-500"
-          />
-          <input
-            type="radio"
-            name="rating-10"
-            className="mask mask-star-2 mask-half-2 bg-orange-500"
-          />
-          <input
-            type="radio"
-            name="rating-10"
-            className="mask mask-star-2 mask-half-1 bg-orange-500"
-            defaultChecked
-          />
-          <input
-            type="radio"
-            name="rating-10"
-            className="mask mask-star-2 mask-half-2 bg-orange-500"
-          />
-          <input
-            type="radio"
-            name="rating-10"
-            className="mask mask-star-2 mask-half-1 bg-orange-500"
-          />
-          <input
-            type="radio"
-            name="rating-10"
-            className="mask mask-star-2 mask-half-2 bg-orange-500"
-          />
-          <input
-            type="radio"
-            name="rating-10"
-            className="mask mask-star-2 mask-half-1 bg-orange-500"
-          />
-          <input
-            type="radio"
-            name="rating-10"
-            className="mask mask-star-2 mask-half-2 bg-orange-500"
-          />
-          <input
-            type="radio"
-            name="rating-10"
-            className="mask mask-star-2 mask-half-1 bg-orange-500"
-          />
-          <input
-            type="radio"
-            name="rating-10"
-            className="mask mask-star-2 mask-half-2 bg-orange-500"
-          />
+          {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((value) => (
+            <input
+              key={value}
+              type="radio"
+              name="rating"
+              className={`mask mask-star-2 mask-half-${
+                value % 2 === 0 ? 2 : 1
+              } bg-orange-500`}
+              checked={ratingValue === value}
+              onChange={() => handleRatingChange(value)}
+            />
+          ))}
         </div>
+        <button
+          onClick={handleSubmitRating}
+          className="border rounded-[5px] px-2 py-0.5 text-[14px]">
+          Submit
+        </button>
       </div>
     </Dialog>
   );
