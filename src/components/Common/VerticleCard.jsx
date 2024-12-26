@@ -4,8 +4,7 @@ import { BsDot } from "react-icons/bs";
 import CategoryName from "./CategoryName";
 import moment from "moment";
 import { Link } from "react-router-dom";
-const VerticleCard = ({ cardHeight, recent_post, cardImgWidth }) => {
-  console.log("recent_post....", recent_post);
+const VerticleCard = ({ cardHeight, recent_post }) => {
   return (
     <Link to={`/details/${recent_post[0]?._id}`}>
       <div className="round-curve relative">
@@ -20,25 +19,29 @@ const VerticleCard = ({ cardHeight, recent_post, cardImgWidth }) => {
           <CategoryName title={recent_post[0]?.category?.name} />
         </div>
         <div className="mt-7">
-          <p className="text-[#ad47b6] text-[15px] flex justify-normal items-center">
-            {recent_post[0]?.users?.nickname} <BsDot className="2xl" />
-            {moment(recent_post[0]?.users?.createdAt).format("lll")}
+          <p className="flex justify-normal items-center tracking-[0.5px]">
+            <span className="text-[#ad47b6] text-[16px] underline">
+              {recent_post[0]?.users?.nickname}
+            </span>{" "}
+            <BsDot className="text-2xl text-[#ad47b6]" />
+            <span className="text-[#7f5583] text-[14px] tracking-[0.5px]">
+              {moment(recent_post[0]?.users?.createdAt).format("lll")}
+            </span>{" "}
           </p>
-          <p className="text-xl mt-3">{recent_post[0]?.title}</p>
-
-          {/* {recent_post[0]?.description?.replace(/<[^>]*>/g, "")} */}
-          {recent_post[0]?.description?.length > 150 ? (
-            <p className="text-[16px] text-gray-600 mt-3">
+          <p className="text-xl mt-3 font-medium tracking-[1px]">
+            {recent_post[0]?.title}
+          </p>
+          {recent_post[0]?.description?.length > 190 ? (
+            <p className="text-[15px] tracking-[1px] text-gray-600 mt-3">
               {recent_post[0]?.description
-                ?.slice(0, 150)
+                ?.slice(0, 190)
                 .replace(/<[^>]*>/g, "") + "..."}
             </p>
           ) : (
-            <p className="text-[16px]">
-              {recent_post[0]?.description.replace(/<[^>]*>/g, "")}
+            <p className="text-[15px] tracking-[1px]">
+              {recent_post[0]?.description?.replace(/<[^>]*>/g, "")}
             </p>
           )}
-
           <div className="flex flex-wrap gap-3 mt-5 pb-2">
             {recent_post[0]?.tagNames?.map((tag, index) => (
               <Tags tag={tag} key={index} />

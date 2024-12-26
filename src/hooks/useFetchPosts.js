@@ -5,7 +5,7 @@ const useFetchPosts = (url) => {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
-  console.log("postsWithDetails...", data);
+
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true);
@@ -19,7 +19,7 @@ const useFetchPosts = (url) => {
           const postsWithDetails = await Promise.all(
             postData?.map(async (post) => {
               const tags = await fetchTagNames(post.tags);
-              console.log("tags...", tags);
+
               return { ...post, tagNames: tags };
             })
           );

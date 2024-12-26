@@ -2,16 +2,8 @@ import React, { useEffect, useState } from "react";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
-import post1 from "../../assets/recent/recent1.png";
-import post2 from "../../assets/recent/recent2.png";
-import post3 from "../../assets/recent/recent3.png";
-import {
-  IoLogoFacebook,
-  IoLogoInstagram,
-  IoLogoLinkedin,
-  IoLogoTwitter,
-  IoMdFastforward,
-} from "react-icons/io";
+import { FaFacebookF, FaInstagram, FaLinkedinIn } from "react-icons/fa";
+import { FaXTwitter } from "react-icons/fa6";
 import SectionHeader from "../../components/Common/SectionHeader";
 import HorizontalCard from "../../components/Common/HorizontalCard";
 import CategoryName from "../../components/Common/CategoryName";
@@ -19,6 +11,7 @@ import axios from "axios";
 import useFetchPosts from "../../hooks/useFetchPosts";
 import { BsDot } from "react-icons/bs";
 import moment from "moment";
+import SocialIcon from "../../components/Common/SocialIcon";
 
 const TrendingBlog = () => {
   const settings = {
@@ -68,88 +61,12 @@ const TrendingBlog = () => {
     fetchData();
   }, []);
 
-  console.log("categories", categories);
-
-  const recent_post = [
-    {
-      id: 1,
-      featuredImage: post1,
-      category: "Technology",
-      title: "The Future of Artificial Intelligence",
-      description:
-        "Exploring the latest advancements in AI and how they shape our future.",
-      date: "2024-10-15",
-      tag: ["AI", "Machine Learning", "Innovation", "Future", "Tech Trends"],
-      likes: 150,
-      comments: 75,
-      shares: 30,
-      authors: {
-        name: "Alice Smith",
-        image: "https://via.placeholder.com/150",
-        publish_date: "2024-10-15",
-      },
-    },
-    {
-      id: 2,
-      featuredImage: post2,
-      category: "Health & Wellness",
-      title: "Top 10 Benefits of a Plant-Based Diet",
-      description:
-        "Discover the health benefits of plant-based eating and how to start today.",
-      date: "2024-10-12",
-      tag: ["Health", "Wellness", "Diet", "Nutrition", "Lifestyle"],
-      likes: 220,
-      comments: 40,
-      shares: 65,
-      authors: {
-        name: "Mark Lee",
-        image: "https://via.placeholder.com/150",
-        publish_date: "2024-10-12",
-      },
-    },
-    {
-      id: 3,
-      featuredImage: post3,
-      category: "Travel",
-      title: "Exploring Hidden Gems in Europe",
-      description:
-        "A guide to uncovering Europe’s best-kept secrets for adventurous travelers.",
-      date: "2024-10-08",
-      tag: ["Travel", "Adventure", "Europe", "Guides", "Hidden Gems"],
-      likes: 180,
-      comments: 55,
-      shares: 45,
-      authors: {
-        name: "Sarah Brown",
-        image: "https://via.placeholder.com/150",
-        publish_date: "2024-10-08",
-      },
-    },
-    {
-      id: 4,
-      featuredImage: post1,
-      category: "Finance",
-      title: "How to Start Investing in 2024",
-      description:
-        "Learn the basics of investing and tips for building a strong financial future.",
-      date: "2024-10-01",
-      tag: ["Finance", "Investing", "Wealth", "Money Management", "2024"],
-      likes: 305,
-      comments: 90,
-      shares: 75,
-      authors: {
-        name: "David Johnson",
-        image: "https://via.placeholder.com/150",
-        publish_date: "2024-10-01",
-      },
-    },
-  ];
   return (
     <div className="container">
       <SectionHeader title={"Trending Blogs"} />
-      <div className=" grid grid-cols-3 gap-10">
+      <div className="grid grid-cols-3 gap-10">
         <div className="col-span-2 ">
-          <div className="flex flex-col justify-normal gap-1">
+          <div className="flex flex-col justify-normal gap-1 gap-y-5">
             {trendingItem?.map((e, i) => {
               return (
                 <HorizontalCard
@@ -159,6 +76,9 @@ const TrendingBlog = () => {
                   post={e}
                   cardImgHeight={180}
                   cardImgWidth={340}
+                  imgWidth={"350px"}
+                  desWidth={"600px"}
+                  type={"trending"}
                 />
               );
             })}
@@ -166,17 +86,25 @@ const TrendingBlog = () => {
         </div>
         <div>
           <div className="border round-curve px-4 py-2">
-            <p className="text-gray-700 mt-1 text-[16px]">
+            <p className="text-gray-700 font-semibold mt-1 text-[16px]">
               Explore Categories or Topics
             </p>
-            <div className="grid grid-cols-3 gap-3 mt-4 pt-1 pb-3">
+            <div className="flex flex-wrap gap-3 mt-4 pt-1 pb-3">
               {categories.map((e, i) => {
-                return <CategoryName title={e?.name} p={"category-list"} />;
+                return (
+                  <CategoryName
+                    title={e?.name}
+                    p={"category-list"}
+                    categoryId={e?._id}
+                  />
+                );
               })}
             </div>
           </div>
-          <div className="mt-6">
-            <p className="text-gray-700 mt-1 text-[16px]">Features Posts</p>
+          <div className="mt-8">
+            <p className="text-gray-700 font-semibold mt-1 text-[16px]">
+              Features Posts
+            </p>
             <Slider {...settings}>
               {featured?.map((e, i) => {
                 console.log("e", e);
@@ -222,22 +150,11 @@ const TrendingBlog = () => {
               })}
             </Slider>
           </div>
-          <div className="mt-4">
-            <p className="text-gray-700 mt-1 text-[16px]">Stay With Us</p>
-            <div className=" mt-4 flex justify-normal items-center gap-10">
-              <div className="h-8 w-8 rounded-full border flex justify-center items-center">
-                <IoLogoFacebook />
-              </div>
-              <div className="h-8 w-8 rounded-full border flex justify-center items-center">
-                <IoLogoLinkedin />
-              </div>
-              <div className="h-8 w-8 rounded-full border flex justify-center items-center">
-                <IoLogoInstagram />
-              </div>
-              <div className="h-8 w-8 rounded-full border flex justify-center items-center">
-                <IoLogoTwitter />
-              </div>
-            </div>
+          <div className="mt-10">
+            <p className="text-gray-700 font-semibold mt-1 text-[16px]">
+              Stay With Us
+            </p>
+            <SocialIcon />
           </div>
         </div>
       </div>

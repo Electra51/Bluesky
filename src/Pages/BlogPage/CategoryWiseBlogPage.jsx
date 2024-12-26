@@ -1,31 +1,22 @@
-import React, { useEffect, useState } from "react";
-import useFetchPosts from "../../hooks/useFetchPosts";
-import moment from "moment";
-import { BsDot } from "react-icons/bs";
-import Tags from "../../components/Common/Tags";
+import { useEffect, useState } from "react";
 import axios from "axios";
-import { Link, useNavigate, useParams } from "react-router-dom";
+import { Link, useParams, useNavigate } from "react-router-dom";
+import Tags from "../../components/Common/Tags";
+import moment from "moment";
 
-const BlogPage = () => {
+const CategoryWiseBlogPage = () => {
   const { categoryId } = useParams();
-  const navigate = useNavigate();
-
-  const {
-    data: allPosts,
-    loading,
-    error,
-  } = useFetchPosts(
-    "https://blue-sky-backend-umber.vercel.app/api/v1/post/posts"
-  );
-
+  const navigate = useNavigate(); // For navigation
   const [categories, setCategories] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
   const [categoryWisePosts, setCategoryWisePosts] = useState([]);
-  const [selectedCategory, setSelectedCategory] = useState("All");
 
+  // Fetch categories
   const fetchCategories = async () => {
     try {
       const response = await axios.get(
-        "https://blue-sky-backend-umber.vercel.app/api/v1/category/categories"
+        "http://localhost:8080/api/v1/category/categories"
       );
       if (response.status === 200) {
         setCategories(response.data);
@@ -37,45 +28,45 @@ const BlogPage = () => {
     }
   };
 
-  const fetchCategoryWisePosts = async (categoryId) => {
-    try {
-      const response = await fetch(
-        `http://localhost:8080/api/v1/post/category-wise-posts/${categoryId}`
-      );
-      if (!response.ok) {
-        throw new Error("Failed to fetch category-wise posts");
-      }
-      const data = await response.json();
-      setCategoryWisePosts(data.data || []);
-    } catch (err) {
-      console.error("Error:", err.message);
-    }
-  };
-
   useEffect(() => {
     fetchCategories();
   }, []);
 
-  useEffect(() => {
-    if (categoryId) {
-      setSelectedCategory(categoryId);
-      fetchCategoryWisePosts(categoryId);
-    } else {
-      setSelectedCategory("All");
-      setCategoryWisePosts(allPosts);
-    }
-  }, [categoryId, allPosts]);
+  // Fetch category-wise posts
+  const fetchCategoryWisePosts = async () => {
+    setLoading(true);
+    try {
+      let url = `http://localhost:8080/api/v1/post/category-wise-posts/${categoryId}`;
+      if (categoryId == "All") {
+        url = "http://localhost:8080/api/v1/post/posts";
+      }
+      const response = await fetch(url);
 
-  const handleCategoryClick = (categoryId) => {
-    if (categoryId === "All") {
-      navigate("/blog");
-    } else {
-      navigate(`/blog/${categoryId}`);
+      if (!response.ok) {
+        throw new Error("Failed to fetch category-wise posts");
+      }
+
+      const data = await response.json();
+      setCategoryWisePosts(data.data || []);
+      setError(null);
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setLoading(false);
     }
   };
 
+  useEffect(() => {
+    fetchCategoryWisePosts();
+  }, [categoryId]); // Trigger when categoryId changes
+
+  // Handle category button click
+  const handleCategoryClick = (categoryId) => {
+    navigate(`/blog/${categoryId}`); // Update the route dynamically
+  };
+
   return (
-    <div className="container pb-20">
+    <div className="container mx-auto">
       <div className="grid grid-cols-4 gap-5 justify-normal items-start">
         {/* Sidebar with Categories */}
         <div className="mt-7">
@@ -83,7 +74,7 @@ const BlogPage = () => {
           <div className="mt-3 flex flex-col justify-normal items-start space-y-3">
             <button
               className={`category-list ${
-                selectedCategory === "All" ? "font-bold text-purple-600" : ""
+                categoryId === "All" ? "font-bold text-purple-600" : ""
               }`}
               onClick={() => handleCategoryClick("All")}>
               All
@@ -92,9 +83,7 @@ const BlogPage = () => {
               <button
                 key={index}
                 className={`category-list ${
-                  selectedCategory === category._id
-                    ? "font-bold text-purple-600"
-                    : ""
+                  categoryId === category._id ? "font-bold text-purple-600" : ""
                 }`}
                 onClick={() => handleCategoryClick(category._id)}>
                 {category.name}
@@ -108,7 +97,7 @@ const BlogPage = () => {
           {loading ? (
             "Loading..."
           ) : error ? (
-            "Error loading posts"
+            <p>Error loading posts: {error}</p>
           ) : !categoryWisePosts.length ? (
             "No posts found"
           ) : (
@@ -125,8 +114,8 @@ const BlogPage = () => {
                     </div>
                     <div className="mt-2 px-4">
                       <p className="text-[#ad47b6] text-[15px] flex justify-normal items-center">
-                        {post?.users?.nickname} <BsDot className="2xl" />
-                        {moment(post?.users?.createdAt).format("lll")}
+                        {post?.users?.nickname}
+                        {moment(post?.createdAt).format("lll")}
                       </p>
                       <p className="text-[18px] font-medium text-black mt-2">
                         {post?.title?.slice(0, 30).replace(/<[^>]*>/g, "") +
@@ -154,4 +143,4 @@ const BlogPage = () => {
   );
 };
 
-export default BlogPage;
+export default CategoryWiseBlogPage;

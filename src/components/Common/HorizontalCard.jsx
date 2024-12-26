@@ -1,17 +1,24 @@
 import React from "react";
 import { BsDot } from "react-icons/bs";
-import Tags from "./Tags";
 import CategoryName from "./CategoryName";
 import moment from "moment";
 import { Link } from "react-router-dom";
+import Tags from "./Tags";
 
-const HorizontalCard = ({ post, cardImgHeight, cardImgWidth, left, top }) => {
-  console.log("post", post, cardImgHeight, cardImgWidth);
+const HorizontalCard = ({
+  post,
+  cardImgHeight,
+  left,
+  top,
+  imgWidth,
+  desWidth,
+  type,
+}) => {
   return (
     <Link to={`/details/${post?._id}`}>
       <div
         key={post.id}
-        className="round-curve border grid grid-cols-2 gap-5 relative"
+        className="round-curve border flex justify-normal items-start gap-7 relative"
         style={{
           height: cardImgHeight,
         }}>
@@ -19,6 +26,7 @@ const HorizontalCard = ({ post, cardImgHeight, cardImgWidth, left, top }) => {
           className={`rounded-s-[10px]`}
           style={{
             height: cardImgHeight,
+            width: imgWidth,
           }}>
           <img
             src={post?.featuredImage}
@@ -32,36 +40,76 @@ const HorizontalCard = ({ post, cardImgHeight, cardImgWidth, left, top }) => {
           </div>
         </div>
 
-        <div className="mt-3 px-1">
-          <p className="text-[#ad47b6] text-[12px] flex justify-normal items-center">
-            {post?.users?.nickname} <BsDot className="2xl" />
-            {moment(post.createdAt).format("lll")}
+        <div
+          className="px-1 py-2"
+          style={{
+            width: desWidth,
+          }}>
+          <p className="text-[#ad47b6] text-[14px] flex justify-normal items-center tracking-[0.5px]">
+            <span className="text-[#ad47b6] text-[13px] underline">
+              {post?.users?.nickname}
+            </span>{" "}
+            <BsDot className="text-2xl text-[#ad47b6]" />
+            <span className="text-[#7f5583] text-[13px] tracking-[0.5px]">
+              {moment(post?.users?.createdAt).format("lll")}
+            </span>{" "}
           </p>
-          {post?.title?.length > 30 ? (
-            <p className="text-[16px] mt-2">
-              {post?.title?.slice(0, 30).replace(/<[^>]*>/g, "") + "..."}
-            </p>
+
+          {type ? (
+            <>
+              {post?.title?.length > 40 ? (
+                <p className="text-[17px] mt-2 font-medium tracking-[1px]">
+                  {post?.title?.slice(0, 40).replace(/<[^>]*>/g, "") + "..."}
+                </p>
+              ) : (
+                <p className="text-[17px] mt-2 font-medium tracking-[1px]">
+                  {post?.title?.replace(/<[^>]*>/g, "")}
+                </p>
+              )}
+              {post?.description?.length > 190 ? (
+                <p className="text-[13px] tracking-[1px] text-gray-500 mt-1 font-normal">
+                  {post?.description?.slice(0, 190).replace(/<[^>]*>/g, "") +
+                    "..."}
+                </p>
+              ) : (
+                <p className="text-[13px] tracking-[1px] text-gray-500 mt-2 font-normal">
+                  {post?.description.replace(/<[^>]*>/g, "")}
+                </p>
+              )}
+            </>
           ) : (
-            <p className="text-[16px] mt-2">
-              {post?.title?.replace(/<[^>]*>/g, "")}
-            </p>
+            <>
+              {post?.title?.length > 30 ? (
+                <p className="text-[16px] mt-2 font-medium tracking-[1px]">
+                  {post?.title?.slice(0, 30).replace(/<[^>]*>/g, "") + "..."}
+                </p>
+              ) : (
+                <p className="text-[16px] mt-2 font-medium tracking-[1px]">
+                  {post?.title?.replace(/<[^>]*>/g, "")}
+                </p>
+              )}
+              {post?.description?.length > 150 ? (
+                <p className="text-[12px] tracking-[1px] text-gray-500 mt-1 font-normal">
+                  {post?.description?.slice(0, 150).replace(/<[^>]*>/g, "") +
+                    "..."}
+                </p>
+              ) : (
+                <p className="text-[12px] tracking-[1px] text-gray-500 mt-2 font-normal">
+                  {post?.description.replace(/<[^>]*>/g, "")}
+                </p>
+              )}
+            </>
           )}
-          {/* <p className="text-[18px] mt-2">{post?.title}</p> */}
-          {post?.description?.length > 150 ? (
-            <p className="text-[13px] text-gray-500 mt-1.5 font-light">
-              {post?.description?.slice(0, 150).replace(/<[^>]*>/g, "") + "..."}
-            </p>
+
+          {type ? (
+            <div className="flex justify-normal items-center gap-2 mt-4">
+              {post?.tagNames?.slice(0, 1)?.map((tag, index) => {
+                return <Tags tag={tag} key={index} />;
+              })}
+            </div>
           ) : (
-            <p className="text-[13px] text-gray-500 mt-2 font-light">
-              {post?.description.replace(/<[^>]*>/g, "")}
-            </p>
+            ""
           )}
-          {/* <p className="text-[14px] mt-0.5 text-gray-500">{post?.description}</p> */}
-          <div className="flex flex-wrap gap-3 mt-2">
-            {post?.tagnames?.slice(0, 2)?.map((tag, index) => (
-              <Tags tag={tag} key={index} />
-            ))}
-          </div>
         </div>
       </div>
     </Link>

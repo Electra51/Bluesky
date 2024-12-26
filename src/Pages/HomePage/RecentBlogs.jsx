@@ -26,7 +26,7 @@ const RecentBlogs = () => {
     <div className="container">
       <SectionHeader title={"Recent Blog Posts"} />
 
-      <div className="grid grid-cols-2 gap-16 mt-10">
+      <div className="grid grid-cols-2 gap-16 mt-5">
         <div className="border border-gray-50">
           <VerticleCard recent_post={data} cardHeight={300} />
         </div>
@@ -38,8 +38,10 @@ const RecentBlogs = () => {
                 left={"10"}
                 top={"10"}
                 post={post}
-                cardImgHeight={"150px"}
+                cardImgHeight={"160px"}
                 cardImgWidth={"640px"}
+                imgWidth={"290px"}
+                desWidth={"360px"}
               />
             ))}
         </div>

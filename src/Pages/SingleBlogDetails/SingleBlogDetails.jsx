@@ -1,46 +1,52 @@
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import axios from "axios";
 import moment from "moment";
 import toast from "react-hot-toast";
 import { useAuth } from "../../context/auth";
 import ShareModal from "../../components/Common/ShareModal";
-import ModalReact from "../../components/Common/ModalReact";
 import { BiLike } from "react-icons/bi";
-import { FaComments, FaRegComments, FaRegStar, FaStar } from "react-icons/fa";
+import { FaRegStar, FaStar } from "react-icons/fa";
 import { FiShare2 } from "react-icons/fi";
-import like from "../../assets/emoji/like.jpg";
-import love from "../../assets/emoji/love.png";
-import angry from "../../assets/emoji/angry.png";
-import wow from "../../assets/emoji/wow.png";
-import happy from "../../assets/emoji/happy.png";
-import DetailsofBlog from "./DetailsofBlog";
 import ModatRating from "../../components/Common/ModatRating";
-import Star from "../../components/Common/Star";
+import { MdOutlineReply } from "react-icons/md";
+import { RiChat3Line } from "react-icons/ri";
+import { IoIosArrowBack } from "react-icons/io";
+import BreadCrum from "../../components/Common/BreadCrum";
+import { HiOutlineUser } from "react-icons/hi2";
+import { GoDotFill } from "react-icons/go";
+import { SlLike } from "react-icons/sl";
+import BlogDescription from "../../components/Common/BlogDescription";
+import Tags from "../../components/Common/Tags";
+import RightSide from "./RightSide";
+import LeftSide from "./LeftSide";
 
 const SingleBlogDetails = () => {
+  const [post, setPost] = useState({});
   const [isShared, setIsShared] = useState(false);
   const [isRating, setIsRating] = useState(false);
   const [visible, setVisible] = useState(false);
-  const [visibleforReact, setVisibleforReact] = useState(false);
   const [visibleforRating, setVisibleforRating] = useState(false);
+  const [text, setText] = useState("");
+  const token = JSON.parse(localStorage.getItem("auth")).token;
   const [auth, setAuth] = useAuth();
   const userId = auth?.user?._id;
-  const [showCommentBox, setShowCommentBox] = useState(false);
   const params = useParams();
-  const [post, setPost] = useState({});
   const postId = params.id;
-
-  const [text, setText] = useState("");
   const [ratingValue, setRatingValue] = useState("");
-  const token = JSON.parse(localStorage.getItem("auth")).token;
   const [shareCount, setShareCount] = useState(post.shareCount || 0);
   const [ratingCount, setRatingCount] = useState(post.averageRating || 0);
   const [showLink, setShowLink] = useState(false);
-  const [selectedReaction, setSelectedReaction] = useState(null);
-  const [showComments, setShowComments] = useState(false);
-  console.log("post", post);
+  const [selectedReaction, setSelectedReaction] = useState(
+    post?.reactions?.some(
+      (reaction) =>
+        reaction.userId === auth?.user?._id && reaction.type === "like"
+    )
+      ? "like"
+      : null
+  );
 
+  // single post get api
   const getPostById = async () => {
     try {
       const response = await axios.get(
@@ -49,8 +55,8 @@ const SingleBlogDetails = () => {
       if (response.status === 200) {
         const postData = response.data.post;
         setPost(postData);
-        setShareCount(postData.shareCount || 0); // Update shareCount state
-        setRatingCount(postData.averageRating || 0); // Update shareCount state
+        setShareCount(postData.shareCount || 0);
+        setRatingCount(postData.averageRating || 0);
       } else {
         console.error("Failed to fetch blog post");
       }
@@ -58,7 +64,6 @@ const SingleBlogDetails = () => {
       console.error("Error fetching post:", error.message);
     }
   };
-
   useEffect(() => {
     if (params?.id) {
       getPostById();
@@ -83,8 +88,9 @@ const SingleBlogDetails = () => {
 
       if (response.status === 200) {
         toast.success("Reaction updated!");
-        setVisibleforReact(false);
-        setSelectedReaction(reactionType);
+        setSelectedReaction((prev) =>
+          prev === reactionType ? null : reactionType
+        ); // Toggle reaction
         setPost((prevPost) => ({
           ...prevPost,
           reactions: response.data.reactions,
@@ -93,15 +99,6 @@ const SingleBlogDetails = () => {
     } catch (error) {
       toast.error("Failed to update reaction.");
       console.error("Error in handleReaction:", error);
-    }
-  };
-
-  const handleAddCommentClick = () => {
-    if (auth?.user?._id) {
-      setShowCommentBox(true);
-      setShowComments((prevState) => !prevState);
-    } else {
-      toast.error("Please log in to add a comment.");
     }
   };
 
@@ -123,7 +120,8 @@ const SingleBlogDetails = () => {
       );
 
       if (response.status === 200) {
-        toast.success("Comment and/or rating submitted successfully!");
+        toast.success("Comment submitted successfully!");
+
         return response.data;
       }
     } catch (error) {
@@ -207,7 +205,7 @@ const SingleBlogDetails = () => {
   const handleRatingChange = (value) => {
     setRatingValue(value);
   };
-  console.log("ratingValue", ratingValue);
+
   const handleSubmitRating = async () => {
     try {
       const response = await axios.post(
@@ -233,188 +231,38 @@ const SingleBlogDetails = () => {
     }
   };
 
-  const hasUserRated = (userId) => {
-    // Check if the user exists in the ratings array
-    const userRating = post?.ratings.find((rating) => rating.user === userId);
-    return userRating ? true : false; // Returns true if found, false if not
-  };
-
   return (
     <div className="container">
-      <DetailsofBlog post={post} />
+      {/* header */}
+      <div className="text-[14px] font-medium bg-white h-[56px] flex justify-between items-center">
+        <Link
+          to="/blog"
+          className="flex justify-normal items-center gap-5 text-[#5F5F5F] cursor-pointer">
+          <IoIosArrowBack />
+          Back
+        </Link>
 
-      <div>
-        <div className="">
-          <div className="grid grid-cols-2 justify-normal items-center gap-1">
-            <div className="flex justify-normal items-center gap-2.5 -space-x-5">
-              {post?.reactions?.map((e, i) => {
-                return (
-                  <div className="" key={i}>
-                    {e?.type == "angry" ? (
-                      <div className="w-[30px] h-[30px] rounded-full border-2 border-gray-100 ">
-                        <img
-                          src={angry}
-                          alt=""
-                          className="h-full w-full object-cover rounded-full  border-2 border-gray-100"
-                        />
-                      </div>
-                    ) : e?.type == "like" ? (
-                      <div className="w-[26px] h-[26px] rounded-full">
-                        <img
-                          src={like}
-                          alt=""
-                          className="h-full w-full object-cover rounded-full"
-                        />
-                      </div>
-                    ) : e?.type == "love" ? (
-                      <div className="w-[30px] h-[30px] rounded-full border-2 border-gray-50">
-                        <img
-                          src={love}
-                          alt=""
-                          className="h-full w-full object-fill border-2 border-white rounded-full"
-                        />
-                      </div>
-                    ) : e?.type == "wow" ? (
-                      <div className="w-[30px] h-[30px] rounded-full border-2 border-red-400">
-                        <img
-                          src={wow}
-                          alt=""
-                          className="h-full w-full object-fill border-2 border-white rounded-full"
-                        />
-                      </div>
-                    ) : (
-                      <div className="w-[30px] h-[30px] rounded-full border-2 border-red-400">
-                        <img
-                          src={happy}
-                          alt=""
-                          className="h-full w-full object-fill border-2 border-white rounded-full"
-                        />
-                      </div>
-                    )}
-                  </div>
-                );
-              })}
-
-              <span className="pl-3 text-[14px]">
-                {post?.reactions?.length}+
-              </span>
-            </div>
-            <div className="flex justify-end items-center gap-6">
-              {" "}
-              <Star ratingPoint={ratingCount} />
-              <span className="flex justify-end items-center">
-                {shareCount} Share
-              </span>
-            </div>
-          </div>
-          <div className="grid grid-cols-4 justify-normal items-center border border-gray-500 gap-2 divide-x-2 mt-2">
-            <div className="flex justify-center items-center">
-              {/* Like button */}
-              <button onClick={() => setVisibleforReact(true)} className="">
-                {selectedReaction ? (
-                  selectedReaction === "like" ? (
-                    <img src={like} alt="like" width={40} />
-                  ) : selectedReaction === "love" ? (
-                    <img src={love} alt="love" width={40} />
-                  ) : selectedReaction === "wow" ? (
-                    <img src={wow} alt="wow" width={40} />
-                  ) : selectedReaction === "funny" ? (
-                    <img src={happy} alt="happy" width={40} />
-                  ) : selectedReaction === "angry" ? (
-                    <img src={angry} alt="angry" width={40} />
-                  ) : (
-                    <BiLike />
-                  )
-                ) : (
-                  <BiLike />
-                )}
-              </button>
-            </div>
-            <div className="flex justify-center items-center py-2">
-              <button className="" onClick={handleAddCommentClick}>
-                {showComments ? (
-                  <FaRegComments className="text-xl" />
-                ) : (
-                  <FaComments className="text-xl" />
-                )}
-              </button>
-            </div>
-            {/* rating */}
-            <div
-              className={`flex justify-center items-center py-2 ${
-                visible ? "text-white bg-blue-300" : ""
-              }`}>
-              <button
-                onClick={() => {
-                  setVisibleforRating(true);
-                }}
-                className="">
-                {isRating || hasUserRated(userId) ? (
-                  <div className="flex justify-normal items-center gap-3">
-                    {hasUserRated(userId)
-                      ? post?.ratings.find((rating) => rating.user === userId)
-                          ?.value
-                      : ""}
-                    <FaStar className="text-orange-500 text-[16px] mt-[-3px]" />
-                  </div>
-                ) : (
-                  <FaRegStar className="text-xl" />
-                )}
-              </button>
-            </div>
-            {/* share */}
-            <div
-              className={`flex justify-center items-center py-2 ${
-                visible ? "text-white bg-blue-300" : ""
-              }`}>
-              <button
-                onClick={() => {
-                  setShowLink(!showLink);
-                  setVisible(true);
-                }}
-                className="">
-                {isShared || post?.sharedUsers?.includes(userId) ? (
-                  <span className="text-blue-500 font-bold">Shared</span>
-                ) : (
-                  <FiShare2 className="text-xl" />
-                )}
-              </button>
-            </div>
-          </div>
-        </div>
-        {showCommentBox ? (
-          <div className="mt-5">
-            <label className="mb-0.5">Add Your Comments</label>
-            <textarea
-              placeholder="Type Comments... "
-              value={text}
-              onChange={(e) => setText(e.target.value)}
-              className="border border-gray-400 rounded-sm w-full p-1"
-            />
-
-            <button
-              onClick={submitComment}
-              className="bg-blue-500 rounded-sm text-white px-2 py-1">
-              Submit
-            </button>
-          </div>
-        ) : (
-          ""
-        )}
-        <h2 className="mt-2 border-0 border-b">All Comments</h2>
-        <div>
-          {post?.comments?.map((comment, index) => (
-            <div key={index} className="border-b pb-2 mb-2">
-              <p>
-                <strong>{comment.user?.nickname}</strong>: {comment.text}
-              </p>
-              <p className="text-sm text-gray-500">
-                {moment(comment.createdAt).format("lll")}
-              </p>
-            </div>
-          ))}
+        <div className="flex justify-normal items-center gap-2">
+          <BreadCrum prev={"Blog"} still="Blog Details" link="/" />
         </div>
       </div>
+      <div className="mt-[20px] grid grid-cols-3 gap-10 mx-auto items-start">
+        <LeftSide
+          submitComment={submitComment}
+          text={text}
+          isShared={isShared}
+          shareCount={shareCount}
+          ratingCount={ratingCount}
+          userId={userId}
+          post={post}
+          selectedReaction={selectedReaction}
+          visible={visible}
+          isRating={isRating}
+        />
+
+        <RightSide post={post} />
+      </div>
+
       {showLink && (
         <ShareModal
           handleCopyLink={handleCopyLink}
@@ -432,15 +280,6 @@ const SingleBlogDetails = () => {
           handleSubmitRating={handleSubmitRating}
           visible={visibleforRating}
           setVisible={setVisibleforRating}
-        />
-      )}
-      {visibleforReact && (
-        <ModalReact
-          showLink={showLink}
-          id={params.id}
-          handleReaction={handleReaction}
-          visible={visibleforReact}
-          setVisible={setVisibleforReact}
         />
       )}
     </div>

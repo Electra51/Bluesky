@@ -1,42 +1,40 @@
 import React, { useEffect, useState } from "react";
 import Logo from "../Common/Logo";
-import { MdOutlineAccountCircle, MdSearch } from "react-icons/md";
+import { MdMenu, MdOutlineAccountCircle, MdSearch } from "react-icons/md";
 import { Link } from "react-router-dom";
 import { useAuth } from "../../context/auth";
 import useFetchUserDetails from "../../hooks/useFetchUserDetails";
 import axios from "axios";
-
+import { FaAngleDown } from "react-icons/fa";
+import categoryImagebg from "../../assets/category.png";
 const Navbar = () => {
-  const [showMegaMenu, setShowMegaMenu] = useState(false);
-  const [searchTerm, setSearchTerm] = useState("");
-  const [categories, setCategories] = useState([]);
   const [auth, setAuth] = useAuth();
+  const [showMegaMenu, setShowMegaMenu] = useState(false);
+  const [categories, setCategories] = useState([]);
+  const { userDetails } = useFetchUserDetails(auth?.user?.email);
+
+  // toggle for category menu
   const toggleMegaMenu = () => {
     setShowMegaMenu(!showMegaMenu);
   };
-  const fetchData = async () => {
+
+  //  get all category data
+  const allCategoryDataGet = async () => {
     try {
       const response = await axios.get(
         "http://localhost:8080/api/v1/category/categories"
       );
-
       if (response.status === 200) {
         setCategories(response.data);
-        // console.log("response.dataresponse.dataresponse.data", response.data);
-      } else {
-        console.error("Failed to fetch categories");
       }
     } catch (error) {
       console.error("Error:", error.message);
     }
   };
-
   useEffect(() => {
-    fetchData();
+    allCategoryDataGet();
   }, []);
 
-  const authData = localStorage.getItem("Auth");
-  const { userDetails, loading } = useFetchUserDetails(auth?.user?.email);
   //logout function
   const handleLogout = () => {
     setAuth({
@@ -47,18 +45,17 @@ const Navbar = () => {
     localStorage.removeItem("auth");
     toast.success("logout successfully");
   };
+
   const menus = (
     <>
       <li>
         <Link to="/">Home</Link>
       </li>
-
       <li>
-        <details>
-          <summary onClick={toggleMegaMenu} className="cursor-pointer">
-            Category
-          </summary>
-        </details>
+        <div onClick={toggleMegaMenu} className="cursor-pointer">
+          Category
+          <FaAngleDown className={`${showMegaMenu ? "rotate-180" : ""}`} />
+        </div>
       </li>
       <li>
         <Link to={"/blog"}>Blogs</Link>
@@ -80,19 +77,7 @@ const Navbar = () => {
         <div className="navbar-start">
           <div className="dropdown">
             <div tabIndex={0} role="button" className="btn btn-ghost lg:hidden">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="h-5 w-5"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor">
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth="2"
-                  d="M4 6h16M4 12h8m-8 6h16"
-                />
-              </svg>
+              <MdMenu />
             </div>
             <ul
               tabIndex={0}
@@ -123,13 +108,7 @@ const Navbar = () => {
           ) : (
             <div className="dropdown dropdown-end">
               <div tabIndex={0} className="avatar placeholder cursor-pointer">
-                {/* <div className="bg-[#FFF6D8] border border-[#e8cd75] rounded-full w-8">
-                  <span className="text-xs">
-                    {auth?.user?.name.substring(0, 1)}
-                  </span>
-                </div> */}
                 <div className="flex justify-normal gap-2 items-center">
-                  {" "}
                   <div className="h-[36px] w-[36px] rounded-full bg-[#FFF6D8] border border-[#e8cd75] flex justify-center items-center shadow-md">
                     {userDetails?.profileImage ? (
                       <img
@@ -137,15 +116,17 @@ const Navbar = () => {
                         alt=""
                         className="h-full w-full object-fill rounded-full"
                       />
-                    ) : (
+                    ) : userDetails?.nickname ? (
                       <p>{userDetails?.nickname?.substring(0, 1)}</p>
+                    ) : (
+                      <p>{userDetails?.name?.substring(0, 1)}</p>
                     )}
                   </div>
                 </div>
               </div>
               <ul
                 tabIndex={0}
-                className="mt-3 z-[1] p-2 py-2 shadow dropdown-content bg-base-100 rounded-md w-52">
+                className="mt-3 z-[999] p-2 py-2 shadow dropdown-content bg-base-100 rounded-md w-52">
                 <li className="hover:bg-[#76C4EB] px-5 py-1 rounded-[4px]">
                   <Link to="/dashboard/profile" className="justify-between">
                     Profile
@@ -168,17 +149,37 @@ const Navbar = () => {
       {/* Mega Menu */}
       {showMegaMenu && (
         <div className="mega-menu mb-16 sm:mb-0 shadow-xl bg-[#e5f6fe] absolute left-1/2 transform -translate-x-1/2 transition-all z-10">
-          <div class="container mx-auto w-full grid grid-cols-5 gap-3 justify-between p-6">
-            {categories?.map((e, i) => {
-              return (
-                <div className="cursor-pointer border border-gray-100 hover:bg-gray-300 hover:text-white rounded-[5px] px-3 py-2">
-                  <p className="text-[16px] font-medium">{e?.name}</p>
-                  <p className="text-[14px] font-normal mt-1">
-                    {e?.description}
-                  </p>
-                </div>
-              );
-            })}
+          <div className="container mx-auto w-full flex p-3 gap-1">
+            <div className="h-[200px] w-[400px] bg-red-500 mt-5">
+              <img
+                src={categoryImagebg}
+                alt=""
+                className="w-full h-full object-fill "
+              />
+            </div>
+            <div className="grid grid-cols-6 gap-3 justify-between p-6">
+              {categories?.map((e, i) => {
+                return (
+                  <Link
+                    to={`/blog/${e?._id}`}
+                    onClick={() => setShowMegaMenu(false)}
+                    key={i}
+                    className="cursor-pointer hover:bg-gray-300 hover:text-white rounded-none px-3 py-2 border-0 border-l border-blue-500">
+                    <p className="text-[16px] font-medium">{e?.name}</p>
+                    {e?.description?.length > 10 ? (
+                      <p className="text-[16px] mt-2 text-nowrap">
+                        {e?.description?.slice(0, 10).replace(/<[^>]*>/g, "") +
+                          "..."}
+                      </p>
+                    ) : (
+                      <p className="text-[16px] mt-2">
+                        {e?.description?.replace(/<[^>]*>/g, "")}
+                      </p>
+                    )}
+                  </Link>
+                );
+              })}
+            </div>
           </div>
         </div>
       )}

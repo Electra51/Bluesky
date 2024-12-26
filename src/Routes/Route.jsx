@@ -20,6 +20,7 @@ import SignUpUserSelect from "../Pages/SignupPage/SignUpUserSelect";
 import EditPost from "../Pages/DashboardPages/EditPost/EditPost";
 import AuthorList from "../Pages/DashboardPages/AuthorList/AuthorList";
 import BlogPage from "../Pages/BlogPage/BlogPage";
+import CategoryWiseBlogPage from "../Pages/BlogPage/CategoryWiseBlogPage";
 
 export const router = createBrowserRouter([
   {
@@ -34,6 +35,10 @@ export const router = createBrowserRouter([
       {
         path: "/blog",
         element: <BlogPage />,
+      },
+      {
+        path: "/blog/:categoryId",
+        element: <CategoryWiseBlogPage />,
       },
       {
         path: "/details",

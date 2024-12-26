@@ -16,22 +16,25 @@ const Home = () => {
         <div className="mt-60">
           <RecentBlogs />
         </div>
-        <div className="mt-32">
-          <Subscribe />
-        </div>
+
         <div className="mt-32">
           <TrendingBlog />
         </div>
         <div className="mt-32">
+          {" "}
+          <Subscribe />
+        </div>
+        <div className="mt-32">
           <AllBlog />
         </div>
+
         <div className="mt-32">
           <PopularAuthor />
         </div>
-        <LastPart />
         <div className="mt-32">
           <InstraPhoto />
         </div>
+        <LastPart />
       </div>
     </div>
   );

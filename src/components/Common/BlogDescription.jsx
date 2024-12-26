@@ -4,7 +4,7 @@ const BlogDescription = ({ description }) => {
   const sanitizedHTML = DOMPurify.sanitize(description);
 
   return (
-    <div dangerouslySetInnerHTML={{ __html: sanitizedHTML }} className="px-3" />
+    <div dangerouslySetInnerHTML={{ __html: sanitizedHTML }} className="px-1" />
   );
 };
 
