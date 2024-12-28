@@ -22,7 +22,7 @@ const AddCategory = ({ fetchData, onCancel }) => {
 
     try {
       const response = await axios.post(
-        "http://localhost:8080/api/v1/category/categories",
+        "https://blue-sky-backend-umber.vercel.app/api/v1/category/categories",
         data,
         {
           headers: {

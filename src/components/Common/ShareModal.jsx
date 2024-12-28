@@ -16,7 +16,7 @@ const ShareModal = ({ setVisible, visible, postId, handleCopyLink }) => {
         <input
           type="text"
           readOnly
-          value={`http://localhost:8080/api/v1/post/posts/${postId}`}
+          value={`https://blue-sky-backend-umber.vercel.app/api/v1/post/posts/${postId}`}
           className="text-[#0077B6]"
         />
         <button

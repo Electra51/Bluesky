@@ -10,7 +10,7 @@ const useFetchUserDetails = (email) => {
     const fetchUserDetails = async () => {
       try {
         const response = await axios.get(
-          `http://localhost:8080/api/v1/auth/user/${email}`
+          `https://blue-sky-backend-umber.vercel.app/api/v1/auth/user/${email}`
         );
         setUserDetails(response.data.user);
       } catch (err) {

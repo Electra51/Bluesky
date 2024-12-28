@@ -1,12 +1,14 @@
 import React, { useEffect, useState } from "react";
 import Logo from "../Common/Logo";
 import { MdMenu, MdOutlineAccountCircle, MdSearch } from "react-icons/md";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/auth";
 import useFetchUserDetails from "../../hooks/useFetchUserDetails";
 import axios from "axios";
 import { FaAngleDown } from "react-icons/fa";
 import categoryImagebg from "../../assets/category.png";
+import toast from "react-hot-toast";
+
 const Navbar = () => {
   const [auth, setAuth] = useAuth();
   const [showMegaMenu, setShowMegaMenu] = useState(false);
@@ -22,7 +24,7 @@ const Navbar = () => {
   const allCategoryDataGet = async () => {
     try {
       const response = await axios.get(
-        "http://localhost:8080/api/v1/category/categories"
+        "https://blue-sky-backend-umber.vercel.app/api/v1/category/categories"
       );
       if (response.status === 200) {
         setCategories(response.data);
@@ -73,11 +75,11 @@ const Navbar = () => {
           ? "border-0 border-b border-green-50 bg-[#e5f6fe] py-1.5 shadow-sm"
           : "border-0 border-b border-green-50 bg-white py-1.5 shadow-sm"
       }`}>
-      <div className="navbar container">
+      <div className="navbar sm-container lg:container">
         <div className="navbar-start">
           <div className="dropdown">
-            <div tabIndex={0} role="button" className="btn btn-ghost lg:hidden">
-              <MdMenu />
+            <div tabIndex={0} role="button" className="pr-2 lg:hidden">
+              <MdMenu className="text-2xl" />
             </div>
             <ul
               tabIndex={0}
@@ -91,13 +93,6 @@ const Navbar = () => {
           <ul className="menu menu-horizontal px-1">{menus}</ul>
         </div>
         <div className="navbar-end gap-6">
-          <div className="flex justify-normal items-center relative">
-            <input
-              type="text"
-              className="px-2 py-1 h-9 border border-gray-200 rounded-full"
-            />
-            <MdSearch className="absolute top-2 right-3 text-xl" />
-          </div>
           {!userDetails ? (
             <Link
               to="/login"

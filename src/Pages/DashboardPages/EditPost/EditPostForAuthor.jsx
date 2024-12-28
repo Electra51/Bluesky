@@ -67,7 +67,7 @@ const EditPostForAuthor = () => {
                 formData.append("image", file);
                 try {
                   const response = await axios.post(
-                    "http://localhost:8080/api/v1/post/upload-image",
+                    "https://blue-sky-backend-umber.vercel.app/api/v1/post/upload-image",
                     formData,
                     { headers: { "Content-Type": "multipart/form-data" } }
                   );
@@ -88,7 +88,7 @@ const EditPostForAuthor = () => {
   const fetchCategories = async () => {
     try {
       const response = await axios.get(
-        "http://localhost:8080/api/v1/category/categories"
+        "https://blue-sky-backend-umber.vercel.app/api/v1/category/categories"
       );
       if (response.status === 200) setCategories(response.data);
     } catch (error) {
@@ -98,7 +98,9 @@ const EditPostForAuthor = () => {
 
   const fetchTags = async () => {
     try {
-      const response = await axios.get("http://localhost:8080/api/v1/tag/tags");
+      const response = await axios.get(
+        "https://blue-sky-backend-umber.vercel.app/api/v1/tag/tags"
+      );
       if (response.status === 200) setAllTags(response.data);
     } catch (error) {
       console.error("Error fetching tags:", error.message);
@@ -119,7 +121,7 @@ const EditPostForAuthor = () => {
         const formData = new FormData();
         formData.append("image", featuredImage);
         const response = await axios.post(
-          "http://localhost:8080/api/v1/post/upload-image",
+          "https://blue-sky-backend-umber.vercel.app/api/v1/post/upload-image",
           formData,
           { headers: { "Content-Type": "multipart/form-data" } }
         );
@@ -136,7 +138,7 @@ const EditPostForAuthor = () => {
 
       // Use PUT request to update the post
       await axios.put(
-        `http://localhost:8080/api/v1/post/posts/${id}`,
+        `https://blue-sky-backend-umber.vercel.app/api/v1/post/posts/${id}`,
         blogPostData
       );
 
@@ -157,7 +159,7 @@ const EditPostForAuthor = () => {
   const fetchPostData = async () => {
     try {
       const response = await axios.get(
-        `http://localhost:8080/api/v1/post/posts/${id}`
+        `https://blue-sky-backend-umber.vercel.app/api/v1/post/posts/${id}`
       );
 
       if (response.status === 200) {

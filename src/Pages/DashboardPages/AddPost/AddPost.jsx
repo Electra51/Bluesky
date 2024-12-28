@@ -65,7 +65,7 @@ const AddPost = () => {
 
         try {
           const response = await axios.post(
-            "http://localhost:8080/api/v1/post/upload-image",
+            "https://blue-sky-backend-umber.vercel.app/api/v1/post/upload-image",
             formData,
             {
               headers: {
@@ -149,7 +149,9 @@ const AddPost = () => {
 
   const fetchDataTags = async () => {
     try {
-      const response = await axios.get("http://localhost:8080/api/v1/tag/tags");
+      const response = await axios.get(
+        "https://blue-sky-backend-umber.vercel.app/api/v1/tag/tags"
+      );
 
       if (response.status === 200) {
         setAllTags(response.data);
@@ -174,7 +176,7 @@ const AddPost = () => {
   const fetchData = async () => {
     try {
       const response = await axios.get(
-        "http://localhost:8080/api/v1/category/categories"
+        "https://blue-sky-backend-umber.vercel.app/api/v1/category/categories"
       );
 
       if (response.status === 200) {
@@ -205,7 +207,7 @@ const AddPost = () => {
         imageFormData.append("image", featuredImage);
 
         const imageUploadResponse = await axios.post(
-          "http://localhost:8080/api/v1/post/upload-image",
+          "https://blue-sky-backend-umber.vercel.app/api/v1/post/upload-image",
           imageFormData,
           {
             headers: {
@@ -228,7 +230,10 @@ const AddPost = () => {
         status: ["Pending"],
       };
 
-      await axios.post("http://localhost:8080/api/v1/post/posts", blogPostData);
+      await axios.post(
+        "https://blue-sky-backend-umber.vercel.app/api/v1/post/posts",
+        blogPostData
+      );
 
       // Reset form fields
       setTitle("");

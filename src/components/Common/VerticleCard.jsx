@@ -32,7 +32,7 @@ const VerticleCard = ({ cardHeight, recent_post }) => {
             {recent_post[0]?.title}
           </p>
           {recent_post[0]?.description?.length > 190 ? (
-            <p className="text-[15px] tracking-[1px] text-gray-600 mt-3">
+            <p className="text-[15px] tracking-[1px] text-gray-500 mt-3">
               {recent_post[0]?.description
                 ?.slice(0, 190)
                 .replace(/<[^>]*>/g, "") + "..."}

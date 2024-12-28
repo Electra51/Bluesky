@@ -48,7 +48,7 @@ const SignUp = () => {
     try {
       // Register user
       const res = await axios.post(
-        `http://localhost:8080/api/v1/auth/register`,
+        `https://blue-sky-backend-umber.vercel.app/api/v1/auth/register`,
         {
           name,
           email,
@@ -80,7 +80,7 @@ const SignUp = () => {
         if (id === 1) {
           const token = res.data.token; // Assuming the token is returned after registration
           const verificationRes = await axios.post(
-            `http://localhost:8080/api/v1/auth/author/request-verification`,
+            `https://blue-sky-backend-umber.vercel.app/api/v1/auth/author/request-verification`,
             { userId: res.data.user._id }, // Send the user ID
             {
               headers: {

@@ -27,7 +27,7 @@
 //     }
 
 //     try {
-//       const res = await axios.post(`http://localhost:8080/api/v1/auth/login`, {
+//       const res = await axios.post(`https://blue-sky-backend-umber.vercel.app/api/v1/auth/login`, {
 //         email,
 //         password,
 //       });
@@ -173,10 +173,13 @@ const Login = () => {
     }
 
     try {
-      const res = await axios.post(`http://localhost:8080/api/v1/auth/login`, {
-        email,
-        password,
-      });
+      const res = await axios.post(
+        `https://blue-sky-backend-umber.vercel.app/api/v1/auth/login`,
+        {
+          email,
+          password,
+        }
+      );
 
       if (res && res.data.success) {
         toast.success(res.data.message);

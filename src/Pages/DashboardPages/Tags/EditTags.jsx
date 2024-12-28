@@ -23,7 +23,7 @@ const EditTags = ({
     const fetchTagData = async () => {
       try {
         const response = await axios.get(
-          `http://localhost:8080/api/v1/tag/tags/${tagId}`
+          `https://blue-sky-backend-umber.vercel.app/api/v1/tag/tags/${tagId}`
         );
 
         if (response.status === 200) {
@@ -56,7 +56,7 @@ const EditTags = ({
 
     try {
       const response = await axios.put(
-        `http://localhost:8080/api/v1/tag/tags/${tagId}`,
+        `https://blue-sky-backend-umber.vercel.app/api/v1/tag/tags/${tagId}`,
         data,
         {
           headers: {

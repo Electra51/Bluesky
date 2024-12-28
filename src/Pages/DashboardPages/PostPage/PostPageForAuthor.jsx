@@ -18,7 +18,7 @@ const PostPageForAuthor = () => {
   const fetchGetData = async () => {
     try {
       const response = await axios.get(
-        `http://localhost:8080/api/v1/post/posts/user/${userId}`
+        `https://blue-sky-backend-umber.vercel.app/api/v1/post/posts/user/${userId}`
       );
 
       if (response.status === 200) {
@@ -50,7 +50,7 @@ const PostPageForAuthor = () => {
   const getTagNameById = async (tagId) => {
     try {
       const response = await axios.get(
-        `http://localhost:8080/api/v1/tag/tags/${tagId}`,
+        `https://blue-sky-backend-umber.vercel.app/api/v1/tag/tags/${tagId}`,
         {
           headers: { "Content-Type": "application/json" },
         }
@@ -74,7 +74,7 @@ const PostPageForAuthor = () => {
   const handleDelete = async (id) => {
     try {
       const response = await axios.delete(
-        `http://localhost:8080/api/v1/post/posts/${id}`,
+        `https://blue-sky-backend-umber.vercel.app/api/v1/post/posts/${id}`,
         {
           headers: { "Content-Type": "application/json" },
         }

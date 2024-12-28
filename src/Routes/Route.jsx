@@ -21,6 +21,7 @@ import EditPost from "../Pages/DashboardPages/EditPost/EditPost";
 import AuthorList from "../Pages/DashboardPages/AuthorList/AuthorList";
 import BlogPage from "../Pages/BlogPage/BlogPage";
 import CategoryWiseBlogPage from "../Pages/BlogPage/CategoryWiseBlogPage";
+import Contact from "../Pages/ContactPage/Contact";
 
 export const router = createBrowserRouter([
   {
@@ -35,6 +36,10 @@ export const router = createBrowserRouter([
       {
         path: "/blog",
         element: <BlogPage />,
+      },
+      {
+        path: "/contact",
+        element: <Contact />,
       },
       {
         path: "/blog/:categoryId",

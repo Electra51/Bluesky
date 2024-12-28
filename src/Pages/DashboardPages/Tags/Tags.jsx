@@ -54,7 +54,9 @@ const Tags = () => {
 
   const fetchData = async () => {
     try {
-      const response = await axios.get("http://localhost:8080/api/v1/tag/tags");
+      const response = await axios.get(
+        "https://blue-sky-backend-umber.vercel.app/api/v1/tag/tags"
+      );
 
       if (response.status === 200) {
         setTags(response.data);
@@ -69,7 +71,7 @@ const Tags = () => {
   const handleDelete = async (id) => {
     try {
       const response = await axios.delete(
-        `http://localhost:8080/api/v1/tag/tags/${id}`,
+        `https://blue-sky-backend-umber.vercel.app/api/v1/tag/tags/${id}`,
         {
           headers: {
             "Content-Type": "application/json",

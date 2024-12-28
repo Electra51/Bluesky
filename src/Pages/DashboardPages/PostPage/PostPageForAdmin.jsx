@@ -7,7 +7,7 @@ import useFetchPosts from "../../../hooks/useFetchPosts";
 
 const PostPageForAdmin = () => {
   const { data, loading, error } = useFetchPosts(
-    "http://localhost:8080/api/v1/post/posts"
+    "https://blue-sky-backend-umber.vercel.app/api/v1/post/posts"
   );
 
   if (loading) {

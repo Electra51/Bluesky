@@ -12,7 +12,7 @@ export default function PrivateRoute({ children }) {
     const authCheck = async () => {
       try {
         const res = await axios.get(
-          `http://localhost:8080/api/v1/auth/user-auth`
+          `https://blue-sky-backend-umber.vercel.app/api/v1/auth/user-auth`
         );
         if (res?.data?.ok) {
           setOk(true);

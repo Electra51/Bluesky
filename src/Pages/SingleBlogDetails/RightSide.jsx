@@ -37,7 +37,9 @@ const RightSide = ({ post }) => {
   ];
   const fetchData = async () => {
     try {
-      const response = await axios.get("http://localhost:8080/api/v1/tag/tags");
+      const response = await axios.get(
+        "https://blue-sky-backend-umber.vercel.app/api/v1/tag/tags"
+      );
 
       if (response.status === 200) {
         setTags(response.data);
@@ -54,7 +56,7 @@ const RightSide = ({ post }) => {
   const fetchCategoryWisePosts = async () => {
     try {
       const response = await fetch(
-        "http://localhost:8080/api/v1/post/category-wise-posts"
+        "https://blue-sky-backend-umber.vercel.app/api/v1/post/category-wise-posts"
       );
       if (!response.ok) {
         throw new Error("Failed to fetch category-wise posts");
@@ -72,7 +74,6 @@ const RightSide = ({ post }) => {
     fetchCategoryWisePosts();
   }, []);
 
-  console.log("categoryWisePosts", categoryWisePosts);
   return (
     <div className="flex flex-col justify-end">
       <div className="flex justify-center items-start relative">

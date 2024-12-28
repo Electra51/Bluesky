@@ -14,7 +14,7 @@ const EditPostForAdmin = () => {
   const fetchPostData = async () => {
     try {
       const response = await axios.get(
-        `http://localhost:8080/api/v1/post/posts/${id}`
+        `https://blue-sky-backend-umber.vercel.app/api/v1/post/posts/${id}`
       );
 
       if (response.status === 200) {
@@ -34,7 +34,7 @@ const EditPostForAdmin = () => {
   const updateStatus = async (status) => {
     try {
       const response = await axios.patch(
-        `http://localhost:8080/api/v1/post/posts/${id}/status`,
+        `https://blue-sky-backend-umber.vercel.app/api/v1/post/posts/${id}/status`,
         { status }
       );
 

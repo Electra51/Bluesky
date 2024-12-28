@@ -22,10 +22,13 @@ function ResetPassword() {
     setLoading(true);
 
     axios
-      .post(`http://localhost:8080/api/v1/auth/reset-password/${id}/${token}`, {
-        password,
-        password2,
-      })
+      .post(
+        `https://blue-sky-backend-umber.vercel.app/api/v1/auth/reset-password/${id}/${token}`,
+        {
+          password,
+          password2,
+        }
+      )
       .then((res) => {
         setLoading(false);
 

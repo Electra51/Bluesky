@@ -11,9 +11,9 @@ import InstraPhoto from "./InstraPhoto";
 const Home = () => {
   return (
     <div>
-      <div className="mt-10">
+      <div className="mt-6 lg:mt-10">
         <Hero />
-        <div className="mt-60">
+        <div className="mt-32 lg:mt-60">
           <RecentBlogs />
         </div>
 

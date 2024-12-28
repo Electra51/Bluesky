@@ -159,7 +159,6 @@ const LeftSide = ({
           <div className="">
             <h2 className="border-0 border-b mt-10">All Comments</h2>
             {post?.comments?.map((comment, index) => {
-              console.log("comm", comment);
               return (
                 <div key={index} className="border-b pb-2 mb-2">
                   <div className="flex justify-normal items-start gap-3 py-3">

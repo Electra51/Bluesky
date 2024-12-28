@@ -47,7 +47,7 @@ const PopularAuthor = () => {
     const fetchAllAuthors = async () => {
       try {
         const response = await axios.get(
-          `http://localhost:8080/api/v1/auth/users/authors`
+          `https://blue-sky-backend-umber.vercel.app/api/v1/auth/users/authors`
         );
 
         if (response?.data?.success && response?.data?.authors) {
@@ -72,16 +72,23 @@ const PopularAuthor = () => {
 
     fetchAllAuthors();
   }, []);
-  console.log("authors", authors);
   return (
     <div className="bg-[#f5fff1f5] h-[500px] flex items-center justify-center">
       <div className="container">
+        <div className="flex flex-col justify-between mb-24">
+          <h2 className="text-[25px] font-semibold text-center lg:text-center">
+            Our Popular Authors
+          </h2>
+          <p className="text-[16px] text-gray-800 font-normal text-center lg:text-center">
+            Discover the Depths of Knowledge and Inspiration in Every Post
+          </p>
+        </div>
         <Slider {...settings}>
           {authors.map((author, index) => {
             return (
-              <div>
+              <div key={index}>
                 <div className="px-3 flex flex-col justify-center items-center">
-                  <div className=" w-48 h-48 rounded-full">
+                  <div className=" w-40 h-40 rounded-full">
                     <img
                       src={author?.profileImage}
                       alt=""

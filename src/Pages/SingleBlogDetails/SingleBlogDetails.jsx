@@ -50,7 +50,7 @@ const SingleBlogDetails = () => {
   const getPostById = async () => {
     try {
       const response = await axios.get(
-        `http://localhost:8080/api/v1/post/posts/${params.id}`
+        `https://blue-sky-backend-umber.vercel.app/api/v1/post/posts/${params.id}`
       );
       if (response.status === 200) {
         const postData = response.data.post;
@@ -73,7 +73,7 @@ const SingleBlogDetails = () => {
   const handleReaction = async (reactionType) => {
     try {
       const response = await axios.post(
-        `http://localhost:8080/api/v1/post/posts/${postId}/toggleReaction`,
+        `https://blue-sky-backend-umber.vercel.app/api/v1/post/posts/${postId}/toggleReaction`,
         {
           postId,
           userId: auth?.user?._id,
@@ -110,7 +110,7 @@ const SingleBlogDetails = () => {
 
     try {
       const response = await axios.post(
-        `http://localhost:8080/api/v1/post/posts/${postId}/add-comments`,
+        `https://blue-sky-backend-umber.vercel.app/api/v1/post/posts/${postId}/add-comments`,
         { text, ratingValue, userId, postId },
         {
           headers: {
@@ -172,11 +172,11 @@ const SingleBlogDetails = () => {
   };
 
   const handleCopyLink = async () => {
-    const postUrl = `http://localhost:8080/api/v1/post/posts/${postId}`;
+    const postUrl = `https://blue-sky-backend-umber.vercel.app/api/v1/post/posts/${postId}`;
     try {
       await navigator.clipboard.writeText(postUrl);
       const response = await axios.post(
-        `http://localhost:8080/api/v1/post/posts/${postId}/incrementShareCount`,
+        `https://blue-sky-backend-umber.vercel.app/api/v1/post/posts/${postId}/incrementShareCount`,
         { postId, userId },
         {
           headers: {
@@ -209,7 +209,7 @@ const SingleBlogDetails = () => {
   const handleSubmitRating = async () => {
     try {
       const response = await axios.post(
-        `http://localhost:8080/api/v1/post/posts/${postId}/add-rating`, // API endpoint for adding ratings
+        `https://blue-sky-backend-umber.vercel.app/api/v1/post/posts/${postId}/add-rating`, // API endpoint for adding ratings
         {
           postId,
           ratingValue: ratingValue,

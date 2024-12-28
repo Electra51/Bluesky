@@ -6,7 +6,7 @@ import useFetchPosts from "../../hooks/useFetchPosts";
 
 const RecentBlogs = () => {
   const { data, loading, error } = useFetchPosts(
-    "http://localhost:8080/api/v1/post/posts"
+    "https://blue-sky-backend-umber.vercel.app/api/v1/post/posts"
   );
 
   if (loading) {
@@ -16,8 +16,6 @@ const RecentBlogs = () => {
   if (error) {
     return <div>Error: {error}</div>;
   }
-
-  // Check if posts array has content before reducing
   if (!data.length) {
     return <div>No recent posts available.</div>;
   }

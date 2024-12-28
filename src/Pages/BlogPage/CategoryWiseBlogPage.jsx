@@ -16,7 +16,7 @@ const CategoryWiseBlogPage = () => {
   const fetchCategories = async () => {
     try {
       const response = await axios.get(
-        "http://localhost:8080/api/v1/category/categories"
+        "https://blue-sky-backend-umber.vercel.app/api/v1/category/categories"
       );
       if (response.status === 200) {
         setCategories(response.data);
@@ -36,9 +36,9 @@ const CategoryWiseBlogPage = () => {
   const fetchCategoryWisePosts = async () => {
     setLoading(true);
     try {
-      let url = `http://localhost:8080/api/v1/post/category-wise-posts/${categoryId}`;
+      let url = `https://blue-sky-backend-umber.vercel.app/api/v1/post/category-wise-posts/${categoryId}`;
       if (categoryId == "All") {
-        url = "http://localhost:8080/api/v1/post/posts";
+        url = "https://blue-sky-backend-umber.vercel.app/api/v1/post/posts";
       }
       const response = await fetch(url);
 

@@ -5,7 +5,7 @@ const CategoryName = ({ title, p, categoryId }) => {
   return (
     <>
       {p == "hero-list" ? (
-        <button className=" bg-[#0077B6] text-white shadow-md rounded-[4px] px-2 py-0.5 ">
+        <button className=" bg-[#0077B6] text-white shadow-md rounded-[4px] lg:px-2 lg:py-0.5 px-0.5 py-0">
           {title}
         </button>
       ) : p == "category-list" ? (

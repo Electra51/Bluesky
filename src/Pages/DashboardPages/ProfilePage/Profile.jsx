@@ -24,7 +24,7 @@ const Profile = () => {
     const fetchUserDetails = async () => {
       try {
         const response = await axios.get(
-          `http://localhost:8080/api/v1/auth/user/${auth?.user?.email}`
+          `https://blue-sky-backend-umber.vercel.app/api/v1/auth/user/${auth?.user?.email}`
         );
         setUserDetails(response.data.user);
         setEditedUserDetails(response.data.user);
@@ -72,7 +72,7 @@ const Profile = () => {
       }
 
       const response = await axios.put(
-        `http://localhost:8080/api/v1/auth/user/update/${auth?.user?.email}`,
+        `https://blue-sky-backend-umber.vercel.app/api/v1/auth/user/update/${auth?.user?.email}`,
         formData,
         {
           headers: {

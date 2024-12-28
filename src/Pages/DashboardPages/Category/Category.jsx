@@ -55,7 +55,7 @@ const Category = () => {
   const fetchData = async () => {
     try {
       const response = await axios.get(
-        "http://localhost:8080/api/v1/category/categories"
+        "https://blue-sky-backend-umber.vercel.app/api/v1/category/categories"
       );
 
       if (response.status === 200) {
@@ -71,7 +71,7 @@ const Category = () => {
   const handleDelete = async (id) => {
     try {
       const response = await axios.delete(
-        `http://localhost:8080/api/v1/category/categories/${id}`,
+        `https://blue-sky-backend-umber.vercel.app/api/v1/category/categories/${id}`,
         {
           headers: {
             "Content-Type": "application/json",

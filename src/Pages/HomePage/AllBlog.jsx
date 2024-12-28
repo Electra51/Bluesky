@@ -4,10 +4,12 @@ import useFetchPosts from "../../hooks/useFetchPosts";
 import moment from "moment";
 import { BsDot } from "react-icons/bs";
 import Tags from "../../components/Common/Tags";
+import VerticleCard from "../../components/Common/VerticleCard";
+import HorizontalCard from "../../components/Common/HorizontalCard";
 
 const AllBlog = () => {
   const { data, loading, error } = useFetchPosts(
-    "http://localhost:8080/api/v1/post/posts"
+    "https://blue-sky-backend-umber.vercel.app/api/v1/post/posts"
   );
 
   if (loading) {
@@ -22,7 +24,7 @@ const AllBlog = () => {
   if (!data.length) {
     return <div>No recent posts available.</div>;
   }
-  console.log("data", data);
+
   const authData = localStorage.getItem("Auth");
 
   return (
@@ -43,7 +45,7 @@ const AllBlog = () => {
       </div>
 
       <div className="pb-20 pt-10">
-        <Link to={`/details/${data[0]?._id}`}>
+        {/* <Link to={`/details/${data[0]?._id}`}>
           <div className="flex justify-normal items-start border rounded-[6px] gap-7">
             <div className="w-[620px] h-[300px] rounded-l-[6px]">
               <img
@@ -84,7 +86,18 @@ const AllBlog = () => {
               </div>
             </div>
           </div>
-        </Link>
+        </Link> */}
+
+        <HorizontalCard
+          left={"10"}
+          top={"10"}
+          post={data[0]}
+          cardImgHeight={"300px"}
+          cardImgWidth={"1400px"}
+          imgWidth={"620px"}
+          desWidth={"780px"}
+          cardType={"allblog"}
+        />
 
         <div className="grid grid-cols-4 gap-12 mt-7">
           {data
@@ -124,7 +137,7 @@ const AllBlog = () => {
                         </p>
                       )}
                       {post?.description?.length > 140 ? (
-                        <p className="text-[14px] text-gray-500 mt-2">
+                        <p className="text-[14px] text-gray-500 mt-2 tracking-[1px]">
                           {post?.description
                             ?.slice(0, 140)
                             .replace(/<[^>]*>/g, "") + "..."}

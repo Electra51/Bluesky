@@ -14,7 +14,7 @@ const ForgotPassword = () => {
 
     try {
       const res = await axios.post(
-        `http://localhost:8080/api/v1/auth/forgot-password`,
+        `https://blue-sky-backend-umber.vercel.app/api/v1/auth/forgot-password`,
         { email }
       );
 

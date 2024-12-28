@@ -13,7 +13,9 @@ const HorizontalCard = ({
   imgWidth,
   desWidth,
   type,
+  cardType,
 }) => {
+  console.log("cardType", cardType, type);
   return (
     <Link to={`/details/${post?._id}`}>
       <div
@@ -73,6 +75,28 @@ const HorizontalCard = ({
                 </p>
               ) : (
                 <p className="text-[13px] tracking-[1px] text-gray-500 mt-2 font-normal">
+                  {post?.description.replace(/<[^>]*>/g, "")}
+                </p>
+              )}
+            </>
+          ) : cardType ? (
+            <>
+              {post?.title?.length > 400 ? (
+                <p className="text-[16px] mt-2 font-medium tracking-[1px]">
+                  {post?.title?.slice(0, 400).replace(/<[^>]*>/g, "") + "..."}
+                </p>
+              ) : (
+                <p className="text-[16px] mt-2 font-medium tracking-[1px]">
+                  {post?.title?.replace(/<[^>]*>/g, "")}
+                </p>
+              )}
+              {post?.description?.length > 150 ? (
+                <p className="text-[12px] tracking-[1px] text-gray-500 mt-1 font-normal">
+                  {post?.description?.slice(0, 150).replace(/<[^>]*>/g, "") +
+                    "..."}
+                </p>
+              ) : (
+                <p className="text-[12px] tracking-[1px] text-gray-500 mt-2 font-normal">
                   {post?.description.replace(/<[^>]*>/g, "")}
                 </p>
               )}

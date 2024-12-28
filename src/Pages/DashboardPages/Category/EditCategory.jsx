@@ -23,7 +23,7 @@ const EditCategory = ({
     const fetchCategoryData = async () => {
       try {
         const response = await axios.get(
-          `http://localhost:8080/api/v1/category/categories/${categoryId}`
+          `https://blue-sky-backend-umber.vercel.app/api/v1/category/categories/${categoryId}`
         );
 
         if (response.status === 200) {
@@ -55,7 +55,7 @@ const EditCategory = ({
 
     try {
       const response = await axios.put(
-        `http://localhost:8080/api/v1/category/categories/${categoryId}`,
+        `https://blue-sky-backend-umber.vercel.app/api/v1/category/categories/${categoryId}`,
         data,
         {
           headers: {

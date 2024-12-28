@@ -25,10 +25,9 @@ const TrendingBlog = () => {
   const [trendingItem, setTrendingItem] = useState([]);
   const [featured, setFeaturedItem] = useState([]);
   const { data, loading, error } = useFetchPosts(
-    "http://localhost:8080/api/v1/post/posts"
+    "https://blue-sky-backend-umber.vercel.app/api/v1/post/posts"
   );
 
-  console.log("data", data);
   useEffect(() => {
     const trendingItems = data.filter((item) =>
       item?.status?.includes("Trending")
@@ -40,11 +39,10 @@ const TrendingBlog = () => {
     setFeaturedItem(featuredItems);
   }, [data]);
 
-  console.log("featured", featured);
   const fetchData = async () => {
     try {
       const response = await axios.get(
-        "http://localhost:8080/api/v1/category/categories"
+        "https://blue-sky-backend-umber.vercel.app/api/v1/category/categories"
       );
 
       if (response.status === 200) {
@@ -93,6 +91,7 @@ const TrendingBlog = () => {
               {categories.map((e, i) => {
                 return (
                   <CategoryName
+                    key={i}
                     title={e?.name}
                     p={"category-list"}
                     categoryId={e?._id}
@@ -107,7 +106,6 @@ const TrendingBlog = () => {
             </p>
             <Slider {...settings}>
               {featured?.map((e, i) => {
-                console.log("e", e);
                 return (
                   <div>
                     <h3>

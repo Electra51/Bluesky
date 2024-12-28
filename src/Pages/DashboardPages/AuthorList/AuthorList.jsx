@@ -17,7 +17,7 @@ const AuthorList = () => {
     const fetchAllAuthors = async () => {
       try {
         const response = await axios.get(
-          `http://localhost:8080/api/v1/auth/users/authors`
+          `https://blue-sky-backend-umber.vercel.app/api/v1/auth/users/authors`
         );
 
         if (response?.data?.success && response?.data?.authors) {
@@ -54,7 +54,7 @@ const AuthorList = () => {
   const handleVerify = async (authorId, index) => {
     try {
       const res = await axios.patch(
-        `http://localhost:8080/api/v1/auth/author/verify`,
+        `https://blue-sky-backend-umber.vercel.app/api/v1/auth/author/verify`,
         {
           authorId,
         }

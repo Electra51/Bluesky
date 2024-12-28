@@ -40,7 +40,7 @@ const BlogPage = () => {
   const fetchCategoryWisePosts = async (categoryId) => {
     try {
       const response = await fetch(
-        `http://localhost:8080/api/v1/post/category-wise-posts/${categoryId}`
+        `https://blue-sky-backend-umber.vercel.app/api/v1/post/category-wise-posts/${categoryId}`
       );
       if (!response.ok) {
         throw new Error("Failed to fetch category-wise posts");

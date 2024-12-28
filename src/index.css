@@ -17,6 +17,11 @@ body {
   width: 1440px;
   margin: 0 auto;
 }
+.sm-container {
+  width: 390px;
+  margin: 0 auto;
+  /* border: 1px solid red; */
+}
 .round-curve {
   border-radius: 10px;
 }
@@ -65,4 +70,32 @@ svg[Attributes] {
   width: 28;
   height: 28;
   fill: rgb(234, 229, 241) !important;
+}
+
+.wavy {
+  position: relative;
+  color: #0077b6;
+  -webkit-box-reflect: below -12px linear-gradient(transparent, rgba(0, 0, 0, 0.2));
+}
+.wavy span {
+  position: relative;
+  display: inline-block;
+  color: #0077b6;
+  font-weight: 700;
+  font-size: 20px;
+  text-transform: uppercase;
+  animation: animate 1s ease-in-out infinite;
+  animation-delay: calc(0.1s * var(--i));
+}
+@keyframes animate {
+  0% {
+    transform: translateY(0px);
+  }
+  20% {
+    transform: translateY(-20px);
+  }
+  40%,
+  100% {
+    transform: translateY(0px);
+  }
 }

@@ -17,7 +17,7 @@ const Details = () => {
   const fetchData = async () => {
     try {
       const response = await axios.get(
-        "http://localhost:8080/api/v1/category/categories"
+        "https://blue-sky-backend-umber.vercel.app/api/v1/category/categories"
       );
 
       if (response.status === 200) {
@@ -38,7 +38,7 @@ const Details = () => {
   const fetchPostData = async () => {
     try {
       const response = await axios.get(
-        `http://localhost:8080/api/v1/post/posts`
+        `https://blue-sky-backend-umber.vercel.app/api/v1/post/posts`
       );
 
       if (response.status === 200) {
