@@ -65,7 +65,7 @@ const AddPost = () => {
 
         try {
           const response = await axios.post(
-            "https://blue-sky-backend-umber.vercel.app/api/v1/post/upload-image",
+            "http://localhost:8080/api/v1/post/upload-image",
             formData,
             {
               headers: {
