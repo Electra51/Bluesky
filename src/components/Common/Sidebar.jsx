@@ -26,7 +26,7 @@ const Sidebar = () => {
     toast.success("logout successfully");
     navigate(location.state?.from || "/");
   };
-
+  console.log("userDetails", userDetails);
   return (
     <div className="w-[270px] bg-[#f3f4fc] h-[100vh] relative">
       <Link
@@ -76,7 +76,7 @@ const Sidebar = () => {
                 {userDetails?.nickname}
               </p>
             </div>
-          ) : auth.user ? (
+          ) : auth?.user ? (
             <div className="flex justify-normal gap-2 items-center">
               {" "}
               <div className="h-[36px] w-[36px] rounded-full bg-[#FFF6D8] border border-[#e8cd75] flex justify-center items-center">

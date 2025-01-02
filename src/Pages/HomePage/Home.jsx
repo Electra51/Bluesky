@@ -13,29 +13,26 @@ const Home = () => {
     <div>
       <div className="mt-6 lg:mt-10">
         <Hero />
-        <div className="mt-32 lg:mt-60">
-          <RecentBlogs />
-        </div>
-
-        <div className="mt-32">
-          <TrendingBlog />
-        </div>
-        <div className="mt-32">
-          {" "}
-          <Subscribe />
-        </div>
-        <div className="mt-32">
-          <AllBlog />
-        </div>
-
-        <div className="mt-32">
-          <PopularAuthor />
-        </div>
-        <div className="mt-32">
-          <InstraPhoto />
-        </div>
-        <LastPart />
       </div>
+      <div className="mt-32 lg:mt-[200px]">
+        <RecentBlogs />
+      </div>
+      <div className="mt-32 lg:mt-[200px]">
+        <TrendingBlog />
+      </div>
+      <div className="mt-32 lg:mt-[200px]">
+        <Subscribe />
+      </div>
+      <div className="mt-32 lg:mt-[200px]">
+        <AllBlog />
+      </div>
+      <div className="mt-32 lg:mt-[200px]">
+        <PopularAuthor />
+      </div>
+      <div className="mt-32 lg:mt-[200px] mb-32">
+        <InstraPhoto />
+      </div>
+      <LastPart />
     </div>
   );
 };

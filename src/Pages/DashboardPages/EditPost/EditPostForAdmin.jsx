@@ -3,6 +3,7 @@ import axios from "axios";
 import { useNavigate, useParams } from "react-router-dom";
 import toast from "react-hot-toast";
 import BreadCrum from "../../../components/Common/BreadCrum";
+import BlogDescription from "../../../components/Common/BlogDescription";
 
 const EditPostForAdmin = () => {
   const [data, setData] = useState("");
@@ -67,7 +68,7 @@ const EditPostForAdmin = () => {
 
   return (
     <>
-      <div className="flex justify-normal items-start pl-7 pt-4">
+      <div className="flex justify-normal items-start">
         <BreadCrum
           still={"Blog Details"}
           prev={"Blog Lists"}
@@ -75,15 +76,19 @@ const EditPostForAdmin = () => {
         />
       </div>
       <div className="grid grid-cols-3 gap-5 w-[1440px]">
-        <div className="col-span-2 bg-white m-3 ">
-          <div className="mt-[7px] rounded-md p-4">
-            <p className="mb-3">Title: {data?.title}</p>
+        <div className="col-span-2 bg-white h-[90vh] overflow-auto">
+          <div className="mt-[7px] rounded-md">
+            <p className="mb-3 font-semibold text-xl">{data?.title}</p>
+            <div className="h-[430px] w-full">
+              <img
+                src={data?.featuredImage}
+                alt="Featured"
+                className="h-full w-full object-fill"
+              />
+            </div>
 
-            <img src={data?.featuredImage} alt="Featured" />
             <div className="flex flex-col mt-[18px]">
-              <p className="mb-3">
-                Description: {data?.description?.replace(/<[^>]*>/g, "")}
-              </p>
+              <BlogDescription description={data?.description} />
             </div>
           </div>
         </div>
@@ -93,9 +98,8 @@ const EditPostForAdmin = () => {
               <label className="text-nowrap">Approve Type: </label>
               <select
                 className="bg-white border border-gray-300 rounded-[5px] w-[200px] py-0.5"
-                value={status} // Bind selected value to state
-                onChange={handleStatusChange} // Handle change
-              >
+                value={status}
+                onChange={handleStatusChange}>
                 <option value="Trending">Trending</option>
                 <option value="Featured">Featured</option>
                 <option value="Pending">Pending</option>

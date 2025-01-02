@@ -3,10 +3,13 @@ import Logo from "../../components/Common/Logo";
 import BreadCrum from "../../components/Common/BreadCrum";
 import "./sign.css";
 import { Link } from "react-router-dom";
+
 const SignUpUserSelect = () => {
   return (
     <div className="w-full max-w-[550px] mx-auto py-6 mt-20">
-      <Logo />
+      <div className="flex justify-center items-center mb-2">
+        <Logo />
+      </div>
       <BreadCrum prev={"Home"} still={"SignUp"} link={"/"} />
 
       <div className="pt-8 grid grid-cols-2 gap-10">

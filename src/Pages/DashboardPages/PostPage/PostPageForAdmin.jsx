@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import DashboardHeader from "../../../components/Common/DashboardHeader";
 import moment from "moment";
 import { RiArrowRightUpLine } from "react-icons/ri";
@@ -6,18 +6,12 @@ import { Link } from "react-router-dom";
 import useFetchPosts from "../../../hooks/useFetchPosts";
 
 const PostPageForAdmin = () => {
-  const { data, loading, error } = useFetchPosts(
-    "https://blue-sky-backend-umber.vercel.app/api/v1/post/posts"
+  const [loading, setLoading] = useState(false);
+  const { data } = useFetchPosts(
+    "https://blue-sky-backend-umber.vercel.app/api/v1/post/posts",
+    loading,
+    setLoading
   );
-
-  if (loading) {
-    return <div>Loading...</div>;
-  }
-
-  if (error) {
-    return <div>Error: {error}</div>;
-  }
-
   return (
     <div className="w-[1440px]">
       <div className="flex justify-between items-center m-3 ">
@@ -52,9 +46,20 @@ const PostPageForAdmin = () => {
                 )}
                 <div className="flex justify-between items-center mt-3">
                   <div className="flex gap-3">
-                    <p className="cursor-pointer text-[13px] text-gray-500 border border-green-300 rounded-[5px] px-2 py-0.5">
-                      {e?.status}
-                    </p>
+                    {e?.status == "Featured" ? (
+                      <p className="cursor-pointer text-[13px] text-white border border-green-300 bg-green-500 rounded-[5px] px-2 py-0.5">
+                        {e?.status}
+                      </p>
+                    ) : e?.status == "Trending" ? (
+                      <p className="cursor-pointer text-[13px] text-white border border-green-300 bg-blue-500 rounded-[5px] px-2 py-0.5">
+                        {e?.status}
+                      </p>
+                    ) : (
+                      <p className="cursor-pointer text-[13px] text-gray-500 border border-green-300 rounded-[5px] px-2 py-0.5">
+                        Pending
+                      </p>
+                    )}
+
                     <p className="cursor-pointer text-[13px] text-gray-500 border border-red-300 rounded-[5px] px-2 py-0.5">
                       Cancel
                     </p>

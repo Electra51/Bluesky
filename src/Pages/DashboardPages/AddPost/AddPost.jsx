@@ -24,6 +24,7 @@ const AddPost = () => {
   const [auth, setAuth] = useAuth();
   const [title, setTitle] = useState("");
   const [value, setValue] = useState("");
+  const [loading, setLoading] = useState(false);
   const [selectedTag, setSelectedTag] = useState(null);
   const quillRef = useRef();
   const [categories, setCategories] = useState([]);
@@ -65,7 +66,7 @@ const AddPost = () => {
 
         try {
           const response = await axios.post(
-            "http://localhost:8080/api/v1/post/upload-image",
+            "https://blue-sky-backend-umber.vercel.app/api/v1/post/upload-image",
             formData,
             {
               headers: {
@@ -198,6 +199,7 @@ const AddPost = () => {
   };
 
   const handleBlogPost = async () => {
+    setLoading(true);
     try {
       let imageUrl = "";
 
@@ -243,6 +245,7 @@ const AddPost = () => {
       setTags([]);
 
       navigate("/dashboard/post");
+      setLoading(false);
       toast.success("Blog post created successfully!");
     } catch (error) {
       console.error("Error creating blog post:", error);
@@ -336,12 +339,16 @@ const AddPost = () => {
             <RiDeleteBinLine className="text-[24px]" />
             <span className="text-[14px]">Delete </span>
           </button>
-          <button
-            className="w-[113px] h-[40px] rounded-md bg-[#0077B6] gap-1 hover:bg-[#76C4EB] text-white flex justify-center items-center "
-            onClick={handleBlogPost}>
-            <MdOutlineFileUpload className="text-[24px]" />{" "}
-            <span className="text-[14px]">Publish</span>
-          </button>
+          {loading ? (
+            <p>Loading..</p>
+          ) : (
+            <button
+              className="w-[113px] h-[40px] rounded-md bg-[#0077B6] gap-1 hover:bg-[#76C4EB] text-white flex justify-center items-center "
+              onClick={handleBlogPost}>
+              <MdOutlineFileUpload className="text-[24px]" />{" "}
+              <span className="text-[14px]">Publish</span>
+            </button>
+          )}
         </div>
         <hr className="pt-4 text-[#E9E9E9]" />
         <p className="text-[16px] font-medium pb-3 px-2">Select Categories</p>

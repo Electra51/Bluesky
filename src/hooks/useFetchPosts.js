@@ -1,9 +1,9 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 
-const useFetchPosts = (url) => {
+const useFetchPosts = (url, loading, setLoading) => {
   const [data, setData] = useState([]);
-  const [loading, setLoading] = useState(false);
+
   const [error, setError] = useState(null);
 
   useEffect(() => {

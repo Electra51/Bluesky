@@ -5,7 +5,6 @@ import Select from "react-select";
 import axios from "axios";
 import { useDropzone } from "react-dropzone";
 import { MdOutlineFileUpload } from "react-icons/md";
-import { RiDeleteBinLine } from "react-icons/ri";
 import DashboardHeader from "../../../components/Common/DashboardHeader";
 import { useNavigate, useParams } from "react-router-dom";
 

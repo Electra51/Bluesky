@@ -20,6 +20,7 @@ const SignUp = () => {
   const navigate = useNavigate();
   const { id } = useParams();
 
+  // signup function
   const handleSignUp = async (e) => {
     e.preventDefault();
     const { name, email, password, confirmPassword, role = id } = value;
@@ -34,19 +35,16 @@ const SignUp = () => {
       toast.error("All fields are required");
       return;
     }
-
-    // Check for password match
+    // check for password match
     if (password !== confirmPassword) {
       setConfirmPasswordError("Passwords do not match");
       return;
     } else {
-      setConfirmPasswordError(""); // Reset error message if passwords match
+      setConfirmPasswordError("");
     }
-
     setLoading(true);
 
     try {
-      // Register user
       const res = await axios.post(
         `https://blue-sky-backend-umber.vercel.app/api/v1/auth/register`,
         {
@@ -60,11 +58,9 @@ const SignUp = () => {
 
       if (res && res.data.success) {
         toast.success(res?.data?.message);
-
-        // Add the `isVarified` property to the user object
         const updatedUser = {
           ...res.data.user,
-          isVarified: false, // Default to false after registration
+          isVarified: false,
         };
 
         const authData = {
@@ -72,28 +68,25 @@ const SignUp = () => {
           token: res.data.token,
         };
 
-        // Update state and localStorage
         setAuth(authData);
         localStorage.setItem("auth", JSON.stringify(authData));
 
-        // Check if the role is author (1)
         if (id === 1) {
-          const token = res.data.token; // Assuming the token is returned after registration
+          const token = res.data.token;
           const verificationRes = await axios.post(
             `https://blue-sky-backend-umber.vercel.app/api/v1/auth/author/request-verification`,
-            { userId: res.data.user._id }, // Send the user ID
+            { userId: res.data.user._id },
             {
               headers: {
-                Authorization: `Bearer ${token}`, // Include the token in the request
+                Authorization: `Bearer ${token}`,
               },
             }
           );
 
           if (verificationRes && verificationRes.data.success) {
             toast.success("Verification request sent to admin.");
-            updatedUser.isVarified = true; // Update `isVarified` upon successful verification
+            updatedUser.isVarified = true;
 
-            // Update state and localStorage
             const newAuthData = {
               user: updatedUser,
               token: res.data.token,
@@ -122,7 +115,9 @@ const SignUp = () => {
 
   return (
     <div className="w-full max-w-[350px] mx-auto py-6 mt-20">
-      <Logo />
+      <div className="flex justify-center items-center mb-2">
+        <Logo />
+      </div>
       <BreadCrum prev={"Home"} still={"SignUp"} link={"/"} />
       <form
         className="bg-white border border-gray-200 shadow-sm round-curve px-8 pt-8 pb-8 mb-4"
@@ -195,7 +190,7 @@ const SignUp = () => {
                 ...prev,
                 confirmPassword: e.target.value,
               }));
-              if (confirmPasswordError) setConfirmPasswordError(""); // Clear error when typing
+              if (confirmPasswordError) setConfirmPasswordError("");
             }}
             placeholder="Confirm Password"
           />

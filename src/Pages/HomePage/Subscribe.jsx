@@ -26,7 +26,7 @@ const Subscribe = () => {
             />
             <button className="h-10 w-28 bg-blue-500 text-white rounded-r flex justify-center items-center gap-1">
               Subscribe
-              <FaBell />
+              <FaBell className="motion-safe:animate-pulse" />
             </button>
           </div>
           <div className="mt-8">

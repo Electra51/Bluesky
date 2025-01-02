@@ -3,6 +3,7 @@ import axios from "axios";
 import { Link, useParams, useNavigate } from "react-router-dom";
 import Tags from "../../components/Common/Tags";
 import moment from "moment";
+import { BsDot } from "react-icons/bs";
 
 const CategoryWiseBlogPage = () => {
   const { categoryId } = useParams();
@@ -105,7 +106,7 @@ const CategoryWiseBlogPage = () => {
               {categoryWisePosts.map((post) => (
                 <Link to={`/details/${post?._id}`} key={post._id}>
                   <div className="border rounded-[6px] flex flex-col gap-5">
-                    <div className="w-full h-[260px] rounded-t-[6px]">
+                    <div className="w-full h-[210px] rounded-t-[6px]">
                       <img
                         src={post?.featuredImage}
                         alt=""
@@ -113,15 +114,20 @@ const CategoryWiseBlogPage = () => {
                       />
                     </div>
                     <div className="mt-2 px-4">
-                      <p className="text-[#ad47b6] text-[15px] flex justify-normal items-center">
-                        {post?.users?.nickname}
-                        {moment(post?.createdAt).format("lll")}
+                      <p className="text-[#ad47b6] text-[13px] flex justify-normal items-center tracking-[0.5px]">
+                        <span className="text-[#ad47b6] text-[13px] underline">
+                          {post?.users?.nickname}
+                        </span>{" "}
+                        <BsDot className="text-2xl text-[#ad47b6]" />
+                        <span className="text-[#7f5583] text-[13px] tracking-[0.5px]">
+                          {moment(post?.users?.createdAt).format("lll")}
+                        </span>{" "}
                       </p>
-                      <p className="text-[18px] font-medium text-black mt-2">
+                      <p className="text-[15px] font-medium text-black mt-2">
                         {post?.title?.slice(0, 30).replace(/<[^>]*>/g, "") +
                           "..."}
                       </p>
-                      <p className="text-[16px] text-gray-600 mt-2">
+                      <p className="text-[13px] text-justify text-gray-600 mt-1 font-light tracking-[1px]">
                         {post?.description
                           ?.slice(0, 120)
                           .replace(/<[^>]*>/g, "") + "..."}

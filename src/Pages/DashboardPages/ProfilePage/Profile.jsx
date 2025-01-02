@@ -40,7 +40,14 @@ const Profile = () => {
     }
   }, [auth?.user?.email]);
 
+  // const handleEditClick = () => {
+  //   setIsEditMode(true);
+  // };
   const handleEditClick = () => {
+    if (!userDetails?.isVerified) {
+      setError("You are not verified. Please wait.");
+      return;
+    }
     setIsEditMode(true);
   };
 
@@ -99,130 +106,139 @@ const Profile = () => {
   };
 
   return (
-    <div className="m-3">
-      <DashboardHeader title={"User Details"} />
-      {userDetails ? (
-        <div className="max-w-[400px] my-10 px-3">
-          {isEditMode ? (
-            <div className="p-3  border rounded-sm">
-              <div className="h-44 w-44 rounded-full relative">
-                <img
-                  src={previewImage || userDetails.profileImage || userImage}
-                  alt="User"
-                  width={150}
-                  className="h-full w-full object-fill rounded-full"
-                />
-                <div className="absolute bottom-3 right-3">
-                  <div
-                    className="h-10 w-10 rounded-full flex justify-center items-center shadow-md bg-gray-600 cursor-pointer"
-                    onClick={handleIconClick}>
-                    <MdOutlineEdit className="text-white" />
-                  </div>
-                  <input
-                    type="file"
-                    accept="image/*"
-                    onChange={handleImageChange}
-                    ref={fileInputRef}
-                    className="hidden"
-                  />
-                </div>
-              </div>
-              <div className="mt-6">
-                <div>
-                  <span className="font-semibold w-52">Display Name: </span>
+    <>
+      {" "}
+      {error && (
+        <p className=" absolute top-0 right-0 w-full text-white bg-red-500 h-7 text-center flex justify-center items-center text-sm mb-4">
+          {error}
+        </p>
+      )}
+      <div className="m-3">
+        <DashboardHeader title={"User Details"} />
 
-                  <input
-                    type="text"
-                    name="nickname"
-                    value={editedUserDetails.nickname || ""}
-                    onChange={handleChange}
-                    className="border rounded p-2"
+        {userDetails ? (
+          <div className="max-w-[400px] my-10 px-3">
+            {isEditMode ? (
+              <div className="p-3  border rounded-sm">
+                <div className="h-44 w-44 rounded-full relative">
+                  <img
+                    src={previewImage || userDetails.profileImage || userImage}
+                    alt="User"
+                    width={150}
+                    className="h-full w-full object-fill rounded-full"
+                  />
+                  <div className="absolute bottom-3 right-3">
+                    <div
+                      className="h-10 w-10 rounded-full flex justify-center items-center shadow-md bg-gray-600 cursor-pointer"
+                      onClick={handleIconClick}>
+                      <MdOutlineEdit className="text-white" />
+                    </div>
+                    <input
+                      type="file"
+                      accept="image/*"
+                      onChange={handleImageChange}
+                      ref={fileInputRef}
+                      className="hidden"
+                    />
+                  </div>
+                </div>
+                <div className="mt-6">
+                  <div>
+                    <span className="font-semibold w-52">Display Name: </span>
+
+                    <input
+                      type="text"
+                      name="nickname"
+                      value={editedUserDetails.nickname || ""}
+                      onChange={handleChange}
+                      className="border rounded p-2"
+                    />
+                  </div>
+                  <div className="mt-2">
+                    <span className="font-semibold w-52">User Name: </span>
+                    <span className="font-normal text-gray-600">
+                      @{editedUserDetails.name}
+                    </span>{" "}
+                  </div>
+                  <div className="mt-1">
+                    <span className="font-semibold w-52">E-mail Address: </span>
+                    <span className="font-normal text-gray-600">
+                      {editedUserDetails.email}
+                    </span>{" "}
+                  </div>
+                  <div className="mt-1">
+                    <span className="font-semibold w-52">Join Date: </span>
+                    <span className="font-normal text-gray-600">
+                      {moment(userDetails.createdAt).format("ll")}
+                    </span>{" "}
+                  </div>
+                </div>
+
+                <div>
+                  <button
+                    className="bg-[#0077B6] gap-1 hover:bg-[#76C4EB] border border-[#0077B6] text-white text-[14px] rounded-md px-2 py-1 mt-6"
+                    onClick={handleSave}>
+                    Save
+                  </button>
+                  <button
+                    className="border border-gray-400 text-[14px] rounded-md px-2 py-1 mt-6 ml-2"
+                    onClick={handleCancel}>
+                    Cancel
+                  </button>
+                </div>
+
+                <p className="text-[13px] mt-6">
+                  <span className="text-red-500"> *Note: </span>You can only
+                  edit your profile image & display name. Thank You!
+                </p>
+              </div>
+            ) : (
+              <div className="p-3 ">
+                <div className="h-44 w-44 rounded-full">
+                  <img
+                    src={userDetails.profileImage || userImage}
+                    alt="User"
+                    width={150}
+                    className="h-full w-full object-fill rounded-full"
                   />
                 </div>
-                <div className="mt-2">
-                  <span className="font-semibold w-52">User Name: </span>
+                <p className="mt-5 text-[15px]">
+                  <span className="font-semibold">User Name:</span>{" "}
                   <span className="font-normal text-gray-600">
-                    @{editedUserDetails.name}
-                  </span>{" "}
-                </div>
-                <div className="mt-1">
-                  <span className="font-semibold w-52">E-mail Address: </span>
+                    @{userDetails.name}
+                  </span>
+                </p>
+                <p className="text-[15px] mt-1">
+                  <span className="font-semibold">Display Name:</span>{" "}
                   <span className="font-normal text-gray-600">
-                    {editedUserDetails.email}
-                  </span>{" "}
-                </div>
-                <div className="mt-1">
-                  <span className="font-semibold w-52">Join Date: </span>
+                    {userDetails.nickname || "N/A"}
+                  </span>
+                </p>
+                <p className="text-[15px] mt-1">
+                  <span className="font-semibold">Email:</span>{" "}
+                  <span className="font-normal text-gray-600">
+                    {userDetails.email}
+                  </span>
+                </p>
+                <p className="text-[15px] mt-1">
+                  <span className="font-semibold">Join Date:</span>{" "}
                   <span className="font-normal text-gray-600">
                     {moment(userDetails.createdAt).format("ll")}
-                  </span>{" "}
-                </div>
-              </div>
-
-              <div>
+                  </span>
+                </p>
                 <button
-                  className="bg-[#0077B6] gap-1 hover:bg-[#76C4EB] border border-[#0077B6] text-white text-[14px] rounded-md px-2 py-1 mt-6"
-                  onClick={handleSave}>
-                  Save
-                </button>
-                <button
-                  className="border border-gray-400 text-[14px] rounded-md px-2 py-1 mt-6 ml-2"
-                  onClick={handleCancel}>
-                  Cancel
+                  className="border border-gray-400 rounded-md px-2 py-1 mt-6 flex justify-center items-center gap-1"
+                  onClick={handleEditClick}>
+                  Edit Profile <AiOutlineEdit />
                 </button>
               </div>
-
-              <p className="text-[13px] mt-6">
-                <span className="text-red-500"> *Note: </span>You can only edit
-                your profile image & display name. Thank You!
-              </p>
-            </div>
-          ) : (
-            <div className="p-3 ">
-              <div className="h-44 w-44 rounded-full">
-                <img
-                  src={userDetails.profileImage || userImage}
-                  alt="User"
-                  width={150}
-                  className="h-full w-full object-fill rounded-full"
-                />
-              </div>
-              <p className="mt-5 text-[15px]">
-                <span className="font-semibold">User Name:</span>{" "}
-                <span className="font-normal text-gray-600">
-                  @{userDetails.name}
-                </span>
-              </p>
-              <p className="text-[15px] mt-1">
-                <span className="font-semibold">Display Name:</span>{" "}
-                <span className="font-normal text-gray-600">
-                  {userDetails.nickname || "N/A"}
-                </span>
-              </p>
-              <p className="text-[15px] mt-1">
-                <span className="font-semibold">Email:</span>{" "}
-                <span className="font-normal text-gray-600">
-                  {userDetails.email}
-                </span>
-              </p>
-              <p className="text-[15px] mt-1">
-                <span className="font-semibold">Join Date:</span>{" "}
-                <span className="font-normal text-gray-600">
-                  {moment(userDetails.createdAt).format("ll")}
-                </span>
-              </p>
-              <button
-                className="border border-gray-400 rounded-md px-2 py-1 mt-6 flex justify-center items-center gap-1"
-                onClick={handleEditClick}>
-                Edit Profile <AiOutlineEdit />
-              </button>
-            </div>
-          )}
-        </div>
-      ) : (
-        <p>User not found.</p>
-      )}
-    </div>
+            )}
+          </div>
+        ) : (
+          <p>User not found.</p>
+        )}
+      </div>
+    </>
   );
 };
 

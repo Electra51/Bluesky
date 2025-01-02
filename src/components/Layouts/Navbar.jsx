@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Logo from "../Common/Logo";
-import { MdMenu, MdOutlineAccountCircle, MdSearch } from "react-icons/md";
+import { MdMenu, MdOutlineAccountCircle } from "react-icons/md";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/auth";
 import useFetchUserDetails from "../../hooks/useFetchUserDetails";
@@ -14,13 +14,12 @@ const Navbar = () => {
   const [showMegaMenu, setShowMegaMenu] = useState(false);
   const [categories, setCategories] = useState([]);
   const { userDetails } = useFetchUserDetails(auth?.user?.email);
+  const navigate = useNavigate();
 
-  // toggle for category menu
   const toggleMegaMenu = () => {
     setShowMegaMenu(!showMegaMenu);
   };
 
-  //  get all category data
   const allCategoryDataGet = async () => {
     try {
       const response = await axios.get(
@@ -46,24 +45,31 @@ const Navbar = () => {
     });
     localStorage.removeItem("auth");
     toast.success("logout successfully");
+    navigate("/login");
   };
 
   const menus = (
     <>
       <li>
-        <Link to="/">Home</Link>
+        <Link to="/" className="!rounded-none">
+          Home
+        </Link>
       </li>
       <li>
-        <div onClick={toggleMegaMenu} className="cursor-pointer">
+        <div onClick={toggleMegaMenu} className="cursor-pointer !rounded-none">
           Category
           <FaAngleDown className={`${showMegaMenu ? "rotate-180" : ""}`} />
         </div>
       </li>
       <li>
-        <Link to={"/blog"}>Blogs</Link>
+        <Link to={"/blog"} className="!rounded-none">
+          Blogs
+        </Link>
       </li>
       <li>
-        <Link to={"/contact"}>Contact</Link>
+        <Link to={"/contact"} className="!rounded-none">
+          Contact
+        </Link>
       </li>
     </>
   );
@@ -72,7 +78,7 @@ const Navbar = () => {
     <div
       className={`${
         showMegaMenu
-          ? "border-0 border-b border-green-50 bg-[#e5f6fe] py-1.5 shadow-sm"
+          ? "border-0 border-b border-green-50 bg-[#8DBEC1] py-1.5 shadow-sm"
           : "border-0 border-b border-green-50 bg-white py-1.5 shadow-sm"
       }`}>
       <div className="navbar sm-container lg:container">
@@ -143,23 +149,26 @@ const Navbar = () => {
 
       {/* Mega Menu */}
       {showMegaMenu && (
-        <div className="mega-menu mb-16 sm:mb-0 shadow-xl bg-[#e5f6fe] absolute left-1/2 transform -translate-x-1/2 transition-all z-10">
-          <div className="container mx-auto w-full flex p-3 gap-1">
-            <div className="h-[200px] w-[400px] bg-red-500 mt-5">
+        <div className="mega-menu w-[100%] mb-16 sm:mb-0 shadow-xl bg-[#8DBEC1] absolute left-1/2 transform -translate-x-1/2 transition-all z-10">
+          <div className="container flex p-3 gap-1 ">
+            <div className="h-[200px] w-[400px] bg-red-500 mt-5 relative">
               <img
                 src={categoryImagebg}
                 alt=""
                 className="w-full h-full object-fill "
               />
+              <button className="border border-blue-500 px-3 py-0.5 rounded-[5px] text-[14px] text-white absolute bottom-2 right-3 hover:bg-blue-500">
+                Read Now
+              </button>
             </div>
-            <div className="grid grid-cols-6 gap-3 justify-between p-6">
+            <div className="grid grid-cols-6 gap-y-5 gap-x-4 justify-between p-6">
               {categories?.map((e, i) => {
                 return (
                   <Link
                     to={`/blog/${e?._id}`}
                     onClick={() => setShowMegaMenu(false)}
                     key={i}
-                    className="cursor-pointer hover:bg-gray-300 hover:text-white rounded-none px-3 py-2 border-0 border-l border-blue-500">
+                    className="cursor-pointer hover:bg-[#2477B6] hover:text-white rounded-none px-3 py-1 border-0 border-l border-[#f0e3fb]">
                     <p className="text-[16px] font-medium">{e?.name}</p>
                     {e?.description?.length > 10 ? (
                       <p className="text-[16px] mt-2 text-nowrap">

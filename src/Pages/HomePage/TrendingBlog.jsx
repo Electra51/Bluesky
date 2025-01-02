@@ -12,6 +12,7 @@ import useFetchPosts from "../../hooks/useFetchPosts";
 import { BsDot } from "react-icons/bs";
 import moment from "moment";
 import SocialIcon from "../../components/Common/SocialIcon";
+import Loader from "../../components/Common/Loader";
 
 const TrendingBlog = () => {
   const settings = {
@@ -24,8 +25,11 @@ const TrendingBlog = () => {
   const [categories, setCategories] = useState([]);
   const [trendingItem, setTrendingItem] = useState([]);
   const [featured, setFeaturedItem] = useState([]);
-  const { data, loading, error } = useFetchPosts(
-    "https://blue-sky-backend-umber.vercel.app/api/v1/post/posts"
+  const [loading, setLoading] = useState(false);
+  const { data } = useFetchPosts(
+    "https://blue-sky-backend-umber.vercel.app/api/v1/post/posts",
+    loading,
+    setLoading
   );
 
   useEffect(() => {
@@ -60,103 +64,109 @@ const TrendingBlog = () => {
   }, []);
 
   return (
-    <div className="container">
-      <SectionHeader title={"Trending Blogs"} />
-      <div className="grid grid-cols-3 gap-10">
-        <div className="col-span-2 ">
-          <div className="flex flex-col justify-normal gap-1 gap-y-5">
-            {trendingItem?.map((e, i) => {
-              return (
-                <HorizontalCard
-                  key={i}
-                  left={"10"}
-                  top={"10"}
-                  post={e}
-                  cardImgHeight={180}
-                  cardImgWidth={340}
-                  imgWidth={"350px"}
-                  desWidth={"600px"}
-                  type={"trending"}
-                />
-              );
-            })}
-          </div>
-        </div>
-        <div>
-          <div className="border round-curve px-4 py-2">
-            <p className="text-gray-700 font-semibold mt-1 text-[16px]">
-              Explore Categories or Topics
-            </p>
-            <div className="flex flex-wrap gap-3 mt-4 pt-1 pb-3">
-              {categories.map((e, i) => {
-                return (
-                  <CategoryName
-                    key={i}
-                    title={e?.name}
-                    p={"category-list"}
-                    categoryId={e?._id}
-                  />
-                );
-              })}
+    <>
+      {loading ? (
+        <Loader />
+      ) : (
+        <div className="container">
+          <SectionHeader title={"Trending Blogs"} />
+          <div className="grid grid-cols-3 gap-10">
+            <div className="col-span-2 ">
+              <div className="flex flex-col justify-normal gap-1 gap-y-5">
+                {trendingItem?.map((e, i) => {
+                  return (
+                    <HorizontalCard
+                      key={i}
+                      left={"10"}
+                      top={"10"}
+                      post={e}
+                      cardImgHeight={180}
+                      cardImgWidth={340}
+                      imgWidth={"350px"}
+                      desWidth={"600px"}
+                      type={"trending"}
+                    />
+                  );
+                })}
+              </div>
             </div>
-          </div>
-          <div className="mt-8">
-            <p className="text-gray-700 font-semibold mt-1 text-[16px]">
-              Features Posts
-            </p>
-            <Slider {...settings}>
-              {featured?.map((e, i) => {
-                return (
-                  <div>
-                    <h3>
-                      {" "}
-                      <div className=" mt-4 rounded-md relative px-1">
-                        <div className="h-[300px] w-full rounded-md">
-                          <img
-                            src={e?.featuredImage}
-                            alt=""
-                            className="h-full w-full object-fill rounded-md"
-                          />
-                        </div>
-                        <div className="absolute top-3 left-3">
-                          <CategoryName title={e?.category?.name} />
-                          <div className="mt-48">
-                            <p className="text-gray-200 text-[12px] flex justify-normal items-center">
-                              {e?.users?.nickname} <BsDot className="2xl" />
-                              {moment(e.createdAt).format("lll")}
-                            </p>
-                            <div className="flex justify-normal items-center gap-1 mt-2">
-                              <p className="text-white">Topic Title:</p>
-                              {e?.title?.length > 30 ? (
-                                <p className="text-[16px] text-white">
-                                  {e?.title
-                                    ?.slice(0, 30)
-                                    .replace(/<[^>]*>/g, "") + "..."}
+            <div>
+              <div className="border round-curve px-4 py-2">
+                <p className="text-gray-700 font-semibold mt-1 text-[16px]">
+                  Explore Categories or Topics
+                </p>
+                <div className="flex flex-wrap gap-3 mt-4 pt-1 pb-3">
+                  {categories.map((e, i) => {
+                    return (
+                      <CategoryName
+                        key={i}
+                        title={e?.name}
+                        p={"category-list"}
+                        categoryId={e?._id}
+                      />
+                    );
+                  })}
+                </div>
+              </div>
+              <div className="mt-8">
+                <p className="text-gray-700 font-semibold mt-1 text-[16px]">
+                  Features Posts
+                </p>
+                <Slider {...settings}>
+                  {featured?.map((e, i) => {
+                    return (
+                      <div key={i}>
+                        <h3>
+                          {" "}
+                          <div className=" mt-4 rounded-md relative px-1">
+                            <div className="h-[280px] w-full rounded-md">
+                              <img
+                                src={e?.featuredImage}
+                                alt=""
+                                className="h-full w-full object-fill rounded-md"
+                              />
+                            </div>
+                            <div className="absolute top-3 left-3">
+                              <CategoryName title={e?.category?.name} />
+                              <div className="mt-[187px]">
+                                <p className="text-gray-200 text-[12px] flex justify-normal items-center">
+                                  {e?.users?.nickname} <BsDot className="2xl" />
+                                  {moment(e.createdAt).format("lll")}
                                 </p>
-                              ) : (
-                                <p className="text-[16px] text-white">
-                                  {e?.title?.replace(/<[^>]*>/g, "")}
-                                </p>
-                              )}
+                                <div className="flex justify-normal items-center gap-1 mt-2">
+                                  <p className="text-white">Topic Title:</p>
+                                  {e?.title?.length > 30 ? (
+                                    <p className="text-[16px] text-white">
+                                      {e?.title
+                                        ?.slice(0, 30)
+                                        .replace(/<[^>]*>/g, "") + "..."}
+                                    </p>
+                                  ) : (
+                                    <p className="text-[16px] text-white">
+                                      {e?.title?.replace(/<[^>]*>/g, "")}
+                                    </p>
+                                  )}
+                                </div>
+                              </div>
                             </div>
                           </div>
-                        </div>
+                        </h3>
                       </div>
-                    </h3>
-                  </div>
-                );
-              })}
-            </Slider>
-          </div>
-          <div className="mt-10">
-            <p className="text-gray-700 font-semibold mt-1 text-[16px]">
-              Stay With Us
-            </p>
-            <SocialIcon />
+                    );
+                  })}
+                </Slider>
+              </div>
+              <div className="mt-10">
+                <p className="text-gray-700 font-semibold mt-1 text-[16px]">
+                  Stay With Us
+                </p>
+                <SocialIcon />
+              </div>
+            </div>
           </div>
         </div>
-      </div>
-    </div>
+      )}
+    </>
   );
 };
 

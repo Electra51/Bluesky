@@ -54,7 +54,7 @@ const Footer = () => {
 
   return (
     <div className="border-t border-[#ECECEC] pt-7">
-      <div className="flex flex-col lg:flex-row justify-start items-center lg:items-start gap-[100px] max-w-[1200px] mx-auto pt-[79px] ">
+      <div className="flex flex-col lg:flex-row justify-start items-center lg:items-start gap-[100px] max-w-[1440px] mx-auto pt-[79px] pl-[20px]">
         <div className="flex flex-col justify-start items-start lg:block">
           <Logo />
           <h3 className="text-[#565656] text-[14px] mt-[26px] w-[333px] text-center lg:text-justify tracking-[1px]">
