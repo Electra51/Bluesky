@@ -6,7 +6,7 @@ const BlogDescription = ({ description }) => {
   return (
     <div
       dangerouslySetInnerHTML={{ __html: sanitizedHTML }}
-      className="px-1 text-justify py-3"
+      className="px-1 text-justify py-3 tracking-[0.5px]"
     />
   );
 };

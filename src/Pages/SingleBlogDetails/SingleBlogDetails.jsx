@@ -1,25 +1,15 @@
 import React, { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import axios from "axios";
-import moment from "moment";
 import toast from "react-hot-toast";
 import { useAuth } from "../../context/auth";
 import ShareModal from "../../components/Common/ShareModal";
-import { BiLike } from "react-icons/bi";
-import { FaRegStar, FaStar } from "react-icons/fa";
-import { FiShare2 } from "react-icons/fi";
 import ModatRating from "../../components/Common/ModatRating";
-import { MdOutlineReply } from "react-icons/md";
-import { RiChat3Line } from "react-icons/ri";
 import { IoIosArrowBack } from "react-icons/io";
 import BreadCrum from "../../components/Common/BreadCrum";
-import { HiOutlineUser } from "react-icons/hi2";
-import { GoDotFill } from "react-icons/go";
-import { SlLike } from "react-icons/sl";
-import BlogDescription from "../../components/Common/BlogDescription";
-import Tags from "../../components/Common/Tags";
 import RightSide from "./RightSide";
 import LeftSide from "./LeftSide";
+import RelatedBlogs from "./RelatedBlogs";
 
 const SingleBlogDetails = () => {
   const [post, setPost] = useState({});
@@ -45,7 +35,7 @@ const SingleBlogDetails = () => {
       ? "like"
       : null
   );
-
+  console.log("ratingCount", ratingCount);
   // single post get api
   const getPostById = async () => {
     try {
@@ -110,7 +100,7 @@ const SingleBlogDetails = () => {
 
     try {
       const response = await axios.post(
-        `https://blue-sky-backend-umber.vercel.app/api/v1/post/posts/${postId}/add-comments`,
+        `http://localhost:8080/api/v1/post/posts/${postId}/add-comments`,
         { text, ratingValue, userId, postId },
         {
           headers: {
@@ -218,10 +208,12 @@ const SingleBlogDetails = () => {
       );
 
       if (response.status === 200) {
-        const updatedRatingCount = response.data.averageRating; // Assume API returns the updated count
+        const updatedRatingCount = response?.data?.post?.averageRating; // Assume API returns the updated count
+        console.log("updatedRatingCount", response);
         setRatingCount(updatedRatingCount);
         // Handle successful rating submission (e.g., update UI, show toast message)
-        toast.success("Rating submitted successfully!");
+        toast.success(response?.data?.message);
+        setVisibleforRating(false);
         setVisible(false);
         setIsRating(true);
       }
@@ -232,7 +224,7 @@ const SingleBlogDetails = () => {
   };
 
   return (
-    <div className="container">
+    <div className="sm-container lg:container">
       {/* header */}
       <div className="text-[14px] font-medium bg-white h-[56px] flex justify-between items-center">
         <Link
@@ -246,21 +238,36 @@ const SingleBlogDetails = () => {
           <BreadCrum prev={"Blog"} still="Blog Details" link="/" />
         </div>
       </div>
-      <div className="mt-[20px] grid grid-cols-3 gap-10 mx-auto items-start">
-        <LeftSide
-          submitComment={submitComment}
-          text={text}
-          isShared={isShared}
-          shareCount={shareCount}
-          ratingCount={ratingCount}
-          userId={userId}
-          post={post}
-          selectedReaction={selectedReaction}
-          visible={visible}
-          isRating={isRating}
-        />
-
-        <RightSide post={post} />
+      <div>
+        <div className="mt-[20px] grid grid-cols-3 gap-5 mx-auto items-start">
+          <div className=" col-span-2">
+            {" "}
+            <LeftSide
+              setVisibleforRating={setVisibleforRating}
+              setShowLink={setShowLink}
+              submitComment={submitComment}
+              text={text}
+              setText={setText}
+              isShared={isShared}
+              shareCount={shareCount}
+              ratingCount={ratingCount}
+              userId={userId}
+              post={post}
+              selectedReaction={selectedReaction}
+              visible={visible}
+              isRating={isRating}
+              setVisible={setVisible}
+              showLink={showLink}
+              handleReaction={handleReaction}
+            />
+          </div>
+          <div className="flex flex-col justify-end">
+            <RightSide post={post} />
+          </div>
+        </div>
+        <div className="mt-10">
+          <RelatedBlogs categoryId={post?.category?._id} post={post} />
+        </div>
       </div>
 
       {showLink && (

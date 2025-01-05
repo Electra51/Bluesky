@@ -35,6 +35,7 @@ const RightSide = ({ post }) => {
     "https://picsum.photos/id/1024/400/300",
     "https://picsum.photos/id/1031/400/300",
   ];
+  console.log("categoryWisePosts", categoryWisePosts);
   const fetchData = async () => {
     try {
       const response = await axios.get(
@@ -73,12 +74,11 @@ const RightSide = ({ post }) => {
   useEffect(() => {
     fetchCategoryWisePosts();
   }, []);
-
   return (
     <div className="flex flex-col justify-end">
-      <div className="flex justify-center items-start relative">
-        <img src={imgab} alt="" className="absolute top-0 right-0 mx-10" />
-        <div className="flex flex-col justify-center border border-violet-100 bg-violet-50 rounded-sm z-10 mx-10 align-middle items-center h-[500px] w-full">
+      <div className="flex justify-end items-start relative">
+        <img src={imgab} alt="" className="absolute top-0 right-0 ml-10" />
+        <div className="flex flex-col justify-center border border-violet-100 bg-gray-50 rounded-sm z-10 ml-20 align-middle items-center h-[500px] w-full">
           <div className="h-32 w-32 rounded-full">
             <img
               src={post?.users?.profileImage}
@@ -120,7 +120,7 @@ const RightSide = ({ post }) => {
         </div>
       </div>
       <div className=" mt-10">
-        <div className="flex flex-col border border-violet-100 rounded-sm mx-10 z-10">
+        <div className="flex flex-col border border-violet-100 rounded-sm ml-20 z-10">
           <p className="px-4 pt-4 font-medium">Category</p>
           <div className="p-4 space-y-5">
             {categoryWisePosts?.map((e, i) => {
@@ -138,7 +138,7 @@ const RightSide = ({ post }) => {
         </div>
       </div>
       <div className=" mt-10">
-        <div className="flex flex-col border border-violet-100 rounded-sm mx-10 z-10">
+        <div className="flex flex-col border border-violet-100 rounded-sm ml-20 z-10">
           <p className="px-4 pt-4 font-medium">Instra Photos</p>
           <div className="p-4 space-y-5">
             <ResponsiveMasonry
@@ -162,7 +162,7 @@ const RightSide = ({ post }) => {
         </div>
       </div>
       <div className=" mt-10">
-        <div className="flex flex-col border border-violet-100 rounded-sm mx-10 z-10">
+        <div className="flex flex-col border border-violet-100 rounded-sm ml-20 z-10">
           <p className="px-4 pt-4 font-medium">Tags</p>
           <div className="p-4  flex flex-wrap justify-normal gap-3 items-center">
             {tags?.map((e, i) => {
