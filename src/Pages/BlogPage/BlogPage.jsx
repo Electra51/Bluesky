@@ -75,7 +75,7 @@ const BlogPage = () => {
   };
 
   return (
-    <div className="container pb-20">
+    <div className="sm-container lg:container border border-red-500 pb-20 px-5">
       <div className="grid grid-cols-4 gap-5 justify-normal items-start">
         {/* Sidebar with Categories */}
         <div className="mt-7">
