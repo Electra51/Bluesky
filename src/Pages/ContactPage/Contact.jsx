@@ -20,9 +20,9 @@ const Contact = () => {
             a question, a suggestion, or need help with something, feel free to
             reach out to us. Our team is committed to providing you with the
             best service and will respond to your inquiries as quickly as
-            possible. Please fill out the form with your details and message,
-            and we'll get back to you as soon as we can. We look forward to
-            hearing from you!
+            possible. We are Very friendly. Please fill out the form with your
+            details and message, and we'll get back to you as soon as we can. We
+            look forward to hearing from you!
           </p>
 
           <div className="mt-8">
