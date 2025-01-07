@@ -18,12 +18,13 @@ export default function Pagination({ length, page, setPage }) {
           onClick={() => setPage(idx)}
           className={`w-7 h-7 text-[12px] rounded-md ${
             page === idx
-              ? "bg-[#76C4EB] text-background text-white"
-              : "border border-[#76C4EB] text-[#0077B6]"
+              ? "bg-[#2559D8] text-background text-white"
+              : "border border-[#2559D8] text-[#0077B6]"
           }`}>
           {idx + 1}
         </button>
       ))}
+
       <button
         className="hover:text-[#0077B6] p-2 inline-flex items-center gap-2"
         onClick={() => setPage(page + 1)}

@@ -11,7 +11,7 @@ import { GoDotFill } from "react-icons/go";
 import { SlLike } from "react-icons/sl";
 import { HiOutlineUser } from "react-icons/hi2";
 import { useAuth } from "../../context/auth";
-
+import { FiAlertTriangle } from "react-icons/fi";
 const LeftSide = ({
   post,
   selectedReaction,
@@ -30,6 +30,8 @@ const LeftSide = ({
   setVisibleforRating,
   handleReaction,
   setText,
+  Error,
+  ErrorforReact,
 }) => {
   const [auth, setAuth] = useAuth();
   console.log("a", auth?.user?.role, "post", post);
@@ -114,75 +116,85 @@ const LeftSide = ({
           {auth?.user?.role == 1 || auth?.user?.role == 1 ? (
             ""
           ) : (
-            <div className="flex justify-between items-center gap-6">
-              <div className="flex justify-normal items-center gap-6">
-                <div className="flex justify-center items-center">
-                  <BiLike
-                    onClick={() => handleReaction("like")}
-                    className={`cursor-pointer text-2xl ${
-                      selectedReaction === "like"
-                        ? "text-blue-500"
-                        : "text-gray-500"
-                    }`}
-                  />
-                  <span className="ml-2">
-                    {post?.reactions?.filter((r) => r.type === "like").length}
-                  </span>
+            <>
+              <div className="flex justify-between items-center gap-6">
+                <div className="flex justify-normal items-center gap-6">
+                  <div className="flex justify-center items-center">
+                    <BiLike
+                      onClick={() => handleReaction("like")}
+                      className={`cursor-pointer text-2xl ${
+                        selectedReaction === "like"
+                          ? "text-blue-500"
+                          : "text-gray-500"
+                      }`}
+                    />
+
+                    <span className="ml-2">
+                      {post?.reactions?.filter((r) => r.type === "like").length}
+                    </span>
+                  </div>
+                  <div className="flex justify-center items-center">
+                    <div
+                      className={`flex justify-center items-center py-2 px-2 ${
+                        visible ? "text-white bg-blue-300" : ""
+                      }`}>
+                      <button
+                        onClick={() => {
+                          setVisibleforRating(true);
+                        }}
+                        className="">
+                        {isRating || hasUserRated(userId) ? (
+                          <div className="flex justify-normal items-center gap-3">
+                            <FaStar className="text-orange-500 text-[16px] mt-[-3px]" />
+                          </div>
+                        ) : (
+                          <FaRegStar className="text-xl" />
+                        )}
+                      </button>
+                    </div>
+                    {ratingCount}
+                  </div>
                 </div>
-                <div className="flex justify-center items-center">
+
+                <div className="flex justify-normal items-center gap-8">
+                  <span className="flex justify-end items-center gap-1">
+                    <RiChat3Line className="text-[16px]" />{" "}
+                    {post?.comments?.length} Comments
+                  </span>
+
+                  <span className="flex justify-end items-center">
+                    {shareCount} Share
+                  </span>
                   <div
-                    className={`flex justify-center items-center py-2 px-2 ${
+                    className={`flex justify-center items-center py-2 ${
                       visible ? "text-white bg-blue-300" : ""
                     }`}>
                     <button
                       onClick={() => {
-                        setVisibleforRating(true);
+                        setShowLink(!showLink);
+                        setVisible(true);
                       }}
                       className="">
-                      {isRating || hasUserRated(userId) ? (
-                        <div className="flex justify-normal items-center gap-3">
-                          <FaStar className="text-orange-500 text-[16px] mt-[-3px]" />
-                        </div>
+                      {isShared || post?.sharedUsers?.includes(userId) ? (
+                        <span className="text-blue-500 font-bold">
+                          {" "}
+                          Already Shared
+                        </span>
                       ) : (
-                        <FaRegStar className="text-xl" />
+                        <FiShare2 className="text-xl" />
                       )}
                     </button>
                   </div>
-                  {ratingCount}
                 </div>
               </div>
-
-              <div className="flex justify-normal items-center gap-8">
-                <span className="flex justify-end items-center gap-1">
-                  <RiChat3Line className="text-[16px]" />{" "}
-                  {post?.comments?.length} Comments
-                </span>
-
-                <span className="flex justify-end items-center">
-                  {shareCount} Share
-                </span>
-                <div
-                  className={`flex justify-center items-center py-2 ${
-                    visible ? "text-white bg-blue-300" : ""
-                  }`}>
-                  <button
-                    onClick={() => {
-                      setShowLink(!showLink);
-                      setVisible(true);
-                    }}
-                    className="">
-                    {isShared || post?.sharedUsers?.includes(userId) ? (
-                      <span className="text-blue-500 font-bold">
-                        {" "}
-                        Already Shared
-                      </span>
-                    ) : (
-                      <FiShare2 className="text-xl" />
-                    )}
-                  </button>
-                </div>
-              </div>
-            </div>
+              {ErrorforReact ? (
+                <p className="text-red-500 text-[16px] tracking-[1px] mt-3 mb-2 flex justify-normal items-center gap-1">
+                  <FiAlertTriangle /> {ErrorforReact}
+                </p>
+              ) : (
+                ""
+              )}
+            </>
           )}
         </div>
         {/* <div className="gap-10">
@@ -297,14 +309,16 @@ const LeftSide = ({
                 onChange={(e) => setText(e.target.value)}
                 className="border border-gray-400 rounded-sm w-full p-1 h-40 mt-3"
               />
-              {/* <button
-                onClick={submitComment}
-                className="bg-blue-500 rounded-sm text-white px-2 py-1">
-                Submit
-              </button> */}
+              {Error ? (
+                <p className="text-red-500 text-[16px] tracking-[1px] mb-2 flex justify-normal items-center gap-1">
+                  <FiAlertTriangle /> {Error}
+                </p>
+              ) : (
+                ""
+              )}
               <button
                 onClick={submitComment}
-                disabled={loading} // Disable the button while loading
+                disabled={loading}
                 className={`${
                   loading ? "bg-gray-400" : "bg-blue-500"
                 } rounded-sm text-white px-2 py-1`}>

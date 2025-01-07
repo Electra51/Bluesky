@@ -29,6 +29,8 @@ const SingleBlogDetails = () => {
   const [shareCount, setShareCount] = useState(post.shareCount || 0);
   const [ratingCount, setRatingCount] = useState(post.averageRating || 0);
   const [showLink, setShowLink] = useState(false);
+  const [Error, setError] = useState();
+  const [ErrorforReact, setErrorforReact] = useState();
   const [selectedReaction, setSelectedReaction] = useState(
     post?.reactions?.some(
       (reaction) =>
@@ -65,6 +67,12 @@ const SingleBlogDetails = () => {
   }, [params?.id]);
 
   const handleReaction = async (reactionType) => {
+    if (!token) {
+      setErrorforReact(
+        "You are not authenticated. Please log in for any react"
+      );
+      return;
+    }
     try {
       const response = await axios.post(
         `https://blue-sky-backend-umber.vercel.app/api/v1/post/posts/${postId}/toggleReaction`,
@@ -98,10 +106,13 @@ const SingleBlogDetails = () => {
 
   const handleCommentSubmit = async ({ postId, text, token, userId }) => {
     if (!text) {
-      toast.error("Please provide a comment or a rating.");
+      toast.error("Please provide a comment");
       return;
     }
-
+    // if (!userId) {
+    //   setError("Please login first.");
+    //   return;
+    // }
     try {
       const response = await axios.post(
         `https://blue-sky-backend-umber.vercel.app/api/v1/post/posts/${postId}/add-comments`,
@@ -128,41 +139,6 @@ const SingleBlogDetails = () => {
     }
   };
 
-  // const submitComment = async () => {
-  //   const userAuth = localStorage.getItem("auth");
-  //   let token = null;
-
-  //   if (userAuth) {
-  //     try {
-  //       const parsedData = JSON.parse(userAuth);
-  //       token = parsedData.token; // Extract token
-  //     } catch (error) {
-  //       console.error("Error parsing local storage data:", error);
-  //       toast.error("Invalid user authentication data.");
-  //       return;
-  //     }
-  //   }
-
-  //   if (!token) {
-  //     toast.error("User is not authenticated. Please log in.");
-  //     return;
-  //   }
-
-  //   // Call handleCommentSubmit with the token
-  //   const result = await handleCommentSubmit({
-  //     postId,
-  //     text,
-  //     ratingValue,
-  //     token,
-  //     userId,
-  //   });
-
-  //   if (result) {
-  //     setText("");
-  //     setRatingValue("");
-  //   }
-  // };
-
   const submitComment = async () => {
     const userAuth = localStorage.getItem("auth");
     let token = null;
@@ -179,7 +155,7 @@ const SingleBlogDetails = () => {
     }
 
     if (!token) {
-      toast.error("User is not authenticated. Please log in.");
+      setError("You are not authenticated. Please log in for add comments.");
       return;
     }
     setLoading(true);
@@ -302,7 +278,6 @@ const SingleBlogDetails = () => {
           <div>
             <div className="mt-[20px] grid grid-cols-3 gap-5 mx-auto items-start">
               <div className=" col-span-2">
-                {" "}
                 <LeftSide
                   setVisibleforRating={setVisibleforRating}
                   setShowLink={setShowLink}
@@ -321,6 +296,8 @@ const SingleBlogDetails = () => {
                   showLink={showLink}
                   handleReaction={handleReaction}
                   loading={loading}
+                  Error={Error}
+                  ErrorforReact={ErrorforReact}
                 />
               </div>
               <div className="flex flex-col justify-end">
