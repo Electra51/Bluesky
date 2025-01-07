@@ -19,7 +19,6 @@ import SignUp from "../Pages/SignupPage/SignUp";
 import SignUpUserSelect from "../Pages/SignupPage/SignUpUserSelect";
 import EditPost from "../Pages/DashboardPages/EditPost/EditPost";
 import AuthorList from "../Pages/DashboardPages/AuthorList/AuthorList";
-import BlogPage from "../Pages/BlogPage/BlogPage";
 import CategoryWiseBlogPage from "../Pages/BlogPage/CategoryWiseBlogPage";
 import Contact from "../Pages/ContactPage/Contact";
 

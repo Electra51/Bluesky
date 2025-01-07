@@ -49,7 +49,7 @@ const Login = () => {
         });
         localStorage.setItem("auth", JSON.stringify(res.data));
         setIsVerified(res.data.user.isVarified == false);
-        navigate(location.state?.from || "/dashboard");
+        navigate(location.state?.from || "/dashboard/profile");
       } else {
         toast.error(res.data.message);
       }

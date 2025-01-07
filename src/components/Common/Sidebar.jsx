@@ -27,6 +27,7 @@ const Sidebar = () => {
     navigate(location.state?.from || "/");
   };
   console.log("userDetails", userDetails);
+
   return (
     <div className="w-[270px] bg-[#f3f4fc] h-[100vh] relative">
       <Link

@@ -29,7 +29,7 @@ const Dashboard = () => {
         ) : auth?.user?.role == 2 ? (
           <AdminDashboard />
         ) : (
-          <>p</>
+          <></>
         )}
       </div>
     </div>

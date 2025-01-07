@@ -75,8 +75,8 @@ const EditPostForAdmin = () => {
           link={"/dashboard/post"}
         />
       </div>
-      <div className="grid grid-cols-3 gap-5 w-[1440px]">
-        <div className="col-span-2 bg-white h-[90vh] overflow-auto">
+      <div className="grid grid-cols-3 w-[1440px]">
+        <div className="col-span-2 bg-white h-[90vh] overflow-auto pr-5">
           <div className="mt-[7px] rounded-md">
             <p className="mb-3 font-semibold text-xl">{data?.title}</p>
             <div className="h-[430px] w-full">
@@ -116,7 +116,7 @@ const EditPostForAdmin = () => {
             </button>
           </div>
           <div className="mt-12 flex justify-normal items-start gap-5">
-            <div className="h-20 w-24">
+            <div className="h-24 w-24">
               <img
                 src={data?.users?.profileImage}
                 alt={data?.users?.name}

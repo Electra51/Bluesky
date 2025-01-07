@@ -33,6 +33,7 @@ body {
   color: #76c4eb;
 }
 input,
+textarea,
 select:focus {
   outline: none;
   padding-left: 8px;
@@ -98,4 +99,25 @@ svg[Attributes] {
   100% {
     transform: translateY(0px);
   }
+}
+
+/* width */
+::-webkit-scrollbar {
+  width: 3px;
+  padding-left: 5px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #0077b6;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #033b5a;
 }

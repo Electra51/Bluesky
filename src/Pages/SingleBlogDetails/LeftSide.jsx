@@ -22,6 +22,7 @@ const LeftSide = ({
   shareCount,
   isShared,
   text,
+  loading,
   submitComment,
   setShowLink,
   setVisible,
@@ -31,13 +32,14 @@ const LeftSide = ({
   setText,
 }) => {
   const [auth, setAuth] = useAuth();
-  console.log("a", auth?.user?.role);
+  console.log("a", auth?.user?.role, "post", post);
   const hasUserRated = (userId) => {
     const userRating = post?.ratings?.find((rating) => rating.user === userId);
     return userRating ? true : false;
   };
   return (
     <div className="w-full">
+      <p className="text-xl font-semibold tracking-[1px] mb-3">{post?.title}</p>
       <div className="h-[550px] relative">
         <img
           src={post?.featuredImage}
@@ -51,7 +53,7 @@ const LeftSide = ({
       <div className="flex justify-normal items-center gap-4 py-3 border-0 border-b border-t my-6 w-full">
         <div className="flex justify-normal items-center gap-2">
           <HiOutlineUser className="font-medium" />
-          <p className=" uppercase text-[15px]">
+          <p className=" uppercase text-[15px] text-nowrap">
             BY{" "}
             <span className="text-[#ad47b6] underline">
               {post?.users?.nickname}
@@ -61,7 +63,7 @@ const LeftSide = ({
         <GoDotFill />
         <div className="flex justify-normal items-center gap-2">
           <SlLike className="font-medium" />
-          <p className=" uppercase text-[15px]">
+          <p className=" uppercase text-[15px] text-nowrap">
             Like
             <span className="pl-1">
               {post?.reactions?.filter((r) => r.type === "like").length}
@@ -71,7 +73,7 @@ const LeftSide = ({
         <GoDotFill />
         <div className="flex justify-normal items-center gap-2">
           <FaRegStar className="font-medium" />
-          <p className=" uppercase text-[15px]">
+          <p className=" uppercase text-[15px] text-nowrap">
             Rating
             <span className="pl-1">{post?.averageRating}</span>
           </p>
@@ -79,19 +81,19 @@ const LeftSide = ({
         <GoDotFill />
         <div className="flex justify-normal items-center gap-2">
           <RiChat3Line className="font-medium" />
-          <p className=" uppercase text-[15px]">
+          <p className=" uppercase text-[15px] text-nowrap">
             Comments <span className="">{post?.comments?.length}</span>
           </p>
         </div>
         <GoDotFill />
         <div className="flex justify-normal items-center gap-2">
           <FiShare2 className="font-medium" />
-          <p className=" uppercase text-[15px]">
+          <p className=" uppercase text-[15px] text-nowrap">
             Share <span className="">{post?.shareCount}</span>
           </p>
         </div>
         <div className="flex justify-end items-center gap-2 pl-16">
-          <p className=" uppercase text-[15px]">
+          <p className=" uppercase text-[15px] text-nowrap">
             Category:{" "}
             <span className="text-blue-700 font-medium">
               {post?.category?.name}
@@ -109,7 +111,9 @@ const LeftSide = ({
       <hr className="mb-5" />
       <div>
         <div className="">
-          {auth?.user?.role == 0 && (
+          {auth?.user?.role == 1 || auth?.user?.role == 1 ? (
+            ""
+          ) : (
             <div className="flex justify-between items-center gap-6">
               <div className="flex justify-normal items-center gap-6">
                 <div className="flex justify-center items-center">
@@ -181,7 +185,7 @@ const LeftSide = ({
             </div>
           )}
         </div>
-        <div className="gap-10">
+        {/* <div className="gap-10">
           {post?.comments?.length > 0 && (
             <div className="">
               <h2 className="border-0 border-b mt-10">All Comments</h2>
@@ -189,7 +193,7 @@ const LeftSide = ({
                 return (
                   <div key={index} className="border-b pb-2 mb-2">
                     <div className="flex justify-normal items-start gap-3 py-3">
-                      <div className="h-[90px] w-40">
+                      <div className="h-[90px] w-32">
                         <img
                           src={comment?.user?.profileImage}
                           alt=""
@@ -197,17 +201,14 @@ const LeftSide = ({
                         />
                       </div>
                       <div>
-                        <p className="text-[16px] mt-[-3px] font-medium text-gray-900">
+                        <p className="text-[16px] mt-[-3px] font-medium text-gray-900 w-64">
                           {comment.user?.nickname}{" "}
                           <span className="text-[12px] text-gray-500">
                             @{comment?.user?.name}
                           </span>
                         </p>
-                        <p className="text-[15px] text-gray-600">
-                          {comment.text} Lorem ipsum dolor sit amet, consectetur
-                          adipisicing elit. Delectus, recusandae itaque! Magni
-                          quos a eos facilis esse soluta ad beatae delectus quam
-                          nihil labore, debitis iusto nemo sit repudiandae vero!
+                        <p className="text-[15px] text-gray-600 w-[900px]">
+                          {comment.text}
                         </p>
                         <div className="flex justify-normal items-center gap-10 mt-2">
                           <p className="text-[12px] text-gray-500">
@@ -240,6 +241,74 @@ const LeftSide = ({
                 onClick={submitComment}
                 className="bg-blue-500 rounded-sm text-white px-2 py-1">
                 Submit
+              </button>
+            </div>
+          )}
+        </div> */}
+        <div className="gap-10">
+          {post?.comments?.length > 0 && (
+            <div className="">
+              <h2 className="border-0 border-b mt-10">All Comments</h2>
+              {post?.comments?.map((e, index) => {
+                console.log("eeeeee", e?.user?.profileImage);
+                return (
+                  <div key={index} className="border-b pb-2 mb-2">
+                    <div className="flex justify-normal items-start gap-3 py-3">
+                      <div className="h-[90px] w-32">
+                        <img
+                          src={e?.user?.profileImage}
+                          alt=""
+                          className="h-full w-full object-fill"
+                        />
+                      </div>
+                      <div className="w-[900px]">
+                        <p className="text-[16px] mt-[-3px] font-medium text-gray-900">
+                          {e.user?.nickname}{" "}
+                          <span className="text-[12px] text-gray-500">
+                            @{e?.user?.name}
+                          </span>
+                        </p>
+                        <p className="text-[15px] text-gray-600">{e.text}</p>
+                        <div className="flex justify-normal items-center gap-10 mt-2">
+                          <p className="text-[12px] text-gray-500">
+                            {moment(e.createdAt).format("lll")}
+                          </p>
+                          <p className="text-[12px] text-gray-500 flex justify-normal items-center gap-2">
+                            <MdOutlineReply />
+                            Reply
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          )}
+
+          {auth?.user?.role == 1 || auth?.user?.role == 2 ? (
+            ""
+          ) : (
+            <div className="mt-12 pb-10">
+              <label className="mb-1">Add Your Comments</label>
+              <textarea
+                placeholder="Type Comments... "
+                value={text}
+                onChange={(e) => setText(e.target.value)}
+                className="border border-gray-400 rounded-sm w-full p-1 h-40 mt-3"
+              />
+              {/* <button
+                onClick={submitComment}
+                className="bg-blue-500 rounded-sm text-white px-2 py-1">
+                Submit
+              </button> */}
+              <button
+                onClick={submitComment}
+                disabled={loading} // Disable the button while loading
+                className={`${
+                  loading ? "bg-gray-400" : "bg-blue-500"
+                } rounded-sm text-white px-2 py-1`}>
+                {loading ? "Submitting..." : "Submit"}
               </button>
             </div>
           )}

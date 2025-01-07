@@ -5,8 +5,11 @@ import React, {
   useCallback,
   useEffect,
 } from "react";
-import ReactQuill from "react-quill";
-import "react-quill/dist/quill.snow.css";
+// import ReactDOM from "react-dom";
+// import ReactQuill from "react-quill";
+// import "react-quill/dist/quill.snow.css";
+import ReactQuill from "react-quill-new";
+import "react-quill-new/dist/quill.snow.css";
 import Select from "react-select";
 import cheerio from "cheerio";
 import imgIcon from "../../../assets/imageicon.png";
@@ -32,6 +35,12 @@ const AddPost = () => {
   const [tags, setTags] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState();
   const [featuredImage, setFeaturedImage] = useState(null);
+  // Check if React version is 18 or above
+  // if (React.version.startsWith("19")) {
+  //   // Mock findDOMNode to avoid error
+  //   const findDOMNode = () => null;
+  //   ReactDOM.findDOMNode = findDOMNode;
+  // }
   const onDrop = useCallback((acceptedFiles) => {
     const file = acceptedFiles[0];
     setFeaturedImage(file);

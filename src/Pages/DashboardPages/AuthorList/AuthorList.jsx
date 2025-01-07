@@ -7,6 +7,7 @@ import { IoMdCheckmarkCircleOutline } from "react-icons/io";
 import DataTable from "react-data-table-component";
 import { IoClose } from "react-icons/io5";
 import toast from "react-hot-toast";
+import Loader from "../../../components/Common/Loader";
 const AuthorList = () => {
   const [authors, setAuthors] = useState([]);
   const [auth, setAuth] = useAuth();
@@ -15,6 +16,7 @@ const AuthorList = () => {
 
   useEffect(() => {
     const fetchAllAuthors = async () => {
+      setLoading(true);
       try {
         const response = await axios.get(
           `https://blue-sky-backend-umber.vercel.app/api/v1/auth/users/authors`
@@ -42,14 +44,6 @@ const AuthorList = () => {
 
     fetchAllAuthors();
   }, []);
-
-  if (loading) {
-    return <p>Loading authors...</p>;
-  }
-
-  if (error) {
-    return <p>{error}</p>;
-  }
 
   const handleVerify = async (authorId, index) => {
     try {
@@ -124,13 +118,21 @@ const AuthorList = () => {
 
   return (
     <div className="w-[1440px]">
-      <div className="flex justify-between items-center m-3 ">
-        <DashboardHeader title={`All Author Lists (${authors?.length})`} />
-      </div>
+      {loading ? (
+        <>
+          <Loader />
+        </>
+      ) : (
+        <>
+          <div className="flex justify-between items-center m-3 ">
+            <DashboardHeader title={`All Author Lists (${authors?.length})`} />
+          </div>
 
-      <div className="w-[1415px] mt-[7px] ml-3 border rounded-sm">
-        <DataTable columns={columns} data={authors} pagination />
-      </div>
+          <div className="w-[1415px] mt-[7px] ml-3 border rounded-sm">
+            <DataTable columns={columns} data={authors} pagination />
+          </div>
+        </>
+      )}
     </div>
   );
 };

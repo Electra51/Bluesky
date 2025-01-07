@@ -10,6 +10,7 @@ import imgt from "../../../assets/t.png";
 import imga from "../../../assets/a.png";
 import useFetchPosts from "../../../hooks/useFetchPosts";
 import axios from "axios";
+import Loader from "../../../components/Common/Loader";
 
 const AdminDashboard = () => {
   const blogData = localStorage.getItem("blogsLength");
@@ -100,73 +101,101 @@ const AdminDashboard = () => {
   // }, []);
   console.log("data", data);
   return (
-    <div className="grid grid-cols-4 gap-5">
-      <div className="border rounded-md h-[150px] grid grid-cols-2 hover:shadow-md hover:bg-[#f3f4fc]">
-        <div className="flex flex-col justify-between">
-          <img src={img1} alt="" className="w-16 p-2 pt-3" />{" "}
-          <p className="text-[16px] font-medium pl-3.5 pb-3">Total Blogs</p>
-        </div>
-        <p className="text-right text-4xl pr-3 pt-3">{data?.length}</p>
-      </div>
-      <div className="border rounded-md h-[150px] grid grid-cols-2 hover:shadow-md hover:bg-[#f3f4fc]">
-        <div className="flex flex-col justify-between">
-          {/* <FcApproval className="text-5xl pl-3 pt-3" /> */}
-          <img src={imga} alt="" className="w-16 p-2 pt-3" />{" "}
-          <p className="text-[16px] font-medium pl-3.5 pb-3">Total Author</p>
-        </div>
-        <p className="text-right text-4xl pr-3 pt-3">{allAuthor?.length}</p>
-      </div>
-      <div className="border rounded-md h-[150px] grid grid-cols-2 hover:shadow-md hover:bg-[#f3f4fc]">
-        <div className="flex flex-col justify-between">
-          {/* <MdOutlineTrendingUp className="text-5xl pl-3 pt-3" /> */}
-          <img src={imgC} alt="" className="w-16 p-2 pt-3" />{" "}
-          <p className="text-[16px] font-medium pl-3.5 pb-3">Total Category</p>
-        </div>
-        <p className="text-right text-4xl pr-3 pt-3">{categories?.length}</p>
-      </div>
-      <div className="border rounded-md h-[150px] grid grid-cols-2 hover:shadow-md hover:bg-[#f3f4fc]">
-        <div className="flex flex-col justify-between">
-          <img src={imgt} alt="" className="w-16 p-2 pt-3" />{" "}
-          <p className="text-[16px] font-medium pl-3.5 pb-3">Total Tags</p>
-        </div>
-        <p className="text-right text-4xl pr-3 pt-3">{tags?.length}</p>
-      </div>
-      {/* Pending Blogs Block */}
-      <div className="border rounded-md h-[150px] grid grid-cols-2 hover:shadow-md hover:bg-[#f3f4fc]">
-        <div className="flex flex-col justify-between">
-          <img src={img5} alt="" className="w-16 p-2 pt-3" />
-          <p className="text-[16px] font-medium pl-3.5 pb-3">Pending Blogs</p>
-        </div>
-        <p className="text-right text-4xl pr-3 pt-3">{pendingBlogs?.length}</p>
-      </div>
+    <>
+      {loading ? (
+        <Loader />
+      ) : (
+        <div className="grid grid-cols-4 gap-5">
+          <div className="border rounded-md h-[150px] grid grid-cols-2 hover:shadow-md hover:bg-[#f3f4fc]">
+            <div className="flex flex-col justify-between">
+              <img src={img1} alt="" className="w-16 p-2 pt-3" />{" "}
+              <p className="text-[16px] font-medium pl-3.5 pb-3">Total Blogs</p>
+            </div>
+            <p className="text-right text-4xl pr-3 pt-3">{data?.length}</p>
+          </div>
+          <div className="border rounded-md h-[150px] grid grid-cols-2 hover:shadow-md hover:bg-[#f3f4fc]">
+            <div className="flex flex-col justify-between">
+              {/* <FcApproval className="text-5xl pl-3 pt-3" /> */}
+              <img src={imga} alt="" className="w-16 p-2 pt-3" />{" "}
+              <p className="text-[16px] font-medium pl-3.5 pb-3">
+                Total Author
+              </p>
+            </div>
+            <p className="text-right text-4xl pr-3 pt-3">{allAuthor?.length}</p>
+          </div>
+          <div className="border rounded-md h-[150px] grid grid-cols-2 hover:shadow-md hover:bg-[#f3f4fc]">
+            <div className="flex flex-col justify-between">
+              {/* <MdOutlineTrendingUp className="text-5xl pl-3 pt-3" /> */}
+              <img src={imgC} alt="" className="w-16 p-2 pt-3" />{" "}
+              <p className="text-[16px] font-medium pl-3.5 pb-3">
+                Total Category
+              </p>
+            </div>
+            <p className="text-right text-4xl pr-3 pt-3">
+              {categories?.length}
+            </p>
+          </div>
+          <div className="border rounded-md h-[150px] grid grid-cols-2 hover:shadow-md hover:bg-[#f3f4fc]">
+            <div className="flex flex-col justify-between">
+              <img src={imgt} alt="" className="w-16 p-2 pt-3" />{" "}
+              <p className="text-[16px] font-medium pl-3.5 pb-3">Total Tags</p>
+            </div>
+            <p className="text-right text-4xl pr-3 pt-3">{tags?.length}</p>
+          </div>
+          {/* Pending Blogs Block */}
+          <div className="border rounded-md h-[150px] grid grid-cols-2 hover:shadow-md hover:bg-[#f3f4fc]">
+            <div className="flex flex-col justify-between">
+              <img src={img5} alt="" className="w-16 p-2 pt-3" />
+              <p className="text-[16px] font-medium pl-3.5 pb-3">
+                Pending Blogs
+              </p>
+            </div>
+            <p className="text-right text-4xl pr-3 pt-3">
+              {pendingBlogs?.length}
+            </p>
+          </div>
 
-      {/* Rejected Blogs Block */}
-      <div className="border rounded-md h-[150px] grid grid-cols-2 hover:shadow-md hover:bg-[#f3f4fc]">
-        <div className="flex flex-col justify-between">
-          <img src={img6} alt="" className="w-16 p-2 pt-3" />
-          <p className="text-[16px] font-medium pl-3.5 pb-3">Rejected Blogs</p>
-        </div>
-        <p className="text-right text-4xl pr-3 pt-3">{rejectedBlogs?.length}</p>
-      </div>
+          {/* Rejected Blogs Block */}
+          <div className="border rounded-md h-[150px] grid grid-cols-2 hover:shadow-md hover:bg-[#f3f4fc]">
+            <div className="flex flex-col justify-between">
+              <img src={img6} alt="" className="w-16 p-2 pt-3" />
+              <p className="text-[16px] font-medium pl-3.5 pb-3">
+                Rejected Blogs
+              </p>
+            </div>
+            <p className="text-right text-4xl pr-3 pt-3">
+              {rejectedBlogs?.length}
+            </p>
+          </div>
 
-      {/* Trending Blogs Block */}
-      <div className="border rounded-md h-[150px] grid grid-cols-2 hover:shadow-md hover:bg-[#f3f4fc]">
-        <div className="flex flex-col justify-between">
-          <img src={img3} alt="" className="w-16 p-2 pt-3" />
-          <p className="text-[16px] font-medium pl-3.5 pb-3">Trending Blogs</p>
-        </div>
-        <p className="text-right text-4xl pr-3 pt-3">{trendingBlogs?.length}</p>
-      </div>
+          {/* Trending Blogs Block */}
+          <div className="border rounded-md h-[150px] grid grid-cols-2 hover:shadow-md hover:bg-[#f3f4fc]">
+            <div className="flex flex-col justify-between">
+              <img src={img3} alt="" className="w-16 p-2 pt-3" />
+              <p className="text-[16px] font-medium pl-3.5 pb-3">
+                Trending Blogs
+              </p>
+            </div>
+            <p className="text-right text-4xl pr-3 pt-3">
+              {trendingBlogs?.length}
+            </p>
+          </div>
 
-      {/* Featured Blogs Block */}
-      <div className="border rounded-md h-[150px] grid grid-cols-2 hover:shadow-md hover:bg-[#f3f4fc]">
-        <div className="flex flex-col justify-between">
-          <img src={img4} alt="" className="w-16 p-2 pt-3" />{" "}
-          <p className="text-[16px] font-medium pl-3.5 pb-3">Featured Blogs</p>
+          {/* Featured Blogs Block */}
+          <div className="border rounded-md h-[150px] grid grid-cols-2 hover:shadow-md hover:bg-[#f3f4fc]">
+            <div className="flex flex-col justify-between">
+              <img src={img4} alt="" className="w-16 p-2 pt-3" />{" "}
+              <p className="text-[16px] font-medium pl-3.5 pb-3">
+                Featured Blogs
+              </p>
+            </div>
+            <p className="text-right text-4xl pr-3 pt-3">
+              {featuredBlogs?.length}
+            </p>
+          </div>
         </div>
-        <p className="text-right text-4xl pr-3 pt-3">{featuredBlogs?.length}</p>
-      </div>
-    </div>
+      )}
+    </>
   );
 };
 

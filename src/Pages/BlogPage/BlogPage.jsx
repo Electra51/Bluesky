@@ -5,6 +5,7 @@ import { BsDot } from "react-icons/bs";
 import Tags from "../../components/Common/Tags";
 import axios from "axios";
 import { Link, useNavigate, useParams } from "react-router-dom";
+import Loader from "../../components/Common/Loader";
 
 const BlogPage = () => {
   const { categoryId } = useParams();
@@ -106,9 +107,7 @@ const BlogPage = () => {
         {/* Blog Posts */}
         <div className="col-span-3 gap-12 mt-7">
           {loading ? (
-            "Loading..."
-          ) : error ? (
-            "Error loading posts"
+            <Loader />
           ) : !categoryWisePosts.length ? (
             "No posts found"
           ) : (

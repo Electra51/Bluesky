@@ -5,12 +5,13 @@ import { BsThreeDotsVertical } from "react-icons/bs";
 import AddTags from "./AddTags";
 import EditTags from "./EditTags";
 import DashboardHeader from "../../../components/Common/DashboardHeader";
+import Loader from "../../../components/Common/Loader";
 
 const Tags = () => {
   const [tags, setTags] = useState([]);
   const [isEditVisible, setIsEditVisible] = useState(false);
   const [editingTagId, setEditingTagId] = useState(null);
-
+  const [loading, setLoading] = useState(false);
   const columns = [
     {
       name: "Tag name",
@@ -53,6 +54,7 @@ const Tags = () => {
   ];
 
   const fetchData = async () => {
+    setLoading(true);
     try {
       const response = await axios.get(
         "https://blue-sky-backend-umber.vercel.app/api/v1/tag/tags"
@@ -65,6 +67,8 @@ const Tags = () => {
       }
     } catch (error) {
       console.error("Error:", error.message);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -105,23 +109,31 @@ const Tags = () => {
 
   return (
     <div className="grid grid-cols-3 gap-4 w-[1440px]">
-      <div className="col-span-2 bg-white m-3 rounded-md">
-        <DashboardHeader title={"All Tags"} />
+      <>
+        {loading ? (
+          <div className="col-span-2 bg-white m-3 rounded-md">
+            <Loader />
+          </div>
+        ) : (
+          <div className="col-span-2 bg-white m-3 rounded-md">
+            <DashboardHeader title={"All Tags"} />
 
-        <div className="mt-[7px] border rounded-sm">
-          <DataTable
-            columns={columns}
-            data={tags}
-            pagination
-            conditionalRowStyles={[
-              {
-                when: (row) => row._id === editingTagId,
-                style: { backgroundColor: "#76C4EB" },
-              },
-            ]}
-          />
-        </div>
-      </div>
+            <div className="mt-[7px] border rounded-sm">
+              <DataTable
+                columns={columns}
+                data={tags}
+                pagination
+                conditionalRowStyles={[
+                  {
+                    when: (row) => row._id === editingTagId,
+                    style: { backgroundColor: "#76C4EB" },
+                  },
+                ]}
+              />
+            </div>
+          </div>
+        )}
+      </>
 
       {isEditVisible ? (
         <EditTags

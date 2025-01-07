@@ -8,7 +8,7 @@ const RelatedBlogs = ({ categoryId, post }) => {
   const fetchRelatedPosts = async () => {
     try {
       const response = await axios.get(
-        `http://localhost:8080/api/v1/post/posts/related/${categoryId}`
+        `https://blue-sky-backend-umber.vercel.app/api/v1/post/posts/related/${categoryId}`
       );
       if (response.status === 200) {
         const postData = response?.data?.relatedPosts?.filter(
@@ -30,19 +30,24 @@ const RelatedBlogs = ({ categoryId, post }) => {
   console.log("relatedPost", relatedPost);
   return (
     <div>
-      {" "}
-      <p className="font-medium text-black text-[16px]">Related Blogs</p>
-      <hr className="py-2" />
-      <div className="grid grid-cols-5 gap-5 mt-5 pb-20">
-        {relatedPost?.map((p, i) => (
-          <VerticleCard
-            key={i}
-            recent_post={p}
-            cardHeight={200}
-            type={"all_blog"}
-          />
-        ))}
-      </div>
+      {relatedPost?.length > 0 ? (
+        <>
+          <p className="font-medium text-black text-[16px]">Related Blogs</p>
+          <hr className="py-2" />
+          <div className="grid grid-cols-5 gap-5 mt-5 pb-20">
+            {relatedPost?.map((p, i) => (
+              <VerticleCard
+                key={i}
+                recent_post={p}
+                cardHeight={200}
+                type={"all_blog"}
+              />
+            ))}
+          </div>
+        </>
+      ) : (
+        ""
+      )}
     </div>
   );
 };

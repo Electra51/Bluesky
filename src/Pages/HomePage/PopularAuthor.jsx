@@ -3,6 +3,9 @@ import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import axios from "axios";
+import SocialIcon from "../../components/Common/SocialIcon";
+import { FaFacebookF, FaLinkedinIn } from "react-icons/fa";
+import { FaXTwitter } from "react-icons/fa6";
 
 const PopularAuthor = () => {
   var settings = {
@@ -88,7 +91,7 @@ const PopularAuthor = () => {
             return (
               <div key={index}>
                 <div className="px-3 flex flex-col justify-center items-center">
-                  <div className=" w-40 h-40 rounded-full">
+                  <div className="w-36 h-36 rounded-full">
                     <img
                       src={author?.profileImage}
                       alt=""
@@ -97,8 +100,24 @@ const PopularAuthor = () => {
                     />
                   </div>
                   <div className="text-center mt-3">
-                    <p>{author?.nickname}</p>
-                    <p>{author?.email}</p>
+                    <p className="text-[15px] font-semibold tracking-[1px]">
+                      {author?.nickname}
+                    </p>
+                    <p className="text-[13px] font-normal text-gray-500">
+                      {author?.email}
+                    </p>
+                    <div className="mt-1 flex justify-center items-center gap-2">
+                      <div className="h-7 w-7 group hover:bg-blue-500 hover:shadow-md rounded-full border flex justify-center items-center">
+                        <FaFacebookF className="text-[14px] text-blue-600 group-hover:text-white" />
+                      </div>
+                      <div className="h-7 w-7 group hover:bg-blue-500  hover:shadow-md rounded-full border flex justify-center items-center">
+                        <FaLinkedinIn className="text-[14px] text-blue-600 group-hover:text-white" />
+                      </div>
+
+                      <div className="h-7 w-7 group hover:bg-blue-500 hover:shadow-md rounded-full border flex justify-center items-center">
+                        <FaXTwitter className="text-[14px] text-blue-600 group-hover:text-white" />
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>

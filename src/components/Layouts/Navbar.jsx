@@ -8,6 +8,9 @@ import axios from "axios";
 import { FaAngleDown } from "react-icons/fa";
 import categoryImagebg from "../../assets/category.png";
 import toast from "react-hot-toast";
+import { FaRegUserCircle } from "react-icons/fa";
+import { LuLayoutDashboard } from "react-icons/lu";
+import { TbLogout } from "react-icons/tb";
 
 const Navbar = () => {
   const [auth, setAuth] = useAuth();
@@ -107,41 +110,66 @@ const Navbar = () => {
               Login
             </Link>
           ) : (
-            <div className="dropdown dropdown-end">
-              <div tabIndex={0} className="avatar placeholder cursor-pointer">
-                <div className="flex justify-normal gap-2 items-center">
-                  <div className="h-[36px] w-[36px] rounded-full bg-[#FFF6D8] border border-[#e8cd75] flex justify-center items-center shadow-md">
-                    {userDetails?.profileImage ? (
-                      <img
-                        src={userDetails?.profileImage}
-                        alt=""
-                        className="h-full w-full object-fill rounded-full"
-                      />
-                    ) : userDetails?.nickname ? (
-                      <p>{userDetails?.nickname?.substring(0, 1)}</p>
-                    ) : (
-                      <p>{userDetails?.name?.substring(0, 1)}</p>
-                    )}
+            <div className="flex justify-normal items-start gap-1">
+              <div className="dropdown dropdown-end">
+                <div tabIndex={0} className="avatar placeholder cursor-pointer">
+                  <div className="flex justify-normal gap-2 items-center">
+                    <div className="h-[36px] w-[36px] rounded-full bg-[#FFF6D8] border border-[#e8cd75] flex justify-center items-center shadow-md">
+                      {userDetails?.profileImage ? (
+                        <img
+                          src={userDetails?.profileImage}
+                          alt=""
+                          className="h-full w-full object-fill rounded-full"
+                        />
+                      ) : userDetails?.nickname ? (
+                        <p>{userDetails?.nickname?.substring(0, 1)}</p>
+                      ) : (
+                        <p>{userDetails?.name?.substring(0, 1)}</p>
+                      )}
+                    </div>
                   </div>
                 </div>
+                <ul
+                  tabIndex={0}
+                  className="mt-3 z-[999] p-2 py-2 shadow dropdown-content text-white rounded-md w-52 bg-[#8DBEC1]">
+                  <li className="hover:bg-[#76C4EB] px-5 py-1 rounded-[4px]">
+                    <Link
+                      to="/dashboard/profile"
+                      className="justify-normal gap-2 items-center flex">
+                      <FaRegUserCircle /> Profile
+                    </Link>
+                  </li>
+                  <li className="hover:bg-[#76C4EB] px-5 py-1 rounded-[4px]">
+                    <Link
+                      to="/dashboard/dashboard"
+                      className="justify-normal gap-2 items-center flex">
+                      <LuLayoutDashboard />
+                      Dashboard
+                    </Link>
+                  </li>
+                  <li
+                    className="hover:bg-[#76C4EB] px-5 py-1 rounded-[4px]"
+                    onClick={handleLogout}>
+                    <Link
+                      to="/"
+                      className="justify-normal gap-2 items-center flex">
+                      <TbLogout />
+                      Logout
+                    </Link>
+                  </li>
+                </ul>
               </div>
-              <ul
-                tabIndex={0}
-                className="mt-3 z-[999] p-2 py-2 shadow dropdown-content bg-base-100 rounded-md w-52">
-                <li className="hover:bg-[#76C4EB] px-5 py-1 rounded-[4px]">
-                  <Link to="/dashboard/profile" className="justify-between">
-                    Profile
-                  </Link>
-                </li>
-                <li className="hover:bg-[#76C4EB] px-5 py-1 rounded-[4px]">
-                  <Link to="/dashboard/dashboard">Dashboard</Link>
-                </li>
-                <li
-                  className="hover:bg-[#76C4EB] px-5 py-1 rounded-[4px]"
-                  onClick={handleLogout}>
-                  <Link to="/">Logout</Link>
-                </li>
-              </ul>
+              <div className="text-[12px]">
+                <p className="font-medium">{userDetails?.nickname}</p>
+                <p>
+                  <span className="font-medium">Account: </span>
+                  {userDetails?.role == 1
+                    ? "Author"
+                    : userDetails?.role == 0
+                    ? "User"
+                    : "Admin"}
+                </p>
+              </div>
             </div>
           )}
         </div>

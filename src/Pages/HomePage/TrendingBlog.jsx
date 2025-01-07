@@ -2,8 +2,6 @@ import React, { useEffect, useState } from "react";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
-import { FaFacebookF, FaInstagram, FaLinkedinIn } from "react-icons/fa";
-import { FaXTwitter } from "react-icons/fa6";
 import SectionHeader from "../../components/Common/SectionHeader";
 import HorizontalCard from "../../components/Common/HorizontalCard";
 import CategoryName from "../../components/Common/CategoryName";
@@ -73,7 +71,7 @@ const TrendingBlog = () => {
           <div className="grid grid-cols-3 gap-10">
             <div className="col-span-2 ">
               <div className="flex flex-col justify-normal gap-1 gap-y-5">
-                {trendingItem?.map((e, i) => {
+                {trendingItem?.slice(0, 4).map((e, i) => {
                   return (
                     <HorizontalCard
                       key={i}

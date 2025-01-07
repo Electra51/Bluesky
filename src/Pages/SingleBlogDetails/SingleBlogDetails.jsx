@@ -10,15 +10,17 @@ import BreadCrum from "../../components/Common/BreadCrum";
 import RightSide from "./RightSide";
 import LeftSide from "./LeftSide";
 import RelatedBlogs from "./RelatedBlogs";
+import Loader from "../../components/Common/Loader";
 
 const SingleBlogDetails = () => {
   const [post, setPost] = useState({});
+  const [loading, setLoading] = useState(false);
   const [isShared, setIsShared] = useState(false);
   const [isRating, setIsRating] = useState(false);
   const [visible, setVisible] = useState(false);
   const [visibleforRating, setVisibleforRating] = useState(false);
   const [text, setText] = useState("");
-  const token = JSON.parse(localStorage.getItem("auth")).token;
+  const token = JSON.parse(localStorage?.getItem("auth"))?.token;
   const [auth, setAuth] = useAuth();
   const userId = auth?.user?._id;
   const params = useParams();
@@ -38,15 +40,17 @@ const SingleBlogDetails = () => {
   console.log("ratingCount", ratingCount);
   // single post get api
   const getPostById = async () => {
+    setLoading(true);
     try {
       const response = await axios.get(
-        `https://blue-sky-backend-umber.vercel.app/api/v1/post/posts/${params.id}`
+        `https://blue-sky-backend-umber.vercel.app/api/v1/post/posts/${postId}`
       );
       if (response.status === 200) {
         const postData = response.data.post;
         setPost(postData);
         setShareCount(postData.shareCount || 0);
         setRatingCount(postData.averageRating || 0);
+        setLoading(false);
       } else {
         console.error("Failed to fetch blog post");
       }
@@ -100,7 +104,7 @@ const SingleBlogDetails = () => {
 
     try {
       const response = await axios.post(
-        `http://localhost:8080/api/v1/post/posts/${postId}/add-comments`,
+        `https://blue-sky-backend-umber.vercel.app/api/v1/post/posts/${postId}/add-comments`,
         { text, ratingValue, userId, postId },
         {
           headers: {
@@ -110,8 +114,6 @@ const SingleBlogDetails = () => {
       );
 
       if (response.status === 200) {
-        toast.success("Comment submitted successfully!");
-
         return response.data;
       }
     } catch (error) {
@@ -125,6 +127,41 @@ const SingleBlogDetails = () => {
       }
     }
   };
+
+  // const submitComment = async () => {
+  //   const userAuth = localStorage.getItem("auth");
+  //   let token = null;
+
+  //   if (userAuth) {
+  //     try {
+  //       const parsedData = JSON.parse(userAuth);
+  //       token = parsedData.token; // Extract token
+  //     } catch (error) {
+  //       console.error("Error parsing local storage data:", error);
+  //       toast.error("Invalid user authentication data.");
+  //       return;
+  //     }
+  //   }
+
+  //   if (!token) {
+  //     toast.error("User is not authenticated. Please log in.");
+  //     return;
+  //   }
+
+  //   // Call handleCommentSubmit with the token
+  //   const result = await handleCommentSubmit({
+  //     postId,
+  //     text,
+  //     ratingValue,
+  //     token,
+  //     userId,
+  //   });
+
+  //   if (result) {
+  //     setText("");
+  //     setRatingValue("");
+  //   }
+  // };
 
   const submitComment = async () => {
     const userAuth = localStorage.getItem("auth");
@@ -145,7 +182,7 @@ const SingleBlogDetails = () => {
       toast.error("User is not authenticated. Please log in.");
       return;
     }
-
+    setLoading(true);
     // Call handleCommentSubmit with the token
     const result = await handleCommentSubmit({
       postId,
@@ -156,8 +193,28 @@ const SingleBlogDetails = () => {
     });
 
     if (result) {
+      // Add the new comment to the state
+      const newComment = {
+        user: {
+          profileImage: auth.user.profileImage, // Replace with actual user profile image
+          nickname: auth.user.nickname, // Replace with actual nickname
+          name: auth.user.name, // Replace with actual username
+        },
+        text,
+        createdAt: new Date(), // Add current time
+      };
+
+      setPost((prevPost) => ({
+        ...prevPost,
+        comments: [newComment, ...(prevPost?.comments || [])],
+      }));
+
+      // Clear the input fields
       setText("");
       setRatingValue("");
+      toast.success("Comment added successfully!");
+
+      setLoading(false);
     }
   };
 
@@ -224,72 +281,79 @@ const SingleBlogDetails = () => {
   };
 
   return (
-    <div className="sm-container lg:container">
-      {/* header */}
-      <div className="text-[14px] font-medium bg-white h-[56px] flex justify-between items-center">
-        <Link
-          to="/blog"
-          className="flex justify-normal items-center gap-5 text-[#5F5F5F] cursor-pointer">
-          <IoIosArrowBack />
-          Back
-        </Link>
+    <>
+      {loading ? (
+        <Loader />
+      ) : (
+        <div className="sm-container lg:container">
+          {/* header */}
+          <div className="text-[14px] font-medium bg-white h-[56px] flex justify-between items-center">
+            <Link
+              to="/blog"
+              className="flex justify-normal items-center gap-5 text-[#5F5F5F] cursor-pointer">
+              <IoIosArrowBack />
+              Back
+            </Link>
 
-        <div className="flex justify-normal items-center gap-2">
-          <BreadCrum prev={"Blog"} still="Blog Details" link="/" />
-        </div>
-      </div>
-      <div>
-        <div className="mt-[20px] grid grid-cols-3 gap-5 mx-auto items-start">
-          <div className=" col-span-2">
-            {" "}
-            <LeftSide
-              setVisibleforRating={setVisibleforRating}
-              setShowLink={setShowLink}
-              submitComment={submitComment}
-              text={text}
-              setText={setText}
-              isShared={isShared}
-              shareCount={shareCount}
-              ratingCount={ratingCount}
-              userId={userId}
-              post={post}
-              selectedReaction={selectedReaction}
+            <div className="flex justify-normal items-center gap-2">
+              <BreadCrum prev={"Blog"} still="Blog Details" link="/" />
+            </div>
+          </div>
+          <div>
+            <div className="mt-[20px] grid grid-cols-3 gap-5 mx-auto items-start">
+              <div className=" col-span-2">
+                {" "}
+                <LeftSide
+                  setVisibleforRating={setVisibleforRating}
+                  setShowLink={setShowLink}
+                  submitComment={submitComment}
+                  text={text}
+                  setText={setText}
+                  isShared={isShared}
+                  shareCount={shareCount}
+                  ratingCount={ratingCount}
+                  userId={userId}
+                  post={post}
+                  selectedReaction={selectedReaction}
+                  visible={visible}
+                  isRating={isRating}
+                  setVisible={setVisible}
+                  showLink={showLink}
+                  handleReaction={handleReaction}
+                  loading={loading}
+                />
+              </div>
+              <div className="flex flex-col justify-end">
+                <RightSide post={post} />
+              </div>
+            </div>
+            <div className="mt-10">
+              <RelatedBlogs categoryId={post?.category?._id} post={post} />
+            </div>
+          </div>
+
+          {showLink && (
+            <ShareModal
+              handleCopyLink={handleCopyLink}
+              postId={params.id}
               visible={visible}
-              isRating={isRating}
               setVisible={setVisible}
-              showLink={showLink}
-              handleReaction={handleReaction}
             />
-          </div>
-          <div className="flex flex-col justify-end">
-            <RightSide post={post} />
-          </div>
+          )}
+          {visibleforRating && (
+            <ModatRating
+              handleRatingChange={handleRatingChange}
+              showLink={showLink}
+              id={params.id}
+              ratingValue={ratingValue}
+              handleSubmitRating={handleSubmitRating}
+              visible={visibleforRating}
+              setVisible={setVisibleforRating}
+            />
+          )}
         </div>
-        <div className="mt-10">
-          <RelatedBlogs categoryId={post?.category?._id} post={post} />
-        </div>
-      </div>
-
-      {showLink && (
-        <ShareModal
-          handleCopyLink={handleCopyLink}
-          postId={params.id}
-          visible={visible}
-          setVisible={setVisible}
-        />
       )}
-      {visibleforRating && (
-        <ModatRating
-          handleRatingChange={handleRatingChange}
-          showLink={showLink}
-          id={params.id}
-          ratingValue={ratingValue}
-          handleSubmitRating={handleSubmitRating}
-          visible={visibleforRating}
-          setVisible={setVisibleforRating}
-        />
-      )}
-    </div>
+    </>
   );
 };
 

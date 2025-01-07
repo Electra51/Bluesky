@@ -5,6 +5,7 @@ import { IoSearchOutline } from "react-icons/io5";
 import Pagination from "../../components/Common/Pagination";
 import axios from "axios";
 import VerticleCard from "../../components/Common/VerticleCard";
+import Loader from "../../components/Common/Loader";
 
 const Details = () => {
   const [page, setPage] = useState(0);
@@ -12,6 +13,7 @@ const Details = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [categoryData, setCategoryData] = useState();
   const [blogdata, setBlogdata] = useState();
+  const [loading, setLoading] = useState(false);
 
   //category get function
   const fetchData = async () => {
@@ -36,6 +38,7 @@ const Details = () => {
 
   // content get data
   const fetchPostData = async () => {
+    setLoading(true);
     try {
       const response = await axios.get(
         `https://blue-sky-backend-umber.vercel.app/api/v1/post/posts`
@@ -49,6 +52,8 @@ const Details = () => {
       }
     } catch (error) {
       console.error("Error:", error.message);
+    } finally {
+      setLoading(false);
     }
   };
   useEffect(() => {
@@ -138,7 +143,7 @@ const Details = () => {
             <p className="text-[16px] font-medium pt-4">Recent posts</p>
             {filteredTitles.length > 0 && (
               <ul>
-                {filteredTitles.map((title, index) => (
+                {filteredTitles.slice(0, 9).map((title, index) => (
                   <li
                     className="border-0 border-b border-[#E9E9E9] py-2"
                     key={index}>
@@ -150,31 +155,37 @@ const Details = () => {
           </div>
         </div>
 
-        <div className="col-span-3 pb-20">
-          {filteredBlogData.length > 1 && (
-            <Pagination
-              length={filteredBlogData.length}
-              page={page}
-              setPage={setPage}
-            />
-          )}
-          {filteredBlogData.length === 0 ? (
-            <p className="text-[18px] font-medium text-center text-red-500 pt-20">
-              No Content found under this category.
-            </p>
-          ) : (
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-[50px] justify-center items-center mt-5">
-              {filteredBlogData.slice(9 * page, 9 * (page + 1)).map((e, i) => (
-                <VerticleCard
-                  key={i}
-                  recent_post={e}
-                  cardHeight={200}
-                  type={"all_blog"}
-                />
-              ))}
-            </div>
-          )}
-        </div>
+        {loading ? (
+          <Loader />
+        ) : (
+          <div className="col-span-3 pb-20">
+            {filteredBlogData.length > 1 && (
+              <Pagination
+                length={filteredBlogData.length}
+                page={page}
+                setPage={setPage}
+              />
+            )}
+            {filteredBlogData.length == 0 ? (
+              <p className="text-[18px] font-medium text-center text-red-500 pt-20">
+                No Content found under this category.
+              </p>
+            ) : (
+              <div className="grid grid-cols-1 lg:grid-cols-3 gap-[50px] justify-center items-center mt-5">
+                {filteredBlogData
+                  .slice(9 * page, 9 * (page + 1))
+                  .map((e, i) => (
+                    <VerticleCard
+                      key={i}
+                      recent_post={e}
+                      cardHeight={200}
+                      type={"all_blog"}
+                    />
+                  ))}
+              </div>
+            )}
+          </div>
+        )}
       </div>
     </div>
   );
